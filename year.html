@@ -356,18 +356,17 @@
                 }
             }
 
-            // Days Since
+            // Days Since (Only relevant if viewing CURRENT YEAR)
             // Helper to differ days
             const diffDays = (d1, d2) => Math.floor((d1 - d2) / (1000 * 60 * 60 * 24));
             
-            const daysSinceWrite = lastWritingDate ? diffDays(today, new Date(lastWritingDate)) : "-";
-            const daysSinceGym = lastWorkoutDate ? diffDays(today, new Date(lastWorkoutDate)) : "-";
+            const isPastYear = currentYear < today.getFullYear();
+            const daysSinceWrite = (lastWritingDate && !isPastYear) ? diffDays(today, new Date(lastWritingDate)) : "-";
+            const daysSinceGym = (lastWorkoutDate && !isPastYear) ? diffDays(today, new Date(lastWorkoutDate)) : "-";
 
-            // Inject into DOM (We need to add these elements to HTML first, see next edit)
-            // But for now, let's just log or prepare variables. 
-            // Better yet, let's create a display area for them dynamically if it doesn't exist.
+            // Inject into DOM 
             
-            const advancedStatsHTML = `
+            let advancedStatsHTML = `
                 <div class="hud-box" style="grid-column: span 2;">
                    <div style="display:flex; justify-content:space-around; text-align:center;">
                         <div>
@@ -382,7 +381,11 @@
                             <span class="hud-label">Longest Gym Streak</span>
                             <span class="hud-value">${longestWorkoutStreak}</span>
                         </div>
-                   </div>
+                   </div>`;
+
+            // Only show "Days Since" row if it is the current year
+            if (!isPastYear) {
+                advancedStatsHTML += `
                    <div style="margin-top:15px; padding-top:10px; border-top:1px dashed #333; display:flex; justify-content:space-around;">
                         <div>
                             <span class="hud-label">Days Since Writing</span>
@@ -393,8 +396,10 @@
                             <span class="hud-value" style="color:${daysSinceGym > 7 ? 'red' : '#888'}">${daysSinceGym}</span>
                         </div>
                    </div>
-                </div>
-            `;
+                `;
+            }
+
+            advancedStatsHTML += `</div>`;
             
             // Append to HUD
             const hud = document.querySelector('.hud-container');
