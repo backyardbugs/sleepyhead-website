@@ -153,9 +153,15 @@
         <aside id="sidebar-container"></aside>
 
         <main>
-            <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">
-                Captain's Log <span style="color:var(--accent-color)">//</span> 2025
+            <h1 id="year-title" style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">
+                Captain's Log <span style="color:var(--accent-color)">//</span> 2026
             </h1>
+
+            <div style="margin-bottom: 20px; font-family: var(--font-head); font-size: 0.9rem; margin-top: 10px;">
+                <span style="color:#666; margin-right:10px;">SELECT YEAR:</span>
+                <a href="?y=2025" style="margin-right: 10px;">[ 2025 ]</a>
+                <a href="?y=2026">[ 2026 ]</a>
+            </div>
 
             <div class="hud-container">
                 <div class="hud-box">
@@ -217,14 +223,40 @@
     <div id="tooltip"></div>
 
     <script src="data/2025.js"></script>
+    <script src="data/2026.js"></script>
     
     <script src="loader.js"></script>
 
     <script>
         /* --- THE ENGINE --- */
-
         document.addEventListener("DOMContentLoaded", function() {
             
+            // 0. YEAR SELECTION
+            const params = new URLSearchParams(window.location.search);
+            const currentYear = parseInt(params.get('y')) || 2026;
+
+            // Update Titles
+            document.title = `Captain's Log ${currentYear} - Sleepyhead`;
+            document.getElementById('year-title').innerHTML = `Captain's Log <span style="color:var(--accent-color)">//</span> ${currentYear}`;
+
+            // Select Data Sources
+            let activeHistory = [];
+            let activeBooks = [];
+            let activeAlbums = [];
+            let activeStats = [];
+
+            if (currentYear === 2025) {
+                activeHistory = (typeof history2025 !== 'undefined') ? history2025 : [];
+                activeBooks = (typeof books2025 !== 'undefined') ? books2025 : [];
+                activeAlbums = (typeof albums2025 !== 'undefined') ? albums2025 : [];
+                activeStats = (typeof stats2025 !== 'undefined') ? stats2025 : [];
+            } else {
+                activeHistory = (typeof history2026 !== 'undefined') ? history2026 : [];
+                activeBooks = (typeof books2026 !== 'undefined') ? books2026 : [];
+                activeAlbums = (typeof albums2026 !== 'undefined') ? albums2026 : [];
+                activeStats = (typeof stats2026 !== 'undefined') ? stats2026 : [];
+            }
+
             // 1. PROCESS TOTALS
             let totalWords = 0;
             let totalWorkouts = 0;
@@ -232,68 +264,73 @@
             // Create a quick lookup map for dates: "2025-01-01" -> { words: 500, gym: true }
             const dayMap = {};
 
-            if (typeof history2025 !== 'undefined') {
-                history2025.forEach(entry => {
-                    const date = entry[0];
-                    const words = entry[1];
-                    const gym = entry[2];
-                    const note = entry[3] || "";
+            activeHistory.forEach(entry => {
+                const date = entry[0];
+                const words = entry[1];
+                const gym = entry[2];
+                const note = entry[3] || "";
 
-                    totalWords += words;
-                    if (gym) totalWorkouts++;
+                totalWords += words;
+                if (gym) totalWorkouts++;
 
-                    dayMap[date] = { words, gym, note };
-                });
-            }
+                dayMap[date] = { words, gym, note };
+            });
 
             // Update HUD
             document.getElementById('total-words').innerText = totalWords.toLocaleString();
             document.getElementById('total-workouts').innerText = totalWorkouts;
-            if (typeof books2025 !== 'undefined') document.getElementById('total-books').innerText = books2025.length;
             
-
+            const totalBooksEl = document.getElementById('total-books');
+            const totalAlbumsEl = document.getElementById('total-albums');
+            
+            if (totalBooksEl && activeBooks) totalBooksEl.innerText = activeBooks.length;
+            if (totalAlbumsEl && activeAlbums) totalAlbumsEl.innerText = activeAlbums.length; 
 
             // 2. GENERATE CALENDAR GRID (Jan 1 to Dec 31)
             const gridContainer = document.getElementById('year-grid');
-            const year = 2025;
-            const startDate = new Date(year, 0, 1); // Jan 1
-            const endDate = new Date(year, 11, 31); // Dec 31
-            
-            // Iterate through every single day of the year
-            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            if (gridContainer) {
+                gridContainer.innerHTML = ""; // Clear for re-render if needed
+                const startDate = new Date(currentYear, 0, 1); // Jan 1
+                const endDate = new Date(currentYear, 11, 31); // Dec 31
                 
-                // Format date as YYYY-MM-DD
-                const isoDate = d.toISOString().split('T')[0];
-                
-                // Get data for this day (or default to 0)
-                const data = dayMap[isoDate] || { words: 0, gym: false, note: "" };
+                // Iterate through every single day of the year
+                for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                    
+                    // Format date as YYYY-MM-DD (Local)
+                    const offset = d.getTimezoneOffset(); 
+                    const localDate = new Date(d.getTime() - (offset*60*1000));
+                    const isoDate = localDate.toISOString().split('T')[0];
+                    
+                    // Get data for this day (or default to 0)
+                    const data = dayMap[isoDate] || { words: 0, gym: false, note: "" };
 
-                // Create the HTML square
-                const cell = document.createElement('div');
-                cell.className = 'day-cell';
-                
-                // Determine Color Level
-                if (data.words > 1500) cell.classList.add('lvl-3');
-                else if (data.words > 500) cell.classList.add('lvl-2');
-                else if (data.words > 0) cell.classList.add('lvl-1');
-                else cell.classList.add('lvl-0');
+                    // Create the HTML square
+                    const cell = document.createElement('div');
+                    cell.className = 'day-cell';
+                    
+                    // Determine Color Level
+                    if (data.words > 1500) cell.classList.add('lvl-3');
+                    else if (data.words > 500) cell.classList.add('lvl-2');
+                    else if (data.words > 0) cell.classList.add('lvl-1');
+                    else cell.classList.add('lvl-0');
 
-                // Add Gym Dot
-                if (data.gym) {
-                    const dot = document.createElement('div');
-                    dot.className = 'gym-dot';
-                    cell.appendChild(dot);
+                    // Add Gym Dot
+                    if (data.gym) {
+                        const dot = document.createElement('div');
+                        dot.className = 'gym-dot';
+                        cell.appendChild(dot);
+                    }
+
+                    // Prepare Tooltip Data
+                    const dateString = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    let tooltipText = `${dateString}\nWords: ${data.words}`;
+                    if (data.gym) tooltipText += `\nGym: Yes`;
+                    if (data.note) tooltipText += `\n"${data.note}"`;
+                    
+                    cell.setAttribute('data-tooltip', tooltipText);
+
+                    gridContainer.appendChild(cell);
                 }
-
-                // Prepare Tooltip Data
-                const dateString = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                let tooltipText = `${dateString}\nWords: ${data.words}`;
-                if (data.gym) tooltipText += `\nGym: Yes`;
-                if (data.note) tooltipText += `\n"${data.note}"`;
-                
-                cell.setAttribute('data-tooltip', tooltipText);
-
-                gridContainer.appendChild(cell);
             }
 
             /* --- TOOLTIP LOGIC (The Floating Fix) --- */
@@ -325,8 +362,9 @@
             
             // Books
             const bookContainer = document.getElementById('book-list');
-            if (typeof books2025 !== 'undefined') {
-                books2025.forEach(book => {
+            if (bookContainer && activeBooks) {
+                bookContainer.innerHTML = "";
+                activeBooks.forEach(book => {
                     bookContainer.innerHTML += `
                         <div class="ledger-item">
                             <span class="ledger-title">${book.title}</span>
@@ -339,8 +377,9 @@
 
             // Albums
             const albumContainer = document.getElementById('album-list');
-            if (typeof albums2025 !== 'undefined') {
-                albums2025.forEach(album => {
+            if (albumContainer && activeAlbums) {
+                albumContainer.innerHTML = "";
+                activeAlbums.forEach(album => {
                     albumContainer.innerHTML += `
                         <div class="ledger-item">
                             <span class="ledger-title">${album.title}</span>
@@ -353,8 +392,9 @@
 
             // PR Stats
             const statsContainer = document.getElementById('stats-list');
-            if (typeof stats2025 !== 'undefined') {
-                stats2025.forEach(stat => {
+            if (statsContainer && activeStats) {
+                statsContainer.innerHTML = "";
+                activeStats.forEach(stat => {
                     statsContainer.innerHTML += `
                         <div class="stat-row">
                             <span>${stat.label}</span>
