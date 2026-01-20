@@ -103,24 +103,38 @@ function fetchPostContent(filename, isFeedView) {
 
             // --- THE CUT-OFF LOGIC ---
             
-            // SCENARIO A: We are on the Feed AND the text has the cut-off
-            if (isFeedView && text.includes(separator)) {
+            // SCENARIO A: We are on the Feed AND (it has a manual cut-off OR it's too long)
+            var MAX_CHARS = 1000; // Auto-truncate after this many characters
+            
+            if (isFeedView && (text.includes(separator) || text.length > MAX_CHARS)) {
                 
-                // 1. Split correctly by the separator
-                var parts = text.split(separator); 
-                
-                // 2. Render only the first half
-                if (typeof marked !== 'undefined') {
-                    finalHTML = marked.parse(parts[0]);
+                var previewText = "";
+
+                if (text.includes(separator)) {
+                    // Method 1: Manual cut-off (takes priority)
+                    previewText = text.split(separator)[0];
                 } else {
-                    finalHTML = parts[0];
+                    // Method 2: Auto-cut-off
+                    // Cut at MAX_CHARS, then back up to the last space so we don't cut a word in half
+                    previewText = text.substring(0, MAX_CHARS);
+                    if (previewText.lastIndexOf(" ") > 0) {
+                        previewText = previewText.substring(0, previewText.lastIndexOf(" "));
+                    }
+                    previewText += " ...";
+                }
+                
+                // Render the preview
+                if (typeof marked !== 'undefined') {
+                    finalHTML = marked.parse(previewText);
+                } else {
+                    finalHTML = previewText;
                 }
 
-                // 3. Add the button
+                // Add the button
                 finalHTML += `<p><a href="?post=${filename}" class="read-more-btn">Read More →</a></p>`;
 
             } else {
-                // SCENARIO B: We are on the Single Post page (OR there is no cut-off)
+                // SCENARIO B: We are on the Single Post page OR it's a short post
                 
                 // 1. Remove the separator so it doesn't clutter the raw text
                 var cleanText = text.replace(separator, ""); 
