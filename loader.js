@@ -121,4 +121,3 @@ function loadNowPlaying() {
     })
     .catch(err => console.log("Error loading media status:", err));
 }
-}
