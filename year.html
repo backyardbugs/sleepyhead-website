@@ -286,6 +286,124 @@
             if (totalBooksEl && activeBooks) totalBooksEl.innerText = activeBooks.length;
             if (totalAlbumsEl && activeAlbums) totalAlbumsEl.innerText = activeAlbums.length; 
 
+            // --- ADVANCED STATS CALCULATION ---
+            let maxWords = 0;
+            let currentWritingStreak = 0;
+            let longestWritingStreak = 0;
+            let currentWorkoutStreak = 0;
+            let longestWorkoutStreak = 0;
+
+            let lastWritingDate = null;
+            let lastWorkoutDate = null;
+
+            // Sort history by date to ensure proper streak calculation
+            const sortedHistory = activeHistory.slice().sort((a, b) => new Date(a[0]) - new Date(b[0]));
+            
+            // Helpful Set for O(1) lookups of dates that exist in history with >0 words or gym
+            const writingDays = new Set();
+            const workoutDays = new Set();
+
+            sortedHistory.forEach(entry => {
+                const d = entry[0];
+                const w = entry[1];
+                const g = entry[2];
+
+                if (w > maxWords) maxWords = w;
+                if (w > 0) {
+                    writingDays.add(d);
+                    lastWritingDate = d;
+                }
+                if (g) {
+                    workoutDays.add(d);
+                    lastWorkoutDate = d;
+                }
+            });
+
+            // Calculate Streaks (Iterate through the year up to "today" or last entry?)
+            // A streak requires consecutive days.
+            // Let's iterate through the sorted history dates is not enough because skipped days break streaks.
+            // We should iterate from Jan 1st to Today.
+            
+            const today = new Date(); // Actual today
+            const jan1 = new Date(currentYear, 0, 1);
+            
+            let wStreak = 0;
+            let gStreak = 0;
+            
+            // We iterate day by day from Jan 1 to Today (or end of year if viewing past year)
+            let loopEnd = (currentYear < today.getFullYear()) ? new Date(currentYear, 11, 31) : today;
+            
+            for (let d = new Date(jan1); d <= loopEnd; d.setDate(d.getDate() + 1)) {
+                // ISO YYYY-MM-DD
+                const offset = d.getTimezoneOffset(); 
+                const localDate = new Date(d.getTime() - (offset*60*1000));
+                const iso = localDate.toISOString().split('T')[0];
+
+                // Writing Streak
+                if (writingDays.has(iso)) {
+                    wStreak++;
+                    if (wStreak > longestWritingStreak) longestWritingStreak = wStreak;
+                } else {
+                    wStreak = 0;
+                }
+
+                // Workout Streak
+                if (workoutDays.has(iso)) {
+                    gStreak++;
+                    if (gStreak > longestWorkoutStreak) longestWorkoutStreak = gStreak;
+                } else {
+                    gStreak = 0;
+                }
+            }
+
+            // Days Since
+            // Helper to differ days
+            const diffDays = (d1, d2) => Math.floor((d1 - d2) / (1000 * 60 * 60 * 24));
+            
+            const daysSinceWrite = lastWritingDate ? diffDays(today, new Date(lastWritingDate)) : "-";
+            const daysSinceGym = lastWorkoutDate ? diffDays(today, new Date(lastWorkoutDate)) : "-";
+
+            // Inject into DOM (We need to add these elements to HTML first, see next edit)
+            // But for now, let's just log or prepare variables. 
+            // Better yet, let's create a display area for them dynamically if it doesn't exist.
+            
+            const advancedStatsHTML = `
+                <div class="hud-box" style="grid-column: span 2;">
+                   <div style="display:flex; justify-content:space-around; text-align:center;">
+                        <div>
+                            <span class="hud-label">Longest Write Streak</span>
+                            <span class="hud-value">${longestWritingStreak}</span>
+                        </div>
+                        <div>
+                            <span class="hud-label">Max Words/Day</span>
+                            <span class="hud-value">${maxWords}</span>
+                        </div>
+                        <div>
+                            <span class="hud-label">Longest Gym Streak</span>
+                            <span class="hud-value">${longestWorkoutStreak}</span>
+                        </div>
+                   </div>
+                   <div style="margin-top:15px; padding-top:10px; border-top:1px dashed #333; display:flex; justify-content:space-around;">
+                        <div>
+                            <span class="hud-label">Days Since Writing</span>
+                            <span class="hud-value" style="color:${daysSinceWrite > 7 ? 'red' : '#888'}">${daysSinceWrite}</span>
+                        </div>
+                        <div>
+                            <span class="hud-label">Days Since Gym</span>
+                            <span class="hud-value" style="color:${daysSinceGym > 7 ? 'red' : '#888'}">${daysSinceGym}</span>
+                        </div>
+                   </div>
+                </div>
+            `;
+            
+            // Append to HUD
+            const hud = document.querySelector('.hud-container');
+            if(hud) {
+                // Check if we already added it to avoid dupes on re-renders (if specific logic existed)
+                // Just appending is fine for now as this runs once on load
+                hud.insertAdjacentHTML('beforeend', advancedStatsHTML);
+            }
+
             // 2. GENERATE CALENDAR GRID (Jan 1 to Dec 31)
             const gridContainer = document.getElementById('year-grid');
             if (gridContainer) {
@@ -307,6 +425,13 @@
                     // Create the HTML square
                     const cell = document.createElement('div');
                     cell.className = 'day-cell';
+
+                    // Current Day Indicator
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    if (isoDate === todayStr) {
+                        cell.style.border = "2px solid #fff";
+                        cell.style.zIndex = "10";
+                    }
                     
                     // Determine Color Level
                     if (data.words > 1500) cell.classList.add('lvl-3');
