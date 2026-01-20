@@ -1,37 +1,58 @@
 # Sleepyhead Website Roadmap
 
+## 🧠 The Philosophy
+> "An archive for my life... a fun place... early internet aesthetics."
+> Punk, DIY, Anti-Algorithmic, Clean but Personal.
+
 ## 🚀 Phase 1: Interaction & Polish
 - [ ] **1. Status Box / Microblog**
     - *Goal*: Clarify the distinction between the sidebar "Now" section and the "Status" box.
-    - *Plan*: Create a unified "Now" widget that is easier to update than editing HTML. Maybe a single JSON or Markdown file that populates the sidebar reading/playing lists locally.
-- [ ] **5. Smart "Read More"**
+    - *Plan*: Create a unified "Now" widget powered by a simple JSON/Markdown file.
+- [x] **5. Smart "Read More"**
     - *Goal*: Fallback truncation for the home feed.
-    - *Plan*: Update `engine.js` to automatically cut off posts after ~100 words or 2 paragraphs if the `<!--more-->` tag is missing.
+    - *Implemented*: `engine.js` auto-truncates at 1000 chars.
 - [ ] **2. RSS Feed Generator**
-    - *Goal*: allow subscriptions.
-    - *Plan*: Create a Python or Node script that runs during the GitHub Action deploy process to generate `feed.xml` from `blog.js` + Markdown files.
+    - *Goal*: Allow subscriptions (Open Web standard).
+    - *Plan*: Script to generate `feed.xml` on deploy.
+- [ ] **Captain's Log Rollover (2026)**
+    - *Goal*: Archive 2025 data and start fresh for the new year.
+    - *Plan*: Create `data/2026.js`, update `year.html` to toggle between years.
 
-## 🧭 Phase 2: Navigation & Discovery
+## 🎨 Phase 2: The Collections (Visual & Audio)
+- [ ] **The Demo Tape (Music Player)**
+    - *Goal*: A home for scraps and demos.
+    - *Aesthetic*: A crate of Vinyls or a stack of CDs.
+    - *Tech*: Custom audio player with a playlist JSON.
+- [ ] **The Shelf (Library Upgrade)**
+    - *Goal*: Organize reviews of books, movies, games, manga, music.
+    - *Aesthetic*: Visual shelves / grid layout rather than just text lists.
+- [ ] **The Binder (Card Collection)**
+    - *Goal*: Display Yugioh and Pokemon collections.
+    - *Plan*: Image gallery with zoom capabilities (Lightbox).
+- [ ] **The Lookbook (Fashion)**
+    - *Goal*: Inspirations and fits.
+    - *Plan*: Pinterest-style masonry grid or a "closet" interface.
+
+## 🧭 Phase 3: Identity & Projects
+- [ ] **Gatebound Hub**
+    - *Goal*: Dedicated home for the novel.
+    - *Features*: World building docs, status updates, and a filtered feed of "gatebound" tagged posts.
+- [ ] **About Me / CV**
+    - *Goal*: Professional yet personal overview.
+    - *Content*: Projects, music produced, awards, publications.
+- [ ] **The Mailbox**
+    - *Goal*: Guestbook / Messages.
+    - *Tech*: Simple form (maybe `formspree`) or a public guestbook script.
+
+## 🕸️ Phase 4: The Digital Garden (Navigation)
 - [ ] **8. Tag Cloud / Category Page**
     - *Goal*: Better content exploration.
-    - *Plan*: New `tags.html` or a sidebar section that dynamically lists all unique tags found in `blog.js`.
 - [ ] **7. Search Bar**
     - *Goal*: Find content instantly.
-    - *Plan*: Implement a lightweight client-side search (like MiniSearch) that indexes `blog.js` titles and tags (and potentially content).
-- [ ] **3. Series Navigation**
-    - *Goal*: Connect multi-part essays.
-    - *Plan*: Add a `series:` field to the blog metadata. `engine.js` will look for other posts with the same series name and auto-generate "Previous / Next in Series" links.
-
-## 🕸️ Phase 3: The Digital Garden
 - [ ] **12. Backlinks / "What Links Here"**
     - *Goal*: Interconnected thought.
-    - *Plan*: A build script that scans all markdown files for links to other posts, builds a graph, and injects a "References" section at the bottom of the target post.
-- [ ] **17. Sitemap Generator**
-    - *Goal*: SEO.
-    - *Plan*: Script to auto-generate `sitemap.xml` for Google using the `posts` array and static HTML files.
 
 ## 🧊 Icebox (Future Ideas)
+- Series Navigation (Part 1, Part 2 links)
 - Dark/Light Mode Toggle
-- Image Lightbox
-- Reading Time Calculator
 - Random Post Button
