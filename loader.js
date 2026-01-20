@@ -6,6 +6,7 @@ fetch('sidebar.html')
     document.getElementById('sidebar-container').innerHTML = data;
     highlightCurrentPage();
     loadStatus(); 
+    loadNowPlaying(); // New function for the Status Box
 });
 
 function highlightCurrentPage() {
@@ -83,4 +84,41 @@ function loadStatus() {
     .catch(e => {
         console.log("No status update found."); 
     });
+}
+
+function loadNowPlaying() {
+    fetch('status.json?v=' + Date.now())
+    .then(response => {
+        if (!response.ok) throw new Error("status.json not found");
+        return response.json();
+    })
+    .then(data => {
+        var container = document.getElementById('status-container');
+        if (!container) return;
+
+        var html = "";
+
+        // Helper to generate section
+        function buildSection(title, items) {
+            if (!items || items.length === 0) return "";
+            var sectionHTML = `<p><strong>${title}:</strong><br>`;
+            items.forEach(item => {
+                sectionHTML += `- ${item}<br>`;
+            });
+            sectionHTML += `</p>`;
+            return sectionHTML;
+        }
+
+        html += buildSection("READING", data.reading);
+        html += buildSection("PLAYING", data.playing);
+        html += buildSection("WATCHING", data.watching);
+
+        if (data.current_mood) {
+            html += `<p><strong>MOOD:</strong> ${data.current_mood}</p>`;
+        }
+
+        container.innerHTML = html;
+    })
+    .catch(err => console.log("Error loading media status:", err));
+}
 }

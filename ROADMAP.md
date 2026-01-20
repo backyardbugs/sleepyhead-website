@@ -5,9 +5,9 @@
 > Punk, DIY, Anti-Algorithmic, Clean but Personal.
 
 ## 🚀 Phase 1: Interaction & Polish
-- [ ] **1. Status Box / Microblog**
+- [x] **1. Status Box / Microblog**
     - *Goal*: Clarify the distinction between the sidebar "Now" section and the "Status" box.
-    - *Plan*: Create a unified "Now" widget powered by a simple JSON/Markdown file.
+    - *Implemented*: Unified into `status.json` and `loader.js`.
 - [x] **5. Smart "Read More"**
     - *Goal*: Fallback truncation for the home feed.
     - *Implemented*: `engine.js` auto-truncates at 1000 chars.
