@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visuals - Sleepyhead</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        
+        <aside id="sidebar-container"></aside>
+
+        <main>
+            <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">Visual Works</h1>
+
+            <h2 class="post-title">Comics</h2>
+           <div class="art-grid">
+    
+    <div class="art-item" onclick="openReader('greening')">
+        <img src="comics/greening/greeningtitle.webp" alt="Greening Cover">
+        
+        <div style="position:absolute; bottom:0; background:rgba(0,0,0,0.8); color:white; width:100%; font-size:12px; padding:5px; text-align:center;">
+            GREENING
+        </div>
+    </div>
+
+</div>
+
+            <h2 class="post-title" style="margin-top:60px;">Illustration</h2>
+            <div class="art-grid">
+                
+                <div class="art-item" 
+                     onclick="openSingle('https://via.placeholder.com/800x600?text=Character+Sheet', 'Character Design')" >
+                    <img src="https://via.placeholder.com/400x400?text=Char+Design" alt="Sketch">
+                </div>
+
+                <div class="art-item" 
+                     onclick="openSingle('path/to/animation.gif', 'Walk Cycle Animation')" >
+                    <img src="https://via.placeholder.com/400x400?text=GIF+Example" alt="Animation">
+                    <div style="position:absolute; top:5px; right:5px; background:white; color:black; font-size:10px; padding:2px 4px; font-weight:bold;">GIF</div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <div id="lightbox">
+        
+        <span class="close-lightbox" onclick="closeLightbox()">×</span>
+        
+        <button id="prev-btn" class="lightbox-nav" onclick="changePage(-1)">❮</button>
+        <button id="next-btn" class="lightbox-nav" onclick="changePage(1)">❯</button>
+
+        <img id="lightbox-img" src="" alt="Full Screen Art">
+        
+        <div id="page-counter">1 / 1</div>
+        <div id="lightbox-caption"></div>
+    
+    </div>
+
+    <script src="loader.js"></script>
+
+    <script>
+        /* --- THE COMIC DATA MANIFEST --- */
+        
+        const comicLibrary = {
+            
+            "greening": {
+                title: "Greening",
+                // NEW: This is the optional caption field!
+                info: "Winner of the AWP Intro Journals Award. Published in Tampa Review.",
+                pages: [
+                    "comics/greening/greeningtitle.webp",
+                    "comics/greening/greening_1-2.webp",
+                    "comics/greening/greening_3-4.webp",
+                    "comics/greening/greenings_5-6.webp", 
+                    "comics/greening/greening_7-8.webp",
+                    "comics/greening/greening_9-10.webp",
+                    "comics/greening/greening_10-11.webp"
+                ]
+            },
+
+            // Example of a comic WITHOUT a special caption
+            "the_void": {
+                title: "The Void",
+                pages: [
+                    "https://via.placeholder.com/800x1200?text=Page+1",
+                    "https://via.placeholder.com/800x1200?text=Page+2",
+                    "https://via.placeholder.com/800x1200?text=Page+3"
+                ]
+            }
+        };
+
+        /* --- THE LOGIC --- */
+        var lightbox = document.getElementById('lightbox');
+        var imgElement = document.getElementById('lightbox-img');
+        var captionElement = document.getElementById('lightbox-caption');
+        var counterElement = document.getElementById('page-counter');
+        var nextBtn = document.getElementById('next-btn');
+        var prevBtn = document.getElementById('prev-btn');
+
+        // State Tracking
+        var currentComicId = null;
+        var currentPageIndex = 0;
+
+        // MODE 1: Open a Sequential Comic
+        function openReader(comicId) {
+            currentComicId = comicId;
+            currentPageIndex = 0; // Always start at page 1
+
+            // Show controls
+            nextBtn.classList.remove('hidden');
+            prevBtn.classList.remove('hidden');
+            counterElement.classList.remove('hidden');
+
+            updateReader();
+            
+            // Allow the CSS 'display: flex' to take over by removing inline styles if any
+            lightbox.style.display = 'flex';
+        }
+
+        // MODE 2: Open a Single Illustration
+        function openSingle(url, caption) {
+            currentComicId = null; // No comic selected
+            
+            // Hide controls
+            nextBtn.classList.add('hidden');
+            prevBtn.classList.add('hidden');
+            counterElement.classList.add('hidden');
+
+            imgElement.src = url;
+            captionElement.innerText = caption;
+            
+            lightbox.style.display = 'flex';
+        }
+
+        // Helper: Updates the image based on current state
+        function updateReader() {
+            var comic = comicLibrary[currentComicId];
+            var total = comic.pages.length;
+            
+            // Set Image
+            imgElement.src = comic.pages[currentPageIndex];
+
+            // Set Counter
+            counterElement.innerText = (currentPageIndex + 1) + " / " + total;
+            
+            // NEW LOGIC: Check for "Info"
+            if (comic.info) {
+                // If info exists: Title + Line Break + Info (in smaller gray text)
+                captionElement.innerHTML = `
+                    <strong>${comic.title}</strong><br>
+                    <span style="font-size: 0.85em; color: #ccc; font-family: var(--font-body);">
+                        ${comic.info}
+                    </span>
+                `;
+            } else {
+                // If no info: Just the Title
+                captionElement.innerText = comic.title;
+            }
+        }
+
+        // Navigation Logic
+        function changePage(direction) {
+            if (!currentComicId) return; // Do nothing if it's a single image
+
+            var comic = comicLibrary[currentComicId];
+            var newIndex = currentPageIndex + direction;
+
+            // Boundary Checks (Don't go past first or last page)
+            if (newIndex >= 0 && newIndex < comic.pages.length) {
+                currentPageIndex = newIndex;
+                updateReader();
+            }
+        }
+
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+            imgElement.src = ""; 
+        }
+
+        // Keyboard Support (Left/Right Arrows)
+        document.addEventListener('keydown', function(e) {
+            if (lightbox.style.display === 'flex') {
+                if (e.key === "ArrowLeft") changePage(-1);
+                if (e.key === "ArrowRight") changePage(1);
+                if (e.key === "Escape") closeLightbox();
+            }
+        });
+
+        /* --- CLICK OUTSIDE TO CLOSE --- */
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+    </script>
+
+</body>
+</html>

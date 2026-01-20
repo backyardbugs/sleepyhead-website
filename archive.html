@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive - The Digital Broadsheet</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Specific Styles for the Archive List */
+        .archive-list {
+            list-style: none;
+            padding: 0;
+            font-family: var(--font-head);
+        }
+
+        .archive-list li {
+            border-bottom: 1px dashed #333;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .archive-date {
+            color: #666;
+            font-size: 0.9em;
+            min-width: 120px; /* Keeps dates aligned */
+        }
+
+        .archive-title {
+            color: var(--text-color);
+            font-weight: bold;
+            flex-grow: 1;
+        }
+
+        .archive-title a {
+            border-bottom: none; /* Cleaner look for lists */
+        }
+        
+        .archive-title a:hover {
+            color: var(--accent-color);
+        }
+
+        .archive-tags {
+            font-size: 0.8em;
+            color: var(--accent-color);
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <aside id="sidebar-container"></aside>
+
+        <main>
+            <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">The Archive</h1>
+            
+            <p style="font-style:italic; color:#666; margin-bottom:40px;">
+                A complete chronological record of all entries.
+            </p>
+
+            <ul id="archive-feed" class="archive-list">
+                </ul>
+
+        </main>
+    </div>
+
+    <script src="loader.js"></script>
+
+    <script>
+        // Versioning for cache-busting
+        var stamp = Date.now();
+        var blogScript = document.createElement('script');
+        blogScript.src = "blog.js?v=" + stamp;
+        
+        blogScript.onload = function() {
+            renderArchive();
+        };
+        
+        document.body.appendChild(blogScript);
+
+        // 3. The Mini-Engine for the Archive
+        function renderArchive() {
+            var container = document.getElementById('archive-feed');
+            var html = "";
+
+            // Loop through ALL posts (no limit)
+            for (var i = 0; i < posts.length; i++) {
+                var filename = posts[i][0];
+                var title = posts[i][1];
+                var date = posts[i][2];
+                var tags = posts[i][3] || [];
+
+                // Join tags with a generic hash if they exist
+                var tagString = tags.map(t => "#" + t).join(" ");
+
+                html += `
+                <li>
+                    <span class="archive-date">${date}</span>
+                    <span class="archive-title">
+                        <a href="index.html?post=${filename}">${title}</a>
+                    </span>
+                    <span class="archive-tags">${tagString}</span>
+                </li>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+    </script>
+
+</body>
+</html>

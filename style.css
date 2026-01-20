@@ -1,0 +1,362 @@
+/* --- style.css --- */
+
+/* 1. THE GOLDEN RULE */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block; /* Removes weird gaps below images */
+}
+
+/* 2. THE BASICS (The Palette) */
+:root {
+    --bg-color: #111111;       /* Deep Black/Charcoal */
+    --text-color: #e0e0e0;     /* Off-White/Silver */
+    --accent-color: #C5A059;   /* Muted Gold */
+    --border-color: #333333;   /* Dark Grey for lines */
+    --font-head: 'Courier Prime', monospace;
+    --font-body: 'Lora', serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-body);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    font-size: 18px;
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.2s;
+    border-bottom: 1px dotted var(--accent-color);
+}
+
+a:hover {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+/* 3. THE LAYOUT */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* 4. THE SIDEBAR */
+aside {
+    width: 280px;
+    padding: 40px 20px;
+    border-right: 1px solid var(--border-color);
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto; 
+}
+
+aside h1 {
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.bio {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav li {
+    margin-bottom: 10px;
+    font-family: var(--font-head);
+}
+
+/* 5. THE MAIN CONTENT */
+main {
+    flex-grow: 1;
+    padding: 40px 60px;
+}
+
+/* --- NEW BLOCKQUOTE STYLING --- */
+blockquote {
+    /* The Gold Bar */
+    border-left: 4px solid var(--accent-color);
+    
+    /* Spacing */
+    margin: 30px 0;
+    padding-left: 20px;
+    
+    /* The Vibe */
+    color: #bbb;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 0.95em;
+}
+
+/* Optional: Metadata for quotes (Author names) */
+blockquote footer, 
+blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-family: var(--font-head);
+    font-style: normal;
+    font-size: 0.8rem;
+    color: var(--accent-color);
+}
+/* -------------------------------- */
+
+article {
+    margin-bottom: 60px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 40px;
+}
+
+article:last-child {
+    border-bottom: none;
+}
+
+h2.post-title {
+    font-family: var(--font-head);
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    margin-top: 0;
+    color: #fff;
+}
+
+.post-meta {
+    font-family: var(--font-head);
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* 6. MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    aside {
+        width: auto;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 20px;
+        text-align: center;
+    }
+    main {
+        padding: 20px;
+    }
+} 
+
+/* --- New Additions for Tags & Permalinks --- */
+
+.tag {
+    background-color: #222;
+    color: var(--accent-color);
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    border-radius: 4px;
+    margin-right: 5px;
+    font-family: var(--font-head);
+    text-transform: uppercase;
+    border: 1px solid #333;
+}
+
+/* Remove the underline from the title links on the homepage */
+a.permalink {
+    text-decoration: none;
+    border-bottom: none;
+    color: #fff;
+}
+
+a.permalink:hover {
+    color: var(--accent-color);
+}
+
+/* --- COMICS & ART PORTFOLIO --- */
+
+/* The Gallery Grid */
+.art-grid {
+    display: grid;
+    /* Creates columns that automatically fit the screen width */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 60px;
+}
+
+.art-item {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    border: 1px solid #333;
+    transition: border-color 0.3s;
+}
+
+.art-item:hover {
+    border-color: var(--accent-color); /* Gold Border on hover */
+}
+
+.art-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures neat squares/rectangles */
+    display: block;
+    filter: grayscale(100%); /* Keeps the punk B&W vibe */
+    transition: filter 0.3s, transform 0.3s;
+}
+
+.art-item:hover img {
+    filter: grayscale(0%); /* Color reveal on hover */
+    transform: scale(1.02); /* Subtle zoom */
+}
+
+/* The "Lightbox" (Modal) Overlay */
+#lightbox {
+    /* 1. VISIBILITY */
+    display: none; /* Hidden by default! */
+    
+    /* 2. POSITIONING */
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000; 
+    
+    /* 3. APPEARANCE */
+    background-color: rgba(0, 0, 0, 0.9); 
+    
+    /* 4. LAYOUT (When visible) */
+    /* We define HOW it aligns items here, but we don't turn it ON here. */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* --- THE IMAGE ITSELF --- */
+#lightbox img {
+    /* 1. SIZE CONTROLS */
+    /* "Don't be taller or wider than 75% of the screen" */
+    max-height: 75vh;
+    max-width: 75vw;
+    
+    /* 2. ASPECT RATIO */
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    
+    /* 3. AESTHETICS */
+    box-shadow: 0 0 50px rgba(0,0,0,1); /* Heavy shadow to lift it off background */
+    border: 1px solid #333;
+    background: #000;
+}
+
+#lightbox-caption {
+    color: #fff;
+    margin-top: 15px;
+    font-family: var(--font-body);
+    font-style: italic;
+    text-align: center;
+}
+
+/* Close Button for Lightbox */
+.close-lightbox {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 40px;
+    cursor: pointer;
+    font-family: var(--font-head);
+}
+/* --- READER CONTROLS --- */
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    border: none;
+    padding: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none; /* Prevents highlighting the arrow text */
+}
+
+.lightbox-nav:hover {
+    background: var(--accent-color);
+    color: #000;
+}
+
+#prev-btn { left: 10px; }
+#next-btn { right: 10px; }
+
+/* Hide buttons by default (for single illustrations) */
+.hidden { display: none !important; }
+
+/* Page Counter (e.g., "1 / 10") */
+#page-counter {
+    position: absolute;
+    bottom: 20px; /* Sit above the caption */
+    color: #aaa;
+    font-family: var(--font-head);
+    font-size: 0.9rem;
+    background: #000;
+    padding: 5px 10px;
+    border: 1px solid #333;
+}
+/* --- READ MORE BUTTON --- */
+a.read-more-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 16px;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    font-family: var(--font-head);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+a.read-more-btn:hover {
+    background-color: var(--accent-color);
+    color: #000; /* Black text on Gold background */
+    border-bottom: 1px solid var(--accent-color);
+}
+
+/* The Preformatted Poem Fix */
+pre.poem {
+    /* 1. RESET THE DEFAULTS */
+    font-family: var(--font-body); /* Forces Lora font */
+    font-size: 1rem;               /* Matches your body text size */
+    white-space: pre-wrap;         /* Wraps text if it hits the edge of the screen */
+    
+    /* 2. THE AESTHETIC */
+    font-style: italic;
+    color: #bbb;
+    margin: 30px 0;
+    
+    /* 3. THE GOLD BAR */
+    border-left: 2px solid var(--accent-color);
+    padding-left: 20px;
+    margin-left: 20px;
+}

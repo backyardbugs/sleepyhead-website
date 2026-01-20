@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Library - Sleepyhead</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* --- THE SHELVES --- */
+        .bookshelf-container {
+            margin-top: 20px;
+            padding-bottom: 20px;
+            overflow-x: auto; /* Allows scrolling sideways on mobile */
+            white-space: nowrap;
+            /* Hide Scrollbar but keep functionality */
+            scrollbar-width: thin;
+            scrollbar-color: #333 #111;
+        }
+
+        .shelf-row {
+            border-bottom: 15px solid #222; /* The Wood Plank */
+            display: flex;
+            align-items: flex-end; /* Align books to bottom */
+            padding: 0 20px;
+            min-height: 280px; 
+            gap: 6px; /* Space between books */
+        }
+
+        /* --- THE BOOKS --- */
+        .book {
+            width: 45px;
+            border: 1px solid #444;
+            background-color: #161616;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s;
+            position: relative;
+            
+            /* Vertical Text Logic */
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg); /* Flips text to read bottom-up */
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
+            
+            /* Typography */
+            font-family: var(--font-head);
+            font-size: 0.8rem;
+            color: #888;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 2px 2px 5px #000; /* Depth */
+            
+            overflow: hidden;        /* Cuts off text that is too long */
+            text-overflow: ellipsis; /* Adds "..." if it cuts off */
+        }
+
+        .book:hover {
+            transform: rotate(180deg) translateY(-15px); /* Pull out effect */
+            background-color: #222;
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            z-index: 10;
+        }
+
+        /* Random Heights for Realism */
+        .h-1 { height: 250px; }
+        .h-2 { height: 230px; }
+        .h-3 { height: 260px; }
+        .h-4 { height: 210px; }
+        
+        /* Spine Markers */
+        .spine-mark {
+            position: absolute;
+            bottom: 10px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 30px;
+        }
+        
+        .type-poem .spine-mark { background: var(--accent-color); } /* Gold for Poems */
+        .type-story .spine-mark { background: #555; } /* Grey for Stories */
+
+
+        /* --- THE READING OVERLAY --- */
+        #text-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.95);
+            z-index: 5000;
+            overflow-y: auto;
+            justify-content: center;
+        }
+
+        .paper {
+            background: #111;
+            max-width: 700px;
+            width: 90%;
+            margin: 60px auto;
+            padding: 60px;
+            border: 1px solid #333;
+            border-top: 4px solid var(--accent-color);
+            box-shadow: 0 0 50px #000;
+            position: relative;
+            min-height: 80vh;
+        }
+
+        .close-reader {
+            position: absolute;
+            top: 20px; right: 30px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+            font-family: var(--font-head);
+            line-height: 1;
+        }
+        .close-reader:hover { color: var(--accent-color); }
+
+        /* --- READER TYPOGRAPHY --- */
+        .reader-title { 
+            font-family: var(--font-head); 
+            color: #fff; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 20px; 
+            margin-bottom: 40px; 
+            margin-top: 0;
+        }
+
+        .reader-content { 
+            font-family: var(--font-body); 
+            font-size: 1.1rem; 
+            color: #ccc; 
+            line-height: 1.6;
+        }
+
+        /* --- NOVEL FORMATTING (Indents, No Gaps) --- */
+        .reader-content p { 
+            margin-bottom: 0;      /* Remove gap between paragraphs */
+            text-indent: 2em;      /* Add indentation */
+        }
+        /* Keep the first paragraph flat (Standard typesetting rule) */
+        .reader-content p:first-of-type {
+            text-indent: 0;
+        }
+
+        /* --- THE POETRY HACK --- */
+        /* Turns Markdown Code Blocks into Poetry Layouts */
+        .reader-content pre {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+
+        .reader-content code {
+            font-family: var(--font-body); /* Use the book font, not code font */
+            font-size: 1.1rem;
+            color: #ccc;
+            white-space: pre-wrap; /* Preserves exact spaces */
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <aside id="sidebar-container"></aside>
+
+        <main>
+            <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">The Library</h1>
+            <p style="color: #666; font-style: italic;">
+                some things i wrote.
+            </p>
+            
+            <h2 style="font-family: var(--font-head); margin-top: 50px; font-size: 1rem; color: #666;">FICTION</h2>
+            <div class="bookshelf-container">
+                <div class="shelf-row" id="shelf-fiction">
+                    </div>
+            </div>
+
+            <h2 style="font-family: var(--font-head); margin-top: 50px; font-size: 1rem; color: var(--accent-color);">POETRY</h2>
+            <div class="bookshelf-container">
+                <div class="shelf-row" id="shelf-poetry">
+                    </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div id="text-overlay">
+        <div class="paper">
+            <span class="close-reader" onclick="closeReader()">×</span>
+            <div id="reader-body">
+                </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+    
+    <script src="loader.js"></script>
+
+    <script>
+        /* --- THE CATALOG --- */
+        
+        const library = [
+            // FICTION
+            { title: "Farkhead", file: "farkhead", type: "story", height: "h-3" },
+            
+            // THE LONG TITLE EXAMPLE:
+            { 
+                // The Full Title (Shows in the Reader)
+                title: "Rich Body Poor Body: What the Rich Teach Their Kids About Dead Bodies That the Poor and Middle Class Do Not!", 
+                // The Spine Title (Shows on the Shelf)
+                spine: "Rich Body Poor Body", 
+                file: "richbodypoorbody", 
+                type: "story", 
+                height: "h-4" 
+            },
+              { 
+                // The Full Title (Shows in the Reader)
+                title: "Meme Mezmereme’s Magical Floristry", 
+                // The Spine Title (Shows on the Shelf)
+                spine: "Flowers", 
+                file: "flowers", 
+                type: "story", 
+                height: "h-2" 
+            },
+
+            // POETRY
+            { 
+                // The Full Title (Shows in the Reader)
+                title: "The Clock Of The Long Now after 'Lauren Sánchez Is Looking to the Future' by Chloe Malle",
+                // The Spine Title (Shows on the Shelf)
+                spine: "10,000 Year Clock", 
+                file: "clock", 
+                type: "poem", 
+                height: "h-3" 
+            },
+             { 
+                // The Full Title (Shows in the Reader)
+                title: "Nectar",
+                // The Spine Title (Shows on the Shelf)
+                spine: "Nectar", 
+                file: "nectar", 
+                type: "poem", 
+                height: "h-2" 
+            },
+        ];
+
+        /* --- RENDER THE SHELVES --- */
+        const poetryShelf = document.getElementById('shelf-poetry');
+        const fictionShelf = document.getElementById('shelf-fiction');
+
+        library.forEach(item => {
+            // LOGIC: Check if a "spine" nickname exists. If not, use the full title.
+            const displayTitle = item.spine || item.title;
+
+            // 1. Create the book spine
+            let book = document.createElement('div');
+            book.className = `book ${item.height} type-${item.type}`;
+            
+            // We use 'displayTitle' here for the visual book
+            book.innerHTML = `
+                ${displayTitle}
+                <div class="spine-mark"></div>
+            `;
+            
+            // 2. Add click event
+            book.onclick = function() {
+                openReader(item); // The reader still sees the FULL item.title
+            };
+
+            // 3. Sorting Hat
+            if (item.type === 'poem') {
+                poetryShelf.appendChild(book);
+            } else {
+                fictionShelf.appendChild(book);
+            }
+        });
+
+        /* --- READER LOGIC --- */
+        const overlay = document.getElementById('text-overlay');
+        const readerBody = document.getElementById('reader-body');
+
+        function openReader(item) {
+            overlay.style.display = 'flex';
+            readerBody.innerHTML = "<p style='color:#666; font-family:var(--font-head); text-align:center; margin-top:100px;'>Opening book...</p>";
+
+            // Force .md extension
+            var filePath = "library/" + item.file + ".md";
+
+            // Fetch Content
+            fetch(filePath + "?t=" + Date.now())
+                .then(response => {
+                    if (!response.ok) throw new Error("File not found");
+                    return response.text();
+                })
+                .then(text => {
+                    var html = marked.parse(text);
+                    // We use the FULL item.title here
+                    displayContent(item.title, html);
+                })
+                .catch(err => {
+                    readerBody.innerHTML = `<div style='text-align:center; margin-top:50px;'>
+                        <p style='color:red; font-family:var(--font-head)'>Could not find file:</p>
+                        <p>${filePath}</p>
+                        </div>`;
+                });
+        }
+
+        function displayContent(title, htmlContent) {
+            readerBody.innerHTML = `
+                <h1 class="reader-title">${title}</h1>
+                <div class="reader-content">${htmlContent}</div>
+            `;
+        }
+
+        function closeReader() {
+            overlay.style.display = 'none';
+            readerBody.innerHTML = ""; 
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === "Escape") closeReader();
+        });
+
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closeReader();
+        });
+
+    </script>
+</body>
+</html>

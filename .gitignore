@@ -1,0 +1,7 @@
+.DS_Store
+*.log
+node_modules/
+INPUT.txt
+hydrate_workspace.py
+hydrate_workspace_v2.py
+._*

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleepyhead Studio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css?v=1">
+
+</head>
+<body>
+
+    <div class="container">
+        
+        <aside id="sidebar-container"></aside>
+
+        <main>
+            <div id="blog-feed"></div> 
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+    
+    <script>
+    /* --- THE MASTER LOADER --- */
+    /* Automatically loads the latest version of your code */
+    
+    (function() {
+        var stamp = Date.now(); // Get the current time (e.g., 170234...)
+
+        // 1. Create the Blog Script (The Data)
+        var blogScript = document.createElement('script');
+        blogScript.src = "blog.js?v=" + stamp;
+        
+        // 2. When Blog is ready, load the Engine
+        blogScript.onload = function() {
+            var engineScript = document.createElement('script');
+            engineScript.src = "engine.js?v=" + stamp;
+            document.body.appendChild(engineScript);
+        };
+
+        // 3. Fire!
+        document.body.appendChild(blogScript);
+    })();
+</script>
+
+</body>
+<script>
+    // THE DIAGNOSTIC TOOL
+    // This prints invisible errors to the screen so we can see them.
+    window.onerror = function(msg, url, line) {
+        var container = document.getElementById('blog-feed');
+        if (!container) container = document.body;
+        
+        container.innerHTML += `
+            <div style="background:white; color:red; padding:20px; border:2px solid red; margin:20px;">
+                <h3>⚠️ WE HAVE A PROBLEM</h3>
+                <p><strong>Error Message:</strong> ${msg}</p>
+                <p><strong>Location:</strong> ${url} (Line: ${line})</p>
+                <p><em>Take a screenshot of this and show Gemini!</em></p>
+            </div>
+        `;
+        return false;
+    };
+</script>
+<script src="loader.js"></script>
+</html>
