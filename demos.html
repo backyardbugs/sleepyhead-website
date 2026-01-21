@@ -46,7 +46,7 @@
         <audio id="audio-demo" preload="none"></audio>
     </div>
 
-    <div id="demo-popup" class="demo-note-popup"></div>
+    <div id="demo-popup-container"></div>
 
     <script src="loader.js?v=4"></script>
     <script>
@@ -61,9 +61,9 @@
             const btnPlay = document.getElementById('cp-play');
             const btnStop = document.getElementById('cp-stop');
             
-            // Popup Logic
-            const popup = document.getElementById('demo-popup');
-            let popupTimeout;
+            // Popup Container
+            const popupContainer = document.getElementById('demo-popup-container');
+            let popupTimeouts = [];
 
             // Fetch Demos
             fetch('data/demos.json')
@@ -104,9 +104,10 @@
                 cpTitle.textContent = demo.title;
                 cpStatus.textContent = "Loading...";
                 
-                // Reset Popup
-                popup.classList.remove('visible');
-                clearTimeout(popupTimeout);
+                // Reset Popups
+                popupContainer.innerHTML = '';
+                popupTimeouts.forEach(t => clearTimeout(t));
+                popupTimeouts = [];
 
                 // Just incase it's a relative path from json
                 audio.src = demo.url; 
@@ -117,18 +118,45 @@
                     cpStatus.textContent = "Playing";
                     btnPlay.textContent = "PAUSE";
 
-                    // Trigger Popup if note exists
+                    // Trigger Popup(s) if note exists
                     if (demo.note) {
-                        popup.textContent = demo.note;
-                        popupTimeout = setTimeout(() => {
-                            popup.classList.add('visible');
-                        }, 1000); // 1 second delay
+                        // Normalize to array
+                        const notes = Array.isArray(demo.note) ? demo.note : [demo.note];
+                        
+                        let delay = 1000; // Start delay
+                        
+                        notes.forEach(text => {
+                            // Calculate reading time for delay of NEXT message? 
+                            // Or just fixed staggering? Let's do fixed + slight length-based.
+                            
+                            const t = setTimeout(() => {
+                                createBubble(text);
+                            }, delay);
+                            popupTimeouts.push(t);
+
+                            // Increase delay for next message
+                            // Base 2s + 50ms per character
+                            delay += 2000 + (text.length * 30); 
+                        });
                     }
 
                 }).catch(e => {
                     console.log("Auto-play prevented", e);
                     cpStatus.textContent = "Ready";
                     btnPlay.textContent = "PLAY";
+                });
+            }
+
+            function createBubble(text) {
+                const bubble = document.createElement('div');
+                bubble.className = "demo-note-bubble";
+                bubble.innerText = text; // Secure text insertion
+                popupContainer.appendChild(bubble);
+
+                // Trigger animation
+                // Slight delay to ensure DOM paint
+                requestAnimationFrame(() => {
+                    bubble.classList.add('visible');
                 });
             }
 
@@ -152,9 +180,10 @@
                 player.classList.remove('active');
                 cpStatus.textContent = "Stopped";
                 
-                // Hide Popup
-                popup.classList.remove('visible');
-                clearTimeout(popupTimeout);
+                // Hide Popups
+                popupContainer.innerHTML = '';
+                popupTimeouts.forEach(t => clearTimeout(t));
+                popupTimeouts = [];
             });
 
             // Time Update

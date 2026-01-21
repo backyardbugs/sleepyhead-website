@@ -1,9 +1,13 @@
 [
     {
-        "id": "demo_1",
-        "title": "Untitled Sketch 1",
-        "date": "2026-01-20",
-        "url": "audio/demo1.mp3",
-        "note": "Just a loop I made on the OP-1."
+        "id": "bedroom_days",
+        "title": "bedroom days",
+        "date": "2022",
+        "url": "audio/bedroomdays.mp3",
+        "note": [
+            "When I first started becoming obsessed with production I was messing with this Sweet Gingerbread Man sample--which, god. That song is so good--and we ended up with this little thing.",
+            "Idk, maybe it could become a Julep song one day.",
+            "Or maybe like a little intro like that one Frank Ocean song where it starts out with the radio. I think it's called Fertilizer? Anyways."
+        ]
     }
 ]
