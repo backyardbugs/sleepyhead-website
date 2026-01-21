@@ -183,7 +183,7 @@
             function createBubble(text) {
                 const bubble = document.createElement('div');
                 bubble.className = "demo-note-bubble";
-                bubble.innerText = text; // Secure text insertion
+                bubble.innerHTML = text; // Changed to innerHTML to support links
                 popupContainer.appendChild(bubble);
 
                 // Trigger animation
