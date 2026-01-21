@@ -3,306 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music - High Press / Julep</title>
-    
+    <title>Music - Sleepyhead</title>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="style.css">
-
     <style>
-        /* Special Styles just for the Music Page */
-        .band-section {
-            margin-bottom: 60px;
-            border-left: 4px solid var(--accent-color);
-            padding-left: 20px;
-        }
-        
-        /* SHOW LIST STYLES */
-        .show-list {
-            list-style: none;
-            padding: 0;
-            font-family: var(--font-head);
-        }
-
-        .show-list li {
-            border-bottom: 1px dashed #333;
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center; /* Ensures text lines up vertically */
-        }
-        
-        /* Mobile Tweak: On small screens, stack them so they don't squish */
-        @media (max-width: 600px) {
-            .show-list li {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-        }
-
-        .show-band { color: var(--accent-color); font-weight: bold; }
-        .show-date { color: #fff; font-weight: bold; }
-        .show-venue { color: #fff; text-align: right; }
-        .show-location { color: #666; font-size: 0.8em; }
-
-        /* The 'Load More' Button Style */
-        #load-more-btn {
-            display: none; /* Hidden by default */
-            background: transparent;
-            border: 1px solid #444;
-            color: #888;
-            font-family: var(--font-head);
-            padding: 10px 20px;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-        }
-        #load-more-btn:hover {
-            border-color: #fff;
-            color: #fff;
-        }
-
-        /* --- GEAR GRID STYLES --- */
-        .gear-grid {
+        .music-nav-grid {
             display: grid;
-            /* This automatically arranges items. It fits as many 160px boxes as it can per row */
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            margin-top: 20px;
+            margin-bottom: 60px;
         }
-
-        .gear-item {
-            background: #1a1a1a;
+        .music-nav-item {
             border: 1px solid #333;
-            padding: 10px;
+            padding: 40px 20px;
             text-align: center;
-            transition: transform 0.2s;
-            
-            /* FLEXBOX ADDED FOR CAPTIONS */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: #1a1a1a;
+            transition: all 0.2s;
             text-decoration: none;
-            color: inherit;
+            display: block;
         }
-
-        .gear-item:hover {
-            border-color: var(--accent-color); /* Gold border on hover */
-            transform: translateY(-2px); /* Slight lift */
+        .music-nav-item:hover {
+            border-color: var(--accent-color);
+            background: #222;
         }
-
-        .gear-image-box {
-            width: 100%;
-            aspect-ratio: 1 / 1; /* Forces it to be a perfect square */
-            background: #000;
-            margin-bottom: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .gear-image-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures image fills the square without stretching */
-            filter: grayscale(100%); /* The Punk Look: Black & White by default */
-            transition: filter 0.3s;
-        }
-
-        .gear-item:hover img {
-            filter: grayscale(0%); /* Full color on hover */
-        }
-
-        .gear-name {
+        .music-nav-title {
             font-family: var(--font-head);
-            font-size: 0.85rem;
+            font-size: 1.5rem;
             color: #fff;
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 10px;
         }
-
-        .gear-type {
-            font-family: 'Lora', serif; /* Use body font for the sub-label */
-            font-size: 0.75rem;
-            color: #888;
-            display: block;
-        }
-
-        /* NEW CAPTION STYLE */
-        .gear-caption {
+        .music-nav-desc {
             font-family: 'Lora', serif;
-            font-size: 0.75rem;
-            color: #aaa;
-            margin-top: 10px;
-            border-top: 1px dotted #333;
-            padding-top: 10px;
-            line-height: 1.4;
+            font-size: 0.9rem;
+            color: #888;
             font-style: italic;
-            text-align: center;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        
        <aside id="sidebar-container"></aside>
-
         <main>
             <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">Music Projects</h1>
-
-            <div class="band-section">
-                <h2 style="margin-top:0;">HIGH PRESS</h2>
-                <p><em>Pop-Punk / Post-Hardcore / Emo. Bass.</em></p>
-                
-                <div style="background:#222; padding:20px; text-align:center; border:1px solid #444;">
-                     <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/4dNsmfo2ooBsxqbYuwtW0U?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                </div>
-            </div>
-
-            <div class="band-section">
-                <h2 style="margin-top:0;">JULEP</h2>
-                <p><em>My wife and I's band!</em></p>
-                
-                <div style="background:#222; padding:20px; text-align:center; border:1px solid #444;">
-                    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/38s7awIhorM3CymxN2BQFX?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                </div>
-            </div>
-
-            <h2 style="font-family: var(--font-head); margin-top: 60px;">Upcoming Shows</h2>
-            <ul class="show-list">
-                <li>
-                    <span class="show-band">JULEP</span>
-                    <span class="show-date">FEB 15</span>
-                    <span class="show-venue">UNION HALL <span class="show-location">/ LAKELAND, FL</span></span>
-                </li>
-            </ul>
-
-            <h2 style="font-family: var(--font-head); margin-top: 60px; color:#666;">Past Shows</h2>
             
-            <ul class="show-list" id="past-shows-list" style="opacity: 0.6;">
-                <li>
-                    <span class="show-band">HIGH PRESS</span>
-                    <span class="show-date">DEC 18</span>
-                    <span class="show-venue">CROWBAR <span class="show-location">/ TAMPA, FL</span></span>
-                </li>
-                <li>
-                    <span class="show-band">JULEP</span>
-                    <span class="show-date">DEC 12</span>
-                    <span class="show-venue">NEW WORLD TAMPA <span class="show-location">/ TAMPA, FL</span></span>
-                </li>
-                <li>
-                    <span class="show-band">SEEK WELL</span>
-                    <span class="show-date">DEC 06</span>
-                    <span class="show-venue">SPOT <span class="show-location">/ TAMPA, FL</span></span>
-                </li>
-                <li>
-                    <span class="show-band">HIGH PRESS</span>
-                    <span class="show-date">NOV 08</span>
-                    <span class="show-venue">NEW WORLD TAMPA <span class="show-location">/ ORLANDO, FL</span></span>
-                </li>
-                <li>
-                    <span class="show-band">JULEP</span>
-                    <span class="show-date">OCT 24</span>
-                    <span class="show-venue">SHUFFLE TAMPA <span class="show-location">/ TAMPA, FL</span></span>
-                </li>
-                 <li>
-                    <span class="show-band">JULEP</span>
-                    <span class="show-date">SEP 27</span>
-                    <span class="show-venue">BOBA HOUSE <span class="show-location">/ TAMPA, FL</span></span>
-                </li>
-                <li>
-                    <span class="show-band">JULEP</span>
-                    <span class="show-date">SEP 27</span>
-                    <span class="show-venue">RICHEY SUNCOAST<span class="show-location">/ NEW PORT RICHEY, FL</span></span>
-                </li>
-                <li>
-                    <span class="show-band">JULEP</span>
-                    <span class="show-date">AUG 30</span>
-                    <span class="show-venue">UNION HALL <span class="show-location">/ LAKELAND, FL</span></span>
-                </li>
-                 <li>
-                    <span class="show-band">JULEP</span>
-                    <span class="show-date">AUG 07</span>
-                    <span class="show-venue">LOOSEY'S PUB <span class="show-location">/ GAINESVILLE, FL</span></span>
-                </li>
-                 <li>
-                    <span class="show-band">JULEP</span>
-                    <span class="show-date">JULY 26</span>
-                    <span class="show-venue">BOBA HOUSE <span class="show-location">/ TAMPA, FL</span></span>
-                </li>
-                <li>
-                    <span class="show-band">HIGH PRESS</span>
-                    <span class="show-date">JULY 12</span>
-                    <span class="show-venue">THE BRASS MUG <span class="show-location">/ TAMPA, FL</span></span>
-                </li>
-                <li>
-                    <span class="show-band">HIGH PRESS</span>
-                    <span class="show-date">JUNE 21</span>
-                    <span class="show-venue">CROWBAR <span class="show-location">/ TAMPA, FL</span></span>
-                </li>
-                <li>
-                    <span class="show-band">HIGH PRESS</span>
-                    <span class="show-date">MAY 25</span>
-                    <span class="show-venue">NEW WORLD TAMPA <span class="show-location">/ TAMPA, FL</span></span>
-                </li>
-                <li>
-                    <span class="show-band">HIGH PRESS</span>
-                    <span class="show-date">MAY 03</span>
-                    <span class="show-venue">NEW WORLD TAMPA <span class="show-location">/ TAMPA, FL</span></span>
-                </li>
-            </ul>
-            <button id="load-more-btn">↓ Load Full History</button>
+            <div class="music-nav-grid">
+                <a href="julep.html" class="music-nav-item">
+                    <span class="music-nav-title">JULEP</span>
+                    <span class="music-nav-desc">Alternative / Indie</span>
+                </a>
+                <a href="highpress.html" class="music-nav-item">
+                    <span class="music-nav-title">HIGH PRESS</span>
+                    <span class="music-nav-desc">Punk / Post-Hardcore</span>
+                </a>
+                <a href="demos.html" class="music-nav-item">
+                    <span class="music-nav-title">THE DEMO CRATE</span>
+                    <span class="music-nav-desc">Sketches & B-Sides</span>
+                </a>
+            </div>
 
+            <!-- ALL UPCOMING SHOWS -->
+            <h2 style="font-family: var(--font-head);">Tour Dates</h2>
+            <div id="shows-container"></div>
+            
+            <button id="toggle-history-btn" style="
+                background: transparent;
+                border: 1px solid #444;
+                color: #888;
+                font-family: var(--font-head);
+                padding: 10px 20px;
+                cursor: pointer;
+                margin-top: 20px;
+                display: block;
+                width: 100%;
+            ">View Past Shows</button>
 
-            <h2 style="font-family: var(--font-head); margin-top: 60px;">The Rig</h2>
-            <p>I will update this later.</p>
-
-            <div class="gear-grid">
-
+            <!-- THE RIG -->
+             <h2 style="font-family: var(--font-head); margin-top: 60px;">The Rig</h2>
+             <div class="gear-grid">
                 <div class="gear-item">
                     <div class="gear-image-box">
                         <img src="https://via.placeholder.com/300/F5F5DC/333?text=Cream+P-Bass" alt="Fender Precision Bass">
                     </div>
                     <span class="gear-name">Fender Precision Bass</span>
-                    <span class="gear-type">idk the year i'll put it later</span>
-                    
-                    <p class="gear-caption">
-                        "Fender P bass. I'll put a picture later with my other gear."
-                    </p>
+                    <span class="gear-type">Unknown Year</span>
+                    <p class="gear-caption">"Primary weapon of choice."</p>
                 </div>
-
             </div>
-            </main>
+
+        </main>
     </div>
-<script src="loader.js"></script>
 
-<script>
-    /* --- SHOW HISTORY MANAGER --- */
-    (function() {
-        var list = document.getElementById('past-shows-list');
-        var items = list.getElementsByTagName('li');
-        var btn = document.getElementById('load-more-btn');
-        var limit = 5; 
+    <script src="loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load only upcoming initially
+            loadShows('shows-container', 'ALL', false);
 
-        if (items.length > limit) {
-            for (var i = limit; i < items.length; i++) {
-                items[i].style.display = "none";
-            }
-            btn.style.display = "block"; 
-        }
-
-        btn.addEventListener('click', function() {
-            for (var i = 0; i < items.length; i++) {
-                items[i].style.display = "flex"; 
-            }
-            btn.style.display = "none"; 
+            document.getElementById('toggle-history-btn').addEventListener('click', function() {
+                this.style.display = 'none'; // Hide button
+                loadShows('shows-container', 'ALL', true); // Reload with history
+            });
         });
-    })();
-</script>
-
+    </script>
 </body>
 </html>

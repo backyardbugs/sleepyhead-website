@@ -121,3 +121,97 @@ function loadNowPlaying() {
     })
     .catch(err => console.log("Error loading media status:", err));
 }
+
+/* --- SHOWS LOADER --- */
+/* Used by music.html sub-pages to render show lists from data/shows.json */
+function loadShows(containerId, filterBand, showPast = true) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = '<p>Loading shows...</p>';
+
+    fetch('data/shows.json?v=' + Date.now())
+        .then(response => response.json())
+        .then(data => {
+            let shows = data;
+            
+            // Filter by Band
+            if (filterBand && filterBand !== 'ALL') {
+                shows = shows.filter(show => show.band === filterBand);
+            }
+
+            // Split into Upcoming and Past
+            // We calculate based on today
+            const today = new Date().toISOString().split('T')[0];
+            
+            const upcoming = [];
+            const past = [];
+
+            shows.forEach(s => {
+                if (s.date >= today) {
+                    upcoming.push(s);
+                } else {
+                    past.push(s);
+                }
+            });
+
+            // Sort: Upcoming (nearest first), Past (newest first)
+            upcoming.sort((a,b) => a.date.localeCompare(b.date));
+            past.sort((a,b) => b.date.localeCompare(a.date));
+
+            let html = '';
+
+            // Upcoming Section
+            html += '<h3 style="font-family: var(--font-head); border-bottom:1px solid #444; padding-bottom:5px;">Upcoming</h3>';
+            if (upcoming.length > 0) {
+                html += '<ul class="show-list">';
+                upcoming.forEach(show => {
+                    html += createShowItem(show);
+                });
+                html += '</ul>';
+            } else {
+                 html += '<p style="color:#666; font-style:italic;">No upcoming shows.</p>';
+            }
+
+            // Past Section
+            if (showPast) {
+                 html += '<h3 style="font-family: var(--font-head); border-bottom:1px solid #444; padding-bottom:5px; margin-top:40px; color:#888;">History</h3>';
+                 if (past.length > 0) {
+                    html += '<ul class="show-list" style="opacity:0.7;">';
+                    past.forEach(show => {
+                        html += createShowItem(show);
+                    });
+                    html += '</ul>';
+                 } else {
+                     html += '<p style="color:#666; font-style:italic;">No past shows found.</p>';
+                 }
+            }
+
+            container.innerHTML = html;
+        })
+        .catch(err => {
+            console.error(err);
+            container.innerHTML = '<p>Error loading shows.</p>';
+        });
+}
+
+function createShowItem(show) {
+    // Format Date: YYYY-MM-DD -> MMM DD
+    // "2026-02-15"
+    const parts = show.date.split('-');
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const m = months[parseInt(parts[1]) - 1];
+    const d = parts[2];
+    const dateStr = `${m} ${d}`;
+    // Year helpful? maybe if it's not current year.
+    const currentYear = new Date().getFullYear().toString();
+    const yearStr = (parts[0] !== currentYear) ? ` ${parts[0]}` : '';
+
+    return `
+        <li>
+            <span class="show-band" style="width:100px; display:inline-block;">${show.band}</span>
+            <span class="show-date" style="width:100px; display:inline-block;">${dateStr}${yearStr}</span>
+            <span class="show-venue">${show.venue} <span class="show-location">/ ${show.location}</span></span>
+        </li>
+    `;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JULEP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+       <aside id="sidebar-container"></aside>
+        <main>
+             <div style="margin-bottom: 20px;">
+                <a href="music.html" style="font-family: var(--font-head); font-size: 0.9em;">&larr; Back to Music</a>
+            </div>
+
+            <div class="band-section">
+                <h2 style="margin-top:0;">JULEP</h2>
+                <p><em>My wife and I's band!</em></p>
+                <div style="background:#222; padding:20px; text-align:center; border:1px solid #444;">
+                    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/38s7awIhorM3CymxN2BQFX?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <div id="shows-container"></div>
+        </main>
+    </div>
+    <script src="loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadShows('shows-container', 'JULEP');
+        });
+    </script>
+</body>
+</html>

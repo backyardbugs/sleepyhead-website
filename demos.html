@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Demo Crate</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+       <aside id="sidebar-container"></aside>
+        <main>
+            <!-- Breadcrumb / Header -->
+            <div style="margin-bottom: 20px;">
+                <a href="music.html" style="font-family: var(--font-head); font-size: 0.9em;">&larr; Back to Music</a>
+            </div>
+
+            <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">The Demo Crate</h1>
+            <p style="color:#aaa; font-style:italic;">Scraps, sketches, and things that never made it out of the DAW.</p>
+
+            <div id="tape-grid" class="tape-grid">
+                <!-- Tapes injected via JS -->
+                 <div style="grid-column: 1/-1; text-align:center; color:#666; padding: 20px;">
+                    Loading tapes...
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- THE DEMO TAPE PLAYER -->
+    <div id="cassette-player">
+        <div class="player-info">
+            <strong id="cp-title">Select a tape...</strong>
+            <span id="cp-status" style="font-size:0.8em; color:#888; margin-left:10px;"></span>
+        </div>
+        <div class="player-controls">
+            <span id="cp-time" style="margin-right:15px; font-family:monospace;">0:00 / 0:00</span>
+            <button id="cp-play">PLAY</button>
+            <button id="cp-stop">EJECT</button>
+        </div>
+        <audio id="audio-demo" preload="none"></audio>
+    </div>
+
+    <script src="loader.js"></script>
+    <script>
+        /* --- DEMO CRATE LOGIC --- */
+        document.addEventListener('DOMContentLoaded', function() {
+            const tapeGrid = document.getElementById('tape-grid');
+            const player = document.getElementById('cassette-player');
+            const audio = document.getElementById('audio-demo');
+            const cpTitle = document.getElementById('cp-title');
+            const cpStatus = document.getElementById('cp-status');
+            const cpTime = document.getElementById('cp-time');
+            const btnPlay = document.getElementById('cp-play');
+            const btnStop = document.getElementById('cp-stop');
+
+            // Fetch Demos
+            fetch('data/demos.json')
+                .then(response => response.json())
+                .then(data => {
+                    tapeGrid.innerHTML = ''; // Clear loading text
+
+                    if(data.length === 0) {
+                        tapeGrid.innerHTML = '<div style="grid-column:1/-1;">No demos found.</div>';
+                        return;
+                    }
+
+                    data.forEach(demo => {
+                        // Create Tape UI
+                        const tape = document.createElement('div');
+                        tape.className = 'tape-item';
+                        tape.innerHTML = `
+                            <div class="tape-label">${demo.title}</div>
+                            <div class="tape-date">${demo.date}</div>
+                        `;
+                        
+                        // Click Handler
+                        tape.addEventListener('click', () => {
+                            loadTape(demo);
+                        });
+
+                        tapeGrid.appendChild(tape);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error loading demos:', err);
+                    tapeGrid.innerHTML = 'Error loading tapes.';
+                });
+
+            // Player Logic
+            function loadTape(demo) {
+                player.classList.add('active');
+                cpTitle.textContent = demo.title;
+                cpStatus.textContent = "Loading...";
+                
+                // Just incase it's a relative path from json
+                audio.src = demo.url; 
+                audio.load();
+                
+                // Auto play
+                audio.play().then(() => {
+                    cpStatus.textContent = "Playing";
+                    btnPlay.textContent = "PAUSE";
+                }).catch(e => {
+                    console.log("Auto-play prevented", e);
+                    cpStatus.textContent = "Ready";
+                    btnPlay.textContent = "PLAY";
+                });
+            }
+
+            // Play/Pause Toggle
+            btnPlay.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                    btnPlay.textContent = "PAUSE";
+                    cpStatus.textContent = "Playing";
+                } else {
+                    audio.pause();
+                    btnPlay.textContent = "PLAY";
+                    cpStatus.textContent = "Paused";
+                }
+            });
+
+            // Stop/Eject
+            btnStop.addEventListener('click', () => {
+                audio.pause();
+                audio.currentTime = 0;
+                player.classList.remove('active');
+                cpStatus.textContent = "Stopped";
+            });
+
+            // Time Update
+            audio.addEventListener('timeupdate', () => {
+                const current = formatTime(audio.currentTime);
+                const duration = formatTime(audio.duration || 0);
+                cpTime.textContent = `${current} / ${duration}`;
+            });
+
+            // Loop functionality (optional, maybe specific to certain demos?)
+            audio.addEventListener('ended', () => {
+                 btnPlay.textContent = "PLAY";
+                 cpStatus.textContent = "Finished";
+            });
+
+            function formatTime(seconds) {
+                const m = Math.floor(seconds / 60);
+                const s = Math.floor(seconds % 60);
+                return `${m}:${s < 10 ? '0' : ''}${s}`;
+            }
+        });
+    </script>
+</body>
+</html>
