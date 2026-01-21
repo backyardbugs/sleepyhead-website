@@ -114,8 +114,17 @@
                 
                 // ERROR HANDLING
                 audio.onerror = function() {
-                    cpStatus.textContent = "Error loading file";
+                    let errCode = audio.error ? audio.error.code : 'UNKNOWN';
+                    let errMsg = "";
+                    switch(errCode) {
+                        case 1: errMsg = "Aborted"; break;
+                        case 2: errMsg = "Network Error"; break;
+                        case 3: errMsg = "Decode Error"; break;
+                        case 4: errMsg = "Src Not Supported"; break;
+                        default: errMsg = "Unknown";
+                    }
                     console.error("Audio Load Error", audio.error);
+                    cpStatus.innerHTML = `<span style="color:#ff5555">Error: ${errMsg} (${errCode})</span>`;
                 };
 
                 audio.load();
