@@ -1,6 +1,6 @@
 /* LOADER.JS - Injects the shared sidebar & Micro-blog */
 
-fetch('sidebar.html')
+fetch('sidebar.html?v=' + Date.now())
 .then(response => response.text())
 .then(data => {
     document.getElementById('sidebar-container').innerHTML = data;
@@ -170,7 +170,7 @@ function loadShows(containerId, filterBand, showPast = true) {
             let html = '';
 
             // Upcoming Section
-            html += '<h3 style="font-family: var(--font-head); border-bottom:1px solid #444; padding-bottom:5px;">Upcoming</h3>';
+            html += '<h3 class="shows-header">Upcoming</h3>';
             if (upcoming.length > 0) {
                 html += '<ul class="show-list">';
                 upcoming.forEach(show => {
@@ -178,20 +178,20 @@ function loadShows(containerId, filterBand, showPast = true) {
                 });
                 html += '</ul>';
             } else {
-                 html += '<p style="color:#666; font-style:italic;">No upcoming shows.</p>';
+                 html += '<p class="no-shows">No upcoming shows.</p>';
             }
 
             // Past Section
             if (showPast) {
-                 html += '<h3 style="font-family: var(--font-head); border-bottom:1px solid #444; padding-bottom:5px; margin-top:40px; color:#888;">History</h3>';
+                 html += '<h3 class="shows-header history">History</h3>';
                  if (past.length > 0) {
-                    html += '<ul class="show-list" style="opacity:0.7;">';
+                    html += '<ul class="show-list history-list">';
                     past.forEach(show => {
                         html += createShowItem(show);
                     });
                     html += '</ul>';
                  } else {
-                     html += '<p style="color:#666; font-style:italic;">No past shows found.</p>';
+                     html += '<p class="no-shows">No past shows found.</p>';
                  }
             }
 
@@ -217,8 +217,8 @@ function createShowItem(show) {
 
     return `
         <li>
-            <span class="show-band" style="width:100px; display:inline-block;">${show.band}</span>
-            <span class="show-date" style="width:100px; display:inline-block;">${dateStr}${yearStr}</span>
+            <span class="show-band">${show.band}</span>
+            <span class="show-date">${dateStr}${yearStr}</span>
             <span class="show-venue">${show.venue} <span class="show-location">/ ${show.location}</span></span>
         </li>
     `;
