@@ -80,9 +80,20 @@
                         // Create Tape UI
                         const tape = document.createElement('div');
                         tape.className = 'tape-item';
+                        
+                        // Random Rotation for "Messy Crate" look
+                        const rotation = (Math.random() * 6 - 3).toFixed(1); // -3deg to +3deg
+                        tape.style.transform = `rotate(${rotation}deg)`;
+                        
                         tape.innerHTML = `
-                            <div class="tape-label">${demo.title}</div>
-                            <div class="tape-date">${demo.date}</div>
+                            <div class="tape-screw-tl"></div>
+                            <div class="tape-screw-tr"></div>
+                            <div class="tape-label">
+                                <span class="tape-title-text">${demo.title}</span>
+                                <span class="tape-date-text">${demo.date}</span>
+                            </div>
+                            <div class="tape-screw-bl"></div>
+                            <div class="tape-screw-br"></div>
                         `;
                         
                         // Click Handler

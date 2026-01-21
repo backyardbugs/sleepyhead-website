@@ -548,50 +548,95 @@ pre.poem {
 /* --- THE DEMO TAPE / CRATE STYLES --- */
 .tape-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 35px;
+    margin-top: 40px;
+    padding: 20px;
 }
 
 .tape-item {
-    background:#111;
-    border: 1px solid #333;
-    aspect-ratio: 1 / 1;
+    background: #252525; /* Dark plastic */
+    border-radius: 6px;
+    aspect-ratio: 1.6 / 1; /* Cassette shape */
     position: relative;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    box-shadow: 2px 5px 10px rgba(0,0,0,0.5);
+    border: 1px solid #333;
+}
+
+/* Hover Effect: Lift up, straighten slightly, glow */
+.tape-item:hover {
+    transform: scale(1.05) rotate(0deg) !important; /* Override the random rotation */
+    box-shadow: 0 10px 25px rgba(197, 160, 89, 0.15);
+    border-color: #555;
+    z-index: 10;
+}
+
+/* The Paper Label */
+.tape-label {
+    background: #f4f1ea; /* Off-white/Bone paper */
+    color: #111;
+    width: 90%;
+    height: 70%;
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10px;
     text-align: center;
-}
-
-.tape-item:hover {
-    border-color: var(--accent-color);
-    transform: translateY(-4px);
-    box-shadow: 0 4px 15px rgba(197, 160, 89, 0.2);
-}
-
-.tape-label {
-    background: #f0f0f0;
-    color: #111;
+    padding: 5px;
     font-family: 'Courier Prime', monospace; 
-    font-size: 0.8rem;
-    padding: 5px 10px;
-    transform: rotate(-2deg); 
-    box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    max-width: 90%;
-    word-wrap: break-word;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1); /* Inner paper shadow */
+    position: relative;
+    overflow: hidden;
 }
 
-.tape-date {
-    font-size: 0.6rem;
-    color: #666;
-    margin-top: 10px;
-    font-family: var(--font-head);
+/* Horizontal lines on the label */
+.tape-label::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    height: 2px;
+    background: #e0dcd0;
+    box-shadow: 0 4px 0 #e0dcd0;
 }
+
+/* The Text */
+.tape-title-text {
+    font-weight: bold;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    z-index: 2;
+    margin-top: 10px; /* Space for lines */
+    text-transform: lowercase;
+}
+
+.tape-date-text {
+    font-size: 0.65rem;
+    color: #666;
+    margin-top: 4px;
+    z-index: 2;
+}
+
+/* Screws */
+.tape-screw-tl, .tape-screw-tr, .tape-screw-bl, .tape-screw-br {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #111;
+    border-radius: 50%;
+    box-shadow: inset 1px 1px 1px rgba(255,255,255,0.2);
+}
+.tape-screw-tl { top: 5px; left: 5px; }
+.tape-screw-tr { top: 5px; right: 5px; }
+.tape-screw-bl { bottom: 5px; left: 5px; }
+.tape-screw-br { bottom: 5px; right: 5px; }
 
 /* THE PLAYER (Fixed Bottom Bar) */
 #cassette-player {
