@@ -46,6 +46,8 @@
         <audio id="audio-demo" preload="none"></audio>
     </div>
 
+    <div id="demo-popup" class="demo-note-popup"></div>
+
     <script src="loader.js?v=4"></script>
     <script>
         /* --- DEMO CRATE LOGIC --- */
@@ -58,6 +60,10 @@
             const cpTime = document.getElementById('cp-time');
             const btnPlay = document.getElementById('cp-play');
             const btnStop = document.getElementById('cp-stop');
+            
+            // Popup Logic
+            const popup = document.getElementById('demo-popup');
+            let popupTimeout;
 
             // Fetch Demos
             fetch('data/demos.json')
@@ -98,6 +104,10 @@
                 cpTitle.textContent = demo.title;
                 cpStatus.textContent = "Loading...";
                 
+                // Reset Popup
+                popup.classList.remove('visible');
+                clearTimeout(popupTimeout);
+
                 // Just incase it's a relative path from json
                 audio.src = demo.url; 
                 audio.load();
@@ -106,6 +116,15 @@
                 audio.play().then(() => {
                     cpStatus.textContent = "Playing";
                     btnPlay.textContent = "PAUSE";
+
+                    // Trigger Popup if note exists
+                    if (demo.note) {
+                        popup.textContent = demo.note;
+                        popupTimeout = setTimeout(() => {
+                            popup.classList.add('visible');
+                        }, 1000); // 1 second delay
+                    }
+
                 }).catch(e => {
                     console.log("Auto-play prevented", e);
                     cpStatus.textContent = "Ready";
@@ -132,6 +151,10 @@
                 audio.currentTime = 0;
                 player.classList.remove('active');
                 cpStatus.textContent = "Stopped";
+                
+                // Hide Popup
+                popup.classList.remove('visible');
+                clearTimeout(popupTimeout);
             });
 
             // Time Update
