@@ -133,7 +133,7 @@
                             if (res.ok) {
                                 cpStatus.innerHTML = `<span style="color:#ff5555">Error: Format check failed (${res.headers.get('content-type')})</span>`;
                             } else {
-                                cpStatus.innerHTML = `<span style="color:#ff5555">Error: File not found (${res.status})</span>`;
+                                cpStatus.innerHTML = `<span style="color:#ff5555">Error: File not found (${res.status}) <br> Url: ${audio.src}</span>`;
                             }
                         })
                         .catch(e => {
