@@ -130,10 +130,18 @@ function loadShows(containerId, filterBand, showPast = true) {
 
     container.innerHTML = '<p>Loading shows...</p>';
 
-    fetch('data/shows.json?v=' + Date.now())
-        .then(response => response.json())
+    // FORCE CACHE BUST: Use a random number in addition to timestamp to be absolutely sure
+    const cacheBuster = Math.random().toString(36).substring(7);
+    fetch('data/shows.json?v=' + Date.now() + '&cb=' + cacheBuster)
+        .then(response => {
+             if (!response.ok) {
+                 throw new Error(`HTTP error! status: ${response.status}`);
+             }
+             return response.json();
+        })
         .then(data => {
             let shows = data;
+
             
             // Filter by Band
             if (filterBand && filterBand !== 'ALL') {
