@@ -120,11 +120,28 @@
                         case 1: errMsg = "Aborted"; break;
                         case 2: errMsg = "Network Error"; break;
                         case 3: errMsg = "Decode Error"; break;
-                        case 4: errMsg = "Src Not Supported"; break;
+                        case 4: errMsg = "Src Not Supported (Likely 404 or Wrong Format)"; break;
                         default: errMsg = "Unknown";
                     }
                     console.error("Audio Load Error", audio.error);
-                    cpStatus.innerHTML = `<span style="color:#ff5555">Error: ${errMsg} (${errCode})</span>`;
+                    
+                    // Diagnostic
+                    if (errCode === 4) {
+                        cpStatus.innerHTML = `<span style="color:#ff5555">Checking file...</span>`;
+                        fetch(audio.src, { method: 'HEAD' })
+                        .then(res => {
+                            if (res.ok) {
+                                cpStatus.innerHTML = `<span style="color:#ff5555">Error: Format check failed (${res.headers.get('content-type')})</span>`;
+                            } else {
+                                cpStatus.innerHTML = `<span style="color:#ff5555">Error: File not found (${res.status})</span>`;
+                            }
+                        })
+                        .catch(e => {
+                             cpStatus.innerHTML = `<span style="color:#ff5555">Error: Network Check Failed</span>`;
+                        });
+                    } else {
+                        cpStatus.innerHTML = `<span style="color:#ff5555">Error: ${errMsg} (${errCode})</span>`;
+                    }
                 };
 
                 audio.load();
