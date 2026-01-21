@@ -65,8 +65,8 @@
             const popupContainer = document.getElementById('demo-popup-container');
             let popupTimeouts = [];
 
-            // Fetch Demos
-            fetch('data/demos.json')
+            // Fetch Demos (with cache busting)
+            fetch('data/demos.json?v=' + Date.now())
                 .then(response => response.json())
                 .then(data => {
                     tapeGrid.innerHTML = ''; // Clear loading text
@@ -111,6 +111,13 @@
 
                 // Just incase it's a relative path from json
                 audio.src = demo.url; 
+                
+                // ERROR HANDLING
+                audio.onerror = function() {
+                    cpStatus.textContent = "Error loading file";
+                    console.error("Audio Load Error", audio.error);
+                };
+
                 audio.load();
                 
                 // Auto play
