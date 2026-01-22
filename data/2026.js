@@ -16,7 +16,7 @@ const history2026 = [
 ];
 
 const books2026 = [
-    // { title: "Example Book", author: "Author Name", rating: 5, review: "A masterpiece." }
+    { title: "Red Rising", author: "Pierce Brown", rating: 5, review: "" }
 ];
 
 const shows2026 = [];
