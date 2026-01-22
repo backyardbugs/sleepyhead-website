@@ -710,3 +710,5 @@ pre.poem {
     opacity: 1;
     transform: translateY(0) scale(1);
 }
+
+.tape-item.dragging { z-index: 1000 !important; cursor: grabbing; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
