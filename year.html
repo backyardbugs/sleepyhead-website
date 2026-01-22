@@ -578,11 +578,15 @@
             if (bookContainer && activeBooks) {
                 bookContainer.innerHTML = "";
                 activeBooks.forEach(book => {
+                    let metaHTML = `by ${book.author}`;
+                    if (book.review) {
+                        metaHTML += ` — <em>"${book.review}"</em>`;
+                    }
+                    
                     bookContainer.innerHTML += `
                         <div class="ledger-item">
                             <span class="ledger-title">${book.title}</span>
-                            <span class="rating-stars">${"★".repeat(book.rating)}</span>
-                            <span class="ledger-meta">by ${book.author} — <em>"${book.review}"</em></span>
+                            <span class="ledger-meta">${metaHTML}</span>
                         </div>
                     `;
                 });
