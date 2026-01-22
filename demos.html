@@ -81,13 +81,9 @@
                         const tape = document.createElement('div');
                         tape.className = 'tape-item';
                         
-                        // Random Rotation & Translation for "Messier Crate" look
-                        const rotation = (Math.random() * 20 - 10).toFixed(1); // -10deg to +10deg (Messier)
-                        const transX = (Math.random() * 20 - 10).toFixed(1);   // -10px to +10px
-                        const transY = (Math.random() * 20 - 10).toFixed(1);   // -10px to +10px
-                        
-                        tape.style.transform = `translate(${transX}px, ${transY}px) rotate(${rotation}deg)`;
-                        tape.dataset.initialTransform = tape.style.transform; // Save for drag reset logic if needed
+                        // Random Rotation for "Messy Crate" look
+                        const rotation = (Math.random() * 6 - 3).toFixed(1); // -3deg to +3deg
+                        tape.style.transform = `rotate(${rotation}deg)`;
                         
                         tape.innerHTML = `
                             <div class="tape-screw-tl"></div>
@@ -100,78 +96,9 @@
                             <div class="tape-screw-br"></div>
                         `;
                         
-                        // Click Handler to Load (only if not dragging)
-                        let isDragging = false;
-
-                        // DRAG LOGIC
-                        tape.addEventListener('mousedown', startDrag);
-                        tape.addEventListener('touchstart', startDrag, {passive: false});
-
-                        function startDrag(e) {
-                            if (e.target.closest('.player-controls')) return; // Don't drag if clicking buttons (not applicable here but good safety)
-                            
-                            isDragging = false;
-                            const startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
-                            const startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
-                            
-                            // Get current transform values to add to drag
-                            const rect = tape.getBoundingClientRect();
-                            
-                            // We need to calculate offset relative to the tape's center/position
-                            // But simpler approach: Use variable to store current xy translation
-                            
-                            const onMove = (moveEvent) => {
-                                isDragging = true;
-                                moveEvent.preventDefault(); // Prevent scrolling on touch
-                                
-                                const currentX = moveEvent.type === 'mousemove' ? moveEvent.clientX : moveEvent.touches[0].clientX;
-                                const currentY = moveEvent.type === 'mousemove' ? moveEvent.clientY : moveEvent.touches[0].clientY;
-                                
-                                const deltaX = currentX - startX;
-                                const deltaY = currentY - startY;
-
-                                tape.style.transform = `translate(${parseFloat(transX) + deltaX}px, ${parseFloat(transY) + deltaY}px) rotate(${rotation}deg) scale(1.05)`;
-                                tape.classList.add('dragging');
-                            };
-
-                            const onStop = () => {
-                                document.removeEventListener('mousemove', onMove);
-                                document.removeEventListener('mouseup', onStop);
-                                document.removeEventListener('touchmove', onMove);
-                                document.removeEventListener('touchend', onStop);
-                                
-                                tape.classList.remove('dragging');
-                                
-                                // Keep the new position? 
-                                // For now, let's SNAP BACK because simple translation inside a grid can get weird with z-index clipping
-                                // Or better: Let it stay where you dropped it!
-                                // To do that, we need to update transX/transY variables, but they are const in loop scope.
-                                // We can just calculate the final transform string.
-                                
-                                // Actually, let's just let it snap back for "Playful" feel but keep the drag interaction fun?
-                                // User asked "drag them around". Usually implies they stay.
-                                // But without absolute positioning, they are confined to their grid cell visually if overflow issues occur.
-                                // Since .tape-item has position:relative, they will move around visually but take up same space.
-                                
-                                // Let's Let them stay!
-                                // We just leave the style.transform as it was set in onMove.
-                                // We need to remove the scale(1.05) though.
-                                
-                                const currentTransform = tape.style.transform;
-                                tape.style.transform = currentTransform.replace('scale(1.05)', '');
-                            };
-
-                            document.addEventListener('mousemove', onMove);
-                            document.addEventListener('mouseup', onStop);
-                            document.addEventListener('touchmove', onMove, {passive: false});
-                            document.addEventListener('touchend', onStop);
-                        }
-                        
-                        // Separate Click vs Drag
-                        tape.addEventListener('click', (e) => {
-                            if (!isDragging) {
-                                loadTape(demo);
-                            }
+                        // Click Handler
+                        tape.addEventListener('click', () => {
+                            loadTape(demo);
                         });
 
                         tapeGrid.appendChild(tape);
