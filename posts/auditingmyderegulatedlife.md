@@ -1,4 +1,3 @@
-# # Auditing my deregulated life
 ### Audit
 I’m feeling a bit unclear on the projects I’m juggling. So, let’s take a look at what I’ve been working on for the past couple of weeks:
 
