@@ -204,15 +204,7 @@
                     <div id="stats-list"></div>
 
                     <h2 class="post-title" style="margin-top:40px;">Bands Seen</h2>
-                    <ul style="list-style:none; padding:0; color:#888; font-family: var(--font-head);">
-                        <li style="border-bottom:1px dashed #333; padding:10px 0;">
-                            <span style="color:#fff">Julia Wolf</span> / Orlando
-                        </li>
-                        <li style="border-bottom:1px dashed #333; padding:10px 0;">
-                            <span style="color:#fff">The Wonder Years</span> / Orlando
-                        </li>
-                
-                    </ul>
+                    <div id="band-list"></div>
                 </div>
 
             </div>
@@ -244,17 +236,20 @@
             let activeBooks = [];
             let activeAlbums = [];
             let activeStats = [];
+            let activeShows = [];
 
             if (currentYear === 2025) {
                 activeHistory = (typeof history2025 !== 'undefined') ? history2025 : [];
                 activeBooks = (typeof books2025 !== 'undefined') ? books2025 : [];
                 activeAlbums = (typeof albums2025 !== 'undefined') ? albums2025 : [];
                 activeStats = (typeof stats2025 !== 'undefined') ? stats2025 : [];
+                activeShows = (typeof shows2025 !== 'undefined') ? shows2025 : [];
             } else {
                 activeHistory = (typeof history2026 !== 'undefined') ? history2026 : [];
                 activeBooks = (typeof books2026 !== 'undefined') ? books2026 : [];
                 activeAlbums = (typeof albums2026 !== 'undefined') ? albums2026 : [];
                 activeStats = (typeof stats2026 !== 'undefined') ? stats2026 : [];
+                activeShows = (typeof shows2026 !== 'undefined') ? shows2026 : [];
             }
 
             // 1. PROCESS TOTALS
@@ -619,6 +614,21 @@
                         </div>
                     `;
                 });
+            }
+
+            // Bands Seen
+            const bandContainer = document.getElementById('band-list');
+            if (bandContainer && activeShows) {
+                let html = '<ul style="list-style:none; padding:0; color:#888; font-family: var(--font-head);">';
+                activeShows.forEach(band => {
+                    html += `
+                        <li style="border-bottom:1px dashed #333; padding:10px 0;">
+                            <span style="color:#fff">${band}</span>
+                        </li>
+                    `;
+                });
+                html += '</ul>';
+                bandContainer.innerHTML = html;
             }
 
         });

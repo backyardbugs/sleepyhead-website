@@ -196,3 +196,13 @@ const books2025 = [
     { title: "Ninth House", author: "Leigh Bardugo", rating: 5, review: "" },
     { title: "Fourth Wing", author: "Rebecca Yarros", rating: 5, review: "" }
 ];
+
+const shows2025 = [
+    "Annie Diruso", "Julia Wolf", "Knuckle Puck", "Lorna Shore", "3OH!3", 
+    "A Day To Remember", "All Time Low", "ABR", "Boys Like Girls", "Girlfriends", 
+    "Microwave", "Movements", "Redjumpsuit Apparatus", "The Wonder Years", 
+    "Winona Fighter", "Yellowcard", "The Maine", "Big Ass Truck"
+];
+
+const albums2025 = [];
+const stats2025 = [];

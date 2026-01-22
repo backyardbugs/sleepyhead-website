@@ -26,3 +26,7 @@ const albums2026 = [
 const stats2026 = [
     // { label: "Goal 1", value: "Progress" }
 ];
+
+const shows2026 = [];
+const albums2026 = [];
+const stats2026 = [];
