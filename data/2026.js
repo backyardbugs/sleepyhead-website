@@ -19,14 +19,6 @@ const books2026 = [
     // { title: "Example Book", author: "Author Name", rating: 5, review: "A masterpiece." }
 ];
 
-const albums2026 = [
-    // { title: "Example Album", artist: "Band Name", rating: 5 }
-];
-
-const stats2026 = [
-    // { label: "Goal 1", value: "Progress" }
-];
-
 const shows2026 = [];
 const albums2026 = [];
 const stats2026 = [];
