@@ -60,54 +60,52 @@ function fetchUplink(year, dataVar) {
         .then(rows => {
             if (!rows || rows.length === 0) return;
 
-            // Map Sheet Data [Date, Type, Value, Spacer, Note] to Site Data [Date, Words, Gym, Note]
-            const newEntries = rows.map(row => {
+            // Map Sheet Data (Objects) to Site Data (Arrays)
+            // Sheet: { date: "...", type: "...", val: "...", note: "..." }
+            // Site:  [ "YYYY-MM-DD", Words(int), Gym(bool), "Note" ]
+            const newEntries = rows.map(r => {
                 // 1. Date
-                let d = new Date(row[0]);
-                // Handle timezone offset if needed, or simple ISO split
-                let dateStr = !isNaN(d) ? d.toISOString().split('T')[0] : row[0];
+                let d = new Date(r.date);
+                let dateStr = !isNaN(d) ? d.toISOString().split('T')[0] : r.date;
 
-                // 2. Type/Value mapping
-                let type = (row[1] || "").toLowerCase();
-                let val = row[2];
-                let extraTag = row[4];
+                // 2. Map Types
+                let type = (r.type || "").toLowerCase();
+                let content = r.val || ""; 
+                let tag = r.note || "";
 
                 let words = 0;
                 let gym = false;
-                let note = "";
+                let finalNote = "";
 
                 if (type === 'writing') {
-                    words = parseInt(val) || 0;
-                    note = extraTag || "";
+                    words = parseInt(content) || 0;
+                    finalNote = tag; // For writing, the note/tag describes the project
                 } else if (type === 'gym') {
                     gym = true;
-                    // If note is empty, maybe use value if it's text?
-                    note = extraTag || (isNaN(val) ? val : "");
+                    // For gym, the content (e.g. "Chest Day") is the note
+                    finalNote = content; 
                 } else {
-                    // Log, Movie, Music etc.
-                    note = val; // The main content is the log
+                    // Log, Movie, Music, Reading
+                    // The main content is the log. We can append tag if it exists.
+                    // If simple log, content is the note.
+                    finalNote = content;
+                    if (tag) finalNote += " #" + tag; 
                 }
 
-                return [dateStr, words, gym, note];
+                return [dateStr, words, gym, finalNote];
             });
 
-            // Merge: Combine existing history with new entries
-            // We prepend new entries so they appear first if sorting by date isn't strict?
-            // Actually site logic usually sorts or assumes order.
-            // Let's just append and let the render function sort if needed?
-            // data/2026.js is usually sorted ASCENDING by date.
-            
-            // Add to global object so other scripts see it
+            // Merge & Update
             if (window[dataVar]) {
                 window[dataVar] = window[dataVar].concat(newEntries);
                 
-                // Re-sort by date to be safe
+                // Re-sort by date
                 window[dataVar].sort((a, b) => new Date(a[0]) - new Date(b[0]));
                 
                 // Re-render sidebar
                 renderStatusBox(window[dataVar]);
 
-                // If on year.html, try to refresh grid?
+                // Update Grid if present (year.html)
                 if (typeof generateGrid === 'function') {
                     generateGrid();
                 }
