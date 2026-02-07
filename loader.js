@@ -55,9 +55,18 @@ function loadStatus() {
 }
 
 function fetchUplink(year, dataVar) {
+    // DEBUG: Visual indicator
+    const dbg = document.createElement('div');
+    dbg.style.padding = "5px"; dbg.style.fontSize = "10px"; dbg.style.color = "red";
+    dbg.id = "uplink-debug";
+    dbg.innerText = "Connecting to Uplink...";
+    const sb = document.getElementById('sidebar-container');
+    if (sb) sb.appendChild(dbg);
+
     fetch(UPLINK_URL)
         .then(res => res.json())
         .then(rows => {
+            if (dbg) dbg.innerText = "Uplink: " + (rows ? rows.length : 0) + " items.";
             if (!rows || rows.length === 0) return;
 
             // Map Sheet Data (Objects) to Site Data (Arrays)
@@ -111,7 +120,11 @@ function fetchUplink(year, dataVar) {
                 }
             }
         })
-        .catch(err => console.log("Uplink silent fail", err));
+        .catch(err => {
+            console.log("Uplink silent fail", err);
+            const dbg = document.getElementById('uplink-debug');
+            if (dbg) dbg.innerText = "Uplink Error: " + err.message;
+        });
 }
 
 function renderStatusBox(historyData) {
