@@ -108,12 +108,12 @@
 
     <h2>Microblog Uplink</h2>
 
-    <form id="logForm" method="POST" target="hidden_iframe">
+    <form id="logForm">
         <label for="date">Date</label>
-        <input type="date" id="date" name="date" required>
+        <input type="date" id="date" required>
 
         <label for="type">Type</label>
-        <select id="type" name="type">
+        <select id="type">
             <option value="log">Log</option>
             <option value="gym">Gym</option>
             <option value="writing">Writing</option>
@@ -123,19 +123,15 @@
         </select>
 
         <label for="value">Content</label>
-        <textarea id="value" name="value" placeholder="Enter log..." required></textarea>
+        <textarea id="value" placeholder="Enter log..." required></textarea>
 
         <label for="tags">Tags (Optional)</label>
-        <!-- Map 'tags' to 'note' for the script -->
-        <input type="text" id="tags" name="note" placeholder="e.g. journal, idea">
+        <input type="text" id="tags" placeholder="e.g. journal, idea">
 
         <button type="submit">TRANSMIT</button>
     </form>
 
     <div class="status" id="statusMessage"></div>
-    
-    <!-- Hidden Iframe for silent submission -->
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
     <script>
         // Default to today
@@ -167,12 +163,10 @@
 
         // YOUR APP SCRIPT URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec';
-        
-        const form = document.getElementById('logForm');
-        form.action = SCRIPT_URL;
 
-        // Listen for submit to show status UI
-        form.addEventListener('submit', function(e) {
+        document.getElementById('logForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
             const btn = e.target.querySelector('button');
             const statusDiv = document.getElementById('statusMessage');
             
@@ -180,44 +174,40 @@
             btn.innerText = 'TRANSMITTING...';
             statusDiv.innerText = 'Contacting satellite...';
             statusDiv.style.color = '#888';
-            
-            // FALLBACK TIMER: 
-            // If the iframe 'onload' is blocked by privacy settings (common in Safari),
-            // we assume the form submission succeeded after 2.5 seconds.
+
+            const payload = {
+                date: document.getElementById('date').value,
+                type: document.getElementById('type').value,
+                value: document.getElementById('value').value,
+                note: document.getElementById('tags').value
+            };
+
+            // BEACON METHOD: Fire and forget
+            // Browsers allow this even when fetch is blocked by CORS/Unload
+            const blob = new Blob([JSON.stringify(payload)], {type: 'text/plain'});
+            const success = navigator.sendBeacon(SCRIPT_URL, blob);
+
             setTimeout(() => {
-                if (btn.disabled && btn.innerText !== 'TRANSMIT') {
-                    console.log("Fallback success trigger");
-                    markSuccess();
+                if (success) {
+                    statusDiv.innerText = '✓ TRANSMISSION SENT';
+                    statusDiv.style.color = '#4caf50'; // Green
+                    
+                    document.getElementById('value').value = '';
+                    document.getElementById('tags').value = '';
+
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.innerText = 'TRANSMIT';
+                        statusDiv.innerText = '';
+                    }, 2000);
+                } else {
+                    statusDiv.innerText = '⚠ UPLINK FAILED';
+                    statusDiv.style.color = '#f44336';
+                    btn.disabled = false;
+                    btn.innerText = 'RETRY';
                 }
-            }, 2500);
+            }, 1000); // Short delay to simulate network feel
         });
-
-        // Listen for iframe load (response from Google)
-        // Note: This often fails to fire on Safari/iOS due to X-Frame-Options
-        document.getElementById('hidden_iframe').onload = function() {
-            markSuccess();
-        };
-
-        function markSuccess() {
-            const btn = document.querySelector('button');
-            const statusDiv = document.getElementById('statusMessage');
-            
-            // Prevent double-firing
-            if (!btn.disabled || btn.innerText === 'TRANSMIT') return;
-
-            statusDiv.innerText = '✓ TRANSMISSION SENT';
-            statusDiv.style.color = '#4caf50'; // Green
-
-            // Reset form
-            document.getElementById('value').value = '';
-            document.getElementById('tags').value = '';
-
-            setTimeout(() => {
-                btn.disabled = false;
-                btn.innerText = 'TRANSMIT';
-                statusDiv.innerText = '';
-            }, 2000);
-        }
     </script>
 
 </body>
