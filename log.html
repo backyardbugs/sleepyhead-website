@@ -2,198 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sleepyhead Uplink</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microblog Uplink Redirect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        /* Mobile-First Dark Console Theme */
-        body { 
-            background-color: #111; 
-            color: #ccc; 
-            font-family: 'Courier Prime', monospace; 
-            margin: 0; 
-            padding: 20px; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        h2 { 
-            color: #fff; 
-            border-bottom: 2px solid #555; 
-            padding-bottom: 10px; 
-            width: 100%; 
+        body {
+            background: #111;
+            color: #ccc;
+            font-family: 'Courier Prime', monospace;
+            padding: 20px;
             max-width: 500px;
+            margin: 0 auto;
             text-align: center;
-            letter-spacing: 2px;
-            text-transform: uppercase;
         }
-
-        form {
-            width: 100%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        label {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: -10px;
-            margin-left: 5px;
-            text-transform: uppercase;
-        }
-
-        input, textarea, select {
-            background: #222;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 15px;
-            font-size: 16px;
-            font-family: inherit;
-            border-radius: 4px;
-            outline: none;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            border-color: #777;
-            background: #2a2a2a;
-        }
-
-        textarea {
-            height: 150px;
-            resize: none;
-        }
-
-        button {
+        
+        a.button {
+            display: inline-block;
             background: #fff;
             color: #000;
-            border: none;
-            font-family: inherit;
-            padding: 15px;
-            font-size: 16px;
+            text-decoration: none;
+            padding: 15px 30px;
+            margin-top: 50px;
             font-weight: bold;
-            cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 10px;
-            transition: background 0.2s;
+            border-radius: 4px;
         }
 
-        button:active {
-            background: #ccc;
-        }
-
-        button:disabled {
-            background: #555;
-            color: #888;
-            cursor: not-allowed;
-        }
-
-        .status {
+        .note {
             margin-top: 20px;
-            font-size: 14px;
-            height: 20px;
-            color: #888;
+            color: #666;
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
 
-    <h2>Microblog Uplink</h2>
-
-    <form id="logForm" method="POST" target="hidden_iframe" action="https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec">
-        
-        <label for="date">Date</label>
-        <input type="date" id="date" name="date" required>
-
-        <label for="type">Type</label>
-        <select id="type" name="type">
-            <option value="log">Log</option>
-            <option value="gym">Gym</option>
-            <option value="writing">Writing</option>
-            <option value="movie">Movie</option>
-            <option value="music">Music</option>
-            <option value="reading">Reading</option>
-        </select>
-
-        <label for="value">Content</label>
-        <textarea id="value" name="value" placeholder="Enter log..." required></textarea>
-
-        <label for="tags">Tags (Optional)</label>
-        <input type="text" id="tags" name="note" placeholder="e.g. journal, idea">
-
-        <button type="submit">TRANSMIT</button>
-    </form>
-
-    <div class="status" id="statusMessage"></div>
+    <h2>SECURE UPLINK</h2>
     
-    <!-- The Silent Target: Form submits here instead of reloading the page -->
-    <iframe name="hidden_iframe" style="display:none;"></iframe>
+    <p>The transmission interface has been moved to the secure host to prevent external interference.</p>
 
-    <script>
-        // Default to today
-        document.getElementById('date').valueAsDate = new Date();
+    <a href="https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec?view=form" class="button">OPEN UPLINK TERMINAL</a>
 
-        // Smart Label Logic (Visuals only)
-        const typeSelect = document.getElementById('type');
-        const contentLabel = document.querySelector('label[for="value"]');
-        const contentInput = document.getElementById('value');
-
-        function updateLabels() {
-            const type = typeSelect.value;
-            if (type === 'writing') {
-                contentLabel.innerText = "Word Count";
-                contentInput.placeholder = "e.g. 1500";
-            } else {
-                contentLabel.innerText = "Content";
-                
-                if (type === 'gym') contentInput.placeholder = "e.g. Chest & Triceps";
-                else if (type === 'movie') contentInput.placeholder = "Title of the movie...";
-                else if (type === 'music') contentInput.placeholder = "Song or Album title...";
-                else if (type === 'reading') contentInput.placeholder = "Book title...";
-                else contentInput.placeholder = "Enter log...";
-            }
-        }
-
-        typeSelect.addEventListener('change', updateLabels);
-        updateLabels(); 
-
-        // UI Feedback Logic
-        const form = document.getElementById('logForm');
-        form.addEventListener('submit', function() {
-            const btn = document.querySelector('button');
-            const statusDiv = document.getElementById('statusMessage');
-
-            btn.disabled = true;
-            btn.innerText = 'TRANSMITTING...';
-            statusDiv.innerText = 'Uplink Established...';
-            statusDiv.style.color = '#888';
-
-            // Since we target an iframe, we don't get a real 'callback'.
-            // We assume success if the form submits, because HTML forms rarely fail.
-            setTimeout(() => {
-                statusDiv.innerText = '✓ TRANSMISSION SENT';
-                statusDiv.style.color = '#4caf50';
-                
-                // Clear fields
-                document.getElementById('value').value = '';
-                document.getElementById('tags').value = '';
-
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.innerText = 'TRANSMIT';
-                    statusDiv.innerText = '';
-                }, 2000);
-            }, 1500);
-        });
-    </script>
+    <div class="note">
+        (Bookmark the new page for faster access)
+    </div>
 
 </body>
 </html>
