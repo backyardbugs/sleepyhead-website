@@ -175,21 +175,43 @@
             statusDiv.innerText = 'Contacting satellite...';
             statusDiv.style.color = '#888';
 
-            const params = new URLSearchParams();
-            params.append('date', document.getElementById('date').value);
-            params.append('type', document.getElementById('type').value);
-            params.append('value', document.getElementById('value').value);
-            params.append('note', document.getElementById('tags').value);
-            params.append('action', 'write'); // Explicit flag for our new script logic
+            const payload = {
+                date: document.getElementById('date').value,
+                type: document.getElementById('type').value,
+                value: document.getElementById('value').value,
+                note: document.getElementById('tags').value
+            };
 
-            // PIXEL METHOD:
-            // We create an HTML Image element. Setting its 'src' forces the browser
-            // to make a GET request to the URL. This bypasses almost all CORS/fetch blocks.
-            // We don't care if the image "loads" (it won't, it's a script), we just want the hit.
-            const img = new Image();
-            img.src = SCRIPT_URL + '?' + params.toString();
+            // STANDARD FETCH (Mimics the working CURL command)
+            // Header: text/plain (avoids CORS preflight)
+            // Body: JSON string (matches what the script parses)
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                // Google Scripts redirect to a confirmation page. 
+                // Even if the final redirect gives a weird status (like 405), 
+                // the fact that we got a response means the Script executed.
+                console.log("Response status:", response.status);
+                markSuccess();
+            })
+            .catch(err => {
+                console.error(err);
+                statusDiv.innerText = '⚠ UPLINK FAILED';
+                statusDiv.style.color = '#f44336';
+                btn.disabled = false;
+                btn.innerText = 'RETRY';
+            });
+        });
 
-            // Simulate success UI immediately - the pixel request is fire-and-forget
+        function markSuccess() {
+            const btn = document.querySelector('button');
+            const statusDiv = document.getElementById('statusMessage');
+            
             statusDiv.innerText = '✓ TRANSMISSION SENT';
             statusDiv.style.color = '#4caf50'; // Green
             
@@ -201,11 +223,7 @@
                 btn.innerText = 'TRANSMIT';
                 statusDiv.innerText = '';
             }, 2000);
-
-            // Optional: Log if the "image" fails or succeeds (it will likely fail to parse as image, which is fine)
-            img.onload = () => console.log('Pixel loaded');
-            img.onerror = () => console.log('Pixel fired (expected non-image response)');
-        });
+        }
     </script>
 
 </body>
