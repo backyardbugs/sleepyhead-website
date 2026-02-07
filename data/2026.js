@@ -13,6 +13,12 @@ const history2026 = [
     ["2026-01-08", 0, true, ""],
     ["2026-01-09", 0, true, ""],
     ["2026-01-20", 0, true, "Gym"],
+
+    /* --- FEBRUARY --- */
+    ["2026-02-02", 0, false, "Submitted Gatebound (61,394 words)"],
+    ["2026-02-03", 0, true, "Gym"],
+    ["2026-02-05", 0, true, "Gym"],
+    ["2026-02-06", 723, true, "Gym"],
 ];
 
 const books2026 = [
