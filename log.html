@@ -108,12 +108,12 @@
 
     <h2>Microblog Uplink</h2>
 
-    <form id="logForm">
+    <form id="logForm" method="POST" target="hidden_iframe">
         <label for="date">Date</label>
-        <input type="date" id="date" required>
+        <input type="date" id="date" name="date" required>
 
         <label for="type">Type</label>
-        <select id="type">
+        <select id="type" name="type">
             <option value="log">Log</option>
             <option value="gym">Gym</option>
             <option value="writing">Writing</option>
@@ -123,15 +123,19 @@
         </select>
 
         <label for="value">Content</label>
-        <textarea id="value" placeholder="Enter log..." required></textarea>
+        <textarea id="value" name="value" placeholder="Enter log..." required></textarea>
 
         <label for="tags">Tags (Optional)</label>
-        <input type="text" id="tags" placeholder="e.g. journal, idea">
+        <!-- Map 'tags' to 'note' for the script -->
+        <input type="text" id="tags" name="note" placeholder="e.g. journal, idea">
 
         <button type="submit">TRANSMIT</button>
     </form>
 
     <div class="status" id="statusMessage"></div>
+    
+    <!-- Hidden Iframe for silent submission -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
     <script>
         // Default to today
@@ -161,13 +165,14 @@
         typeSelect.addEventListener('change', updateLabels);
         updateLabels(); // Run on load
 
-        // 
         // YOUR APP SCRIPT URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec';
+        
+        const form = document.getElementById('logForm');
+        form.action = SCRIPT_URL;
 
-        document.getElementById('logForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
+        // Listen for submit to show status UI
+        form.addEventListener('submit', function(e) {
             const btn = e.target.querySelector('button');
             const statusDiv = document.getElementById('statusMessage');
             
@@ -175,45 +180,32 @@
             btn.innerText = 'TRANSMITTING...';
             statusDiv.innerText = 'Contacting satellite...';
             statusDiv.style.color = '#888';
+            
+            // We can't actually detect failure easily with an iframe (CORS hides it),
+            // So we assume success if it loads.
+        });
 
-            const payload = {
-                date: document.getElementById('date').value,
-                type: document.getElementById('type').value,
-                value: document.getElementById('value').value,
-                note: document.getElementById('tags').value
-            };
-
-            // We assume success if the fetch promise resolves.
-            // Using Text/Plain - The most compatible method for Google Apps Script
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', 
-                headers: {
-                    'Content-Type': 'text/plain' 
-                },
-                body: JSON.stringify(payload)
-            }).then(() => {
+        // Listen for iframe load (response from Google)
+        document.getElementById('hidden_iframe').onload = function() {
+            const btn = document.querySelector('button');
+            const statusDiv = document.getElementById('statusMessage');
+            
+            // If the button is disabled, it means we recently submitted
+            if (btn.disabled) {
                 statusDiv.innerText = '✓ UPLINK SUCCESSFUL';
                 statusDiv.style.color = '#4caf50'; // Green
-                
-                // Reset form but keep date
+
+                // Reset form
                 document.getElementById('value').value = '';
                 document.getElementById('tags').value = '';
-                
+
                 setTimeout(() => {
                     btn.disabled = false;
                     btn.innerText = 'TRANSMIT';
                     statusDiv.innerText = '';
                 }, 2000);
-            }).catch(err => {
-                statusDiv.innerText = '⚠ CONNECTION FAILED: ' + err.message;
-                statusDiv.style.color = '#f44336'; // Red
-                console.error(err);
-                
-                btn.disabled = false;
-                btn.innerText = 'RETRY';
-            });
-        });
+            }
+        };
     </script>
 
 </body>
