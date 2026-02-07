@@ -56,99 +56,68 @@ function loadStatus() {
 
 function fetchUplink(year, dataVar) {
     // DEBUG: Visual indicator
-    const dbg = document.createElement('div');
-    dbg.style.padding = "5px"; dbg.style.fontSize = "10px"; dbg.style.color = "orange";
-    dbg.id = "uplink-debug";
-    dbg.innerText = "Connecting...";
     const sb = document.getElementById('sidebar-container');
-    if (sb) sb.appendChild(dbg);
+    let dbg = document.getElementById('uplink-debug');
+    if (!dbg && sb) {
+        dbg = document.createElement('div');
+        dbg.id = "uplink-debug";
+        dbg.style.padding = "5px"; dbg.style.fontSize = "10px"; dbg.style.color = "orange";
+        sb.appendChild(dbg);
+    }
+    if (dbg) dbg.innerText = "Connecting (JSONP)...";
 
-    // Add timestamp to prevent caching
-    const url = UPLINK_URL + (UPLINK_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
+    // 1. Define the Global Callback (Must be on 'window' to be reachable)
+    window.processUplinkData = function(rows) {
+        if (dbg) { dbg.innerText = "Uplink: " + (rows ? rows.length : 0) + " items."; dbg.style.color = "green"; }
+        
+        if (!rows || rows.length === 0) return;
 
-    fetch(url, {
-        method: 'GET',
-        redirect: 'follow',
-        credentials: 'omit' // CRITICAL: Fixes CORS errors on Safari/Chrome for public scripts
-    })
-        .then(res => {
-             if (dbg) dbg.innerText = "Status: " + res.status;
-             if (!res.ok) throw new Error("HTTP " + res.status);
-             return res.text(); // Get text first to debug if it's HTML
-        })
-        .then(text => {
-            try {
-                return JSON.parse(text);
-            } catch (e) {
-                console.warn("Uplink returned non-JSON:", text.substring(0, 100));
-                throw new Error("Invalid JSON: " + text.substring(0, 20));
+        // Map Sheet Data (Objects) to Site Data (Arrays)
+        const newEntries = rows.map(r => {
+            // 1. Date
+            let d = new Date(r.date);
+            let dateStr = !isNaN(d) ? d.toISOString().split('T')[0] : r.date;
+
+            // 2. Map Types
+            let type = (r.type || "").toLowerCase();
+            let content = r.val || ""; 
+            let tag = r.note || "";
+
+            let words = 0;
+            let gym = false;
+            let finalNote = "";
+
+            if (type === 'writing') {
+                words = parseInt(content) || 0;
+                finalNote = tag; 
+            } else if (type === 'gym') {
+                gym = true;
+                finalNote = content; 
+            } else {
+                finalNote = content;
+                if (tag) finalNote += " #" + tag; 
             }
-        })
-        .then(rows => {
-            if (dbg) dbg.innerText = "Uplink: " + (rows ? rows.length : 0) + " items.";
-            if (dbg) dbg.style.color = "green";
-            
-            if (!rows || rows.length === 0) return;
 
-            // Map Sheet Data (Objects) to Site Data (Arrays)
-            // Sheet: { date: "...", type: "...", val: "...", note: "..." }
-            // Site:  [ "YYYY-MM-DD", Words(int), Gym(bool), "Note" ]
-            const newEntries = rows.map(r => {
-                // 1. Date
-                let d = new Date(r.date);
-                let dateStr = !isNaN(d) ? d.toISOString().split('T')[0] : r.date;
-
-                // 2. Map Types
-                let type = (r.type || "").toLowerCase();
-                let content = r.val || ""; 
-                let tag = r.note || "";
-
-                let words = 0;
-                let gym = false;
-                let finalNote = "";
-
-                if (type === 'writing') {
-                    words = parseInt(content) || 0;
-                    finalNote = tag; // For writing, the note/tag describes the project
-                } else if (type === 'gym') {
-                    gym = true;
-                    // For gym, the content (e.g. "Chest Day") is the note
-                    finalNote = content; 
-                } else {
-                    // Log, Movie, Music, Reading
-                    // The main content is the log. We can append tag if it exists.
-                    // If simple log, content is the note.
-                    finalNote = content;
-                    if (tag) finalNote += " #" + tag; 
-                }
-
-                return [dateStr, words, gym, finalNote];
-            });
-
-            // Merge & Update
-            if (window[dataVar]) {
-                window[dataVar] = window[dataVar].concat(newEntries);
-                
-                // Re-sort by date
-                window[dataVar].sort((a, b) => new Date(a[0]) - new Date(b[0]));
-                
-                // Re-render sidebar
-                renderStatusBox(window[dataVar]);
-
-                // Update Grid if present (year.html)
-                if (typeof generateGrid === 'function') {
-                    generateGrid();
-                }
-            }
-        })
-        .catch(err => {
-            console.log("Uplink silent fail", err);
-            const dbg = document.getElementById('uplink-debug');
-            if (dbg) {
-                dbg.innerText = "Error: " + err.message + ". (Check AdBlock?)";
-                dbg.style.color = "red";
-            }
+            return [dateStr, words, gym, finalNote];
         });
+
+        // Merge & Update
+        if (window[dataVar]) {
+            window[dataVar] = window[dataVar].concat(newEntries);
+            window[dataVar].sort((a, b) => new Date(a[0]) - new Date(b[0]));
+            renderStatusBox(window[dataVar]); // Re-render sidebar
+            if (typeof generateGrid === 'function') generateGrid(); // Re-render grid
+        }
+    };
+
+    // 2. Inject Script Tag (JSONP method bypasses CORS)
+    const script = document.createElement('script');
+    const url = UPLINK_URL + (UPLINK_URL.includes('?') ? '&' : '?') + 'callback=processUplinkData&t=' + Date.now();
+    script.src = url;
+    script.onerror = function() {
+        if (dbg) { dbg.innerText = "Uplink: Script Error."; dbg.style.color = "red"; }
+    };
+    document.body.appendChild(script);
 }
 
 function renderStatusBox(historyData) {
