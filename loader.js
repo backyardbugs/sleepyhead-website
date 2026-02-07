@@ -64,10 +64,13 @@ function fetchUplink(year, dataVar) {
     if (sb) sb.appendChild(dbg);
 
     // Add timestamp to prevent caching
-    // Add 'action=read' just in case the script needs it to distinguish from the form
     const url = UPLINK_URL + (UPLINK_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
 
-    fetch(url)
+    fetch(url, {
+        method: 'GET',
+        redirect: 'follow',
+        credentials: 'omit' // CRITICAL: Fixes CORS errors on Safari/Chrome for public scripts
+    })
         .then(res => {
              if (dbg) dbg.innerText = "Status: " + res.status;
              if (!res.ok) throw new Error("HTTP " + res.status);
@@ -141,7 +144,10 @@ function fetchUplink(year, dataVar) {
         .catch(err => {
             console.log("Uplink silent fail", err);
             const dbg = document.getElementById('uplink-debug');
-            if (dbg) dbg.innerText = "Uplink Error: " + err.message;
+            if (dbg) {
+                dbg.innerText = "Error: " + err.message + ". (Check AdBlock?)";
+                dbg.style.color = "red";
+            }
         });
 }
 
