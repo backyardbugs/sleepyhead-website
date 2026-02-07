@@ -208,14 +208,28 @@
 
     <div id="tooltip"></div>
 
-    <script src="data/2025.js?v=6"></script>
-    <script src="data/2026.js?v=6"></script>
-    
-    <script src="loader.js?v=5"></script>
-
     <script>
-        /* --- THE ENGINE --- */
-        document.addEventListener("DOMContentLoaded", function() {
+    /* --- AUTO-LOADER (Cache Busting) --- */
+    (function() {
+        var stamp = Date.now();
+        var scripts = ["data/2025.js", "data/2026.js", "loader.js"];
+        var loaded = 0;
+
+        scripts.forEach(function(src) {
+            var s = document.createElement('script');
+            s.src = src + "?v=" + stamp;
+            s.onload = function() {
+                loaded++;
+                if (loaded === scripts.length) {
+                    initDashboard();
+                }
+            };
+            document.body.appendChild(s);
+        });
+    })();
+
+    /* --- THE ENGINE --- */
+    function initDashboard() {
             
             // 0. YEAR SELECTION
             const params = new URLSearchParams(window.location.search);
@@ -625,7 +639,7 @@
                 bandContainer.innerHTML = html;
             }
 
-        });
+        } // End initDashboard
     </script>
 </body>
 </html>
