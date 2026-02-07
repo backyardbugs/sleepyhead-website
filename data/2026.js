@@ -6,19 +6,23 @@
 
 var history2026 = [
     /* --- JANUARY --- */
-    ["2026-01-01", 0, true, "Start of 2026"],
     ["2026-01-02", 1057, true, ""],
     ["2026-01-05", 789, true, ""],
     ["2026-01-06", 1029, true, ""],
     ["2026-01-08", 0, true, ""],
-    ["2026-01-09", 0, true, ""],
+    ["2026-01-09", 0, true, "Started playing Divinity with Z."],
     ["2026-01-20", 0, true, "Gym"],
+    ["2026-01-23", 0, false, "Logo design for High Press."],
+    ["2026-01-24", 0, false, "Continued logo design for High Press."],
+    ["2026-01-27", 0, false, "My VSX headphones finally arrived. Love them so much."],
 
     /* --- FEBRUARY --- */
     ["2026-02-02", 0, false, "Submitted Gatebound (61,394 words)"],
-    ["2026-02-03", 0, true, "Gym"],
+    ["2026-02-03", 0, true, "Gym. Did more work for the High Press shirt and logo design."],
+    ["2026-02-04", 0, false, "Overwatch update looks incredible. Jetpack cat!"],
     ["2026-02-05", 0, true, "Gym"],
     ["2026-02-06", 723, true, "Gym"],
+    ["2026-02-07", 0, false, "Blog admin. Barcade with Parker, Mack, and L tonight."],
 ];
 
 const books2026 = [
