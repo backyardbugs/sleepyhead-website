@@ -344,7 +344,7 @@
             let totalWords = 0;
             let totalWorkouts = 0;
 
-            // Create a quick lookup map for dates: "2025-01-01" -> { words: 500, gym: true }
+            // Create a quick lookup map for dates
             const dayMap = {};
 
             activeHistory.forEach(entry => {
@@ -356,7 +356,13 @@
                 totalWords += words;
                 if (gym) totalWorkouts++;
 
-                dayMap[date] = { words, gym, note };
+                if (!dayMap[date]) {
+                    dayMap[date] = { words: 0, gym: false, notes: [] };
+                }
+                
+                dayMap[date].words += words;
+                if (gym) dayMap[date].gym = true;
+                if (note) dayMap[date].notes.push(note);
             });
 
             // Update HUD
@@ -585,7 +591,7 @@
                     const isoDate = localDate.toISOString().split('T')[0];
                     
                     // Get data for this day (or default to 0)
-                    const data = dayMap[isoDate] || { words: 0, gym: false, note: "" };
+                    const data = dayMap[isoDate] || { words: 0, gym: false, notes: [] };
 
                     // Create the HTML square
                     const cell = document.createElement('div');
@@ -611,7 +617,7 @@
                     }
 
                     // 3. MICRO-NOTES (Dog Ear)
-                    if (data.note && data.note.length > 0) {
+                    if (data.notes && data.notes.length > 0) {
                         cell.classList.add('has-note');
                     }
                     
@@ -656,7 +662,11 @@
                         if (blogPost) tooltipText += `\n\n★ Posted: ${blogPost[1]}`;
                     }
                     
-                    if (data.note) tooltipText += `\n\n"${data.note}"`;
+                    if (data.notes && data.notes.length > 0) {
+                        data.notes.forEach(note => {
+                            tooltipText += `\n\n• ${note}`;
+                        });
+                    }
                     
                     cell.setAttribute('data-tooltip', tooltipText);
 
