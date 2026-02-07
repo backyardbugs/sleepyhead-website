@@ -183,13 +183,13 @@
                 note: document.getElementById('tags').value
             };
 
-            // Using no-cors mode, so we can't read the response JSON, but it avoids CORS errors.
             // We assume success if the fetch promise resolves.
+            // Using Form Data structure for better compatibility
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors', 
                 headers: {
-                    'Content-Type': 'text/plain;charset=utf-8'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: JSON.stringify(payload)
             }).then(() => {
@@ -206,7 +206,7 @@
                     statusDiv.innerText = '';
                 }, 2000);
             }).catch(err => {
-                statusDiv.innerText = '⚠ CONNECTION FAILED';
+                statusDiv.innerText = '⚠ CONNECTION FAILED: ' + err.message;
                 statusDiv.style.color = '#f44336'; // Red
                 console.error(err);
                 
