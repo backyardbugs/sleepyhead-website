@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sleepyhead Uplink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         /* Mobile-First Dark Console Theme */
         body { 
             background-color: #111; 
             color: #ccc; 
-            font-family: 'Courier New', Courier, monospace; 
+            font-family: 'Courier Prime', monospace; 
             margin: 0; 
             padding: 20px; 
             display: flex;
@@ -72,6 +75,7 @@
             background: #fff;
             color: #000;
             border: none;
+            font-family: inherit;
             padding: 15px;
             font-size: 16px;
             font-weight: bold;
@@ -132,7 +136,33 @@
     <script>
         // Default to today
         document.getElementById('date').valueAsDate = new Date();
+Smart Label Logic
+        const typeSelect = document.getElementById('type');
+        const contentLabel = document.querySelector('label[for="value"]');
+        const contentInput = document.getElementById('value');
 
+        function updateLabels() {
+            const type = typeSelect.value;
+            if (type === 'writing') {
+                contentLabel.innerText = "Word Count";
+                contentInput.placeholder = "e.g. 1500";
+                contentInput.type = "number"; // Optional: Force number keyboard on mobile
+            } else {
+                contentLabel.innerText = "Content";
+                contentInput.type = "text"; // Revert to text
+                
+                if (type === 'gym') contentInput.placeholder = "e.g. Chest & Triceps";
+                else if (type === 'movie') contentInput.placeholder = "Title of the movie...";
+                else if (type === 'music') contentInput.placeholder = "Song or Album title...";
+                else if (type === 'reading') contentInput.placeholder = "Book title...";
+                else contentInput.placeholder = "Enter log...";
+            }
+        }
+
+        typeSelect.addEventListener('change', updateLabels);
+        updateLabels(); // Run on load
+
+        // 
         // YOUR APP SCRIPT URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec';
 
