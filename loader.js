@@ -23,7 +23,9 @@ function highlightCurrentPage() {
     });
 }
 
-/* --- MICRO-BLOG LOGIC (Powered by Captain's Log) --- */
+/* --- MICRO-BLOG LOGIC (Powered by Captain's Log & Cloud Uplink) --- */
+const UPLINK_URL = 'https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec';
+
 function loadStatus() {
     // 1. Determine the file to load (Current Year)
     var year = new Date().getFullYear();
@@ -34,6 +36,7 @@ function loadStatus() {
     var dataVar = "history" + year;
 
     if (window[dataVar]) {
+        fetchUplink(year, dataVar); // Fetch fresh data to merge
         renderStatusBox(window[dataVar]);
     } else {
         // 3. If not loaded, fetch it dynamically
@@ -41,6 +44,7 @@ function loadStatus() {
         script.src = scriptPath + "?v=" + Date.now();
         script.onload = function() {
             if (window[dataVar]) {
+                fetchUplink(year, dataVar); // Fetch fresh data to merge
                 renderStatusBox(window[dataVar]);
             }
         };
@@ -48,6 +52,68 @@ function loadStatus() {
         script.onerror = function() { console.log("No log data found for " + year); };
         document.body.appendChild(script);
     }
+}
+
+function fetchUplink(year, dataVar) {
+    fetch(UPLINK_URL)
+        .then(res => res.json())
+        .then(rows => {
+            if (!rows || rows.length === 0) return;
+
+            // Map Sheet Data [Date, Type, Value, Spacer, Note] to Site Data [Date, Words, Gym, Note]
+            const newEntries = rows.map(row => {
+                // 1. Date
+                let d = new Date(row[0]);
+                // Handle timezone offset if needed, or simple ISO split
+                let dateStr = !isNaN(d) ? d.toISOString().split('T')[0] : row[0];
+
+                // 2. Type/Value mapping
+                let type = (row[1] || "").toLowerCase();
+                let val = row[2];
+                let extraTag = row[4];
+
+                let words = 0;
+                let gym = false;
+                let note = "";
+
+                if (type === 'writing') {
+                    words = parseInt(val) || 0;
+                    note = extraTag || "";
+                } else if (type === 'gym') {
+                    gym = true;
+                    // If note is empty, maybe use value if it's text?
+                    note = extraTag || (isNaN(val) ? val : "");
+                } else {
+                    // Log, Movie, Music etc.
+                    note = val; // The main content is the log
+                }
+
+                return [dateStr, words, gym, note];
+            });
+
+            // Merge: Combine existing history with new entries
+            // We prepend new entries so they appear first if sorting by date isn't strict?
+            // Actually site logic usually sorts or assumes order.
+            // Let's just append and let the render function sort if needed?
+            // data/2026.js is usually sorted ASCENDING by date.
+            
+            // Add to global object so other scripts see it
+            if (window[dataVar]) {
+                window[dataVar] = window[dataVar].concat(newEntries);
+                
+                // Re-sort by date to be safe
+                window[dataVar].sort((a, b) => new Date(a[0]) - new Date(b[0]));
+                
+                // Re-render sidebar
+                renderStatusBox(window[dataVar]);
+
+                // If on year.html, try to refresh grid?
+                if (typeof generateGrid === 'function') {
+                    generateGrid();
+                }
+            }
+        })
+        .catch(err => console.log("Uplink silent fail", err));
 }
 
 function renderStatusBox(historyData) {
