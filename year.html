@@ -306,6 +306,9 @@
     })();
 
     /* --- THE ENGINE --- */
+    // Expose initDashboard globally so loader.js can call it
+    window.generateGrid = initDashboard;
+
     function initDashboard() {
             
             // 0. YEAR SELECTION
