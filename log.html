@@ -175,38 +175,45 @@
             statusDiv.innerText = 'Contacting satellite...';
             statusDiv.style.color = '#888';
 
-            const payload = {
-                date: document.getElementById('date').value,
-                type: document.getElementById('type').value,
-                value: document.getElementById('value').value,
-                note: document.getElementById('tags').value
-            };
+            const payload = new URLSearchParams();
+            payload.append('date', document.getElementById('date').value);
+            payload.append('type', document.getElementById('type').value);
+            payload.append('value', document.getElementById('value').value);
+            payload.append('note', document.getElementById('tags').value);
 
-            // BEACON METHOD: Fire and forget
-            // Browsers allow this even when fetch is blocked by CORS/Unload
-            const blob = new Blob([JSON.stringify(payload)], {type: 'text/plain'});
-            const success = navigator.sendBeacon(SCRIPT_URL, blob);
+            // ROBUST FETCH METHOD (NO-CORS)
+            // Uses URLEncoded data which Google Scripts handle natively.
+            // mode: 'no-cors' allows the request to reach Google without blocking on header checks.
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: payload
+            })
+            .then(() => {
+                // Since mode is no-cors, we can't read the response status (it's opaque).
+                // But if the promise resolves, the request was sent.
+                statusDiv.innerText = '✓ TRANSMISSION SENT';
+                statusDiv.style.color = '#4caf50'; // Green
+                
+                document.getElementById('value').value = '';
+                document.getElementById('tags').value = '';
 
-            setTimeout(() => {
-                if (success) {
-                    statusDiv.innerText = '✓ TRANSMISSION SENT';
-                    statusDiv.style.color = '#4caf50'; // Green
-                    
-                    document.getElementById('value').value = '';
-                    document.getElementById('tags').value = '';
-
-                    setTimeout(() => {
-                        btn.disabled = false;
-                        btn.innerText = 'TRANSMIT';
-                        statusDiv.innerText = '';
-                    }, 2000);
-                } else {
-                    statusDiv.innerText = '⚠ UPLINK FAILED';
-                    statusDiv.style.color = '#f44336';
+                setTimeout(() => {
                     btn.disabled = false;
-                    btn.innerText = 'RETRY';
-                }
-            }, 1000); // Short delay to simulate network feel
+                    btn.innerText = 'TRANSMIT';
+                    statusDiv.innerText = '';
+                }, 2000);
+            })
+            .catch(err => {
+                console.error(err);
+                statusDiv.innerText = '⚠ UPLINK FAILED';
+                statusDiv.style.color = '#f44336';
+                btn.disabled = false;
+                btn.innerText = 'RETRY';
+            });
         });
     </script>
 
