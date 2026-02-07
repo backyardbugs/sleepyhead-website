@@ -15,7 +15,27 @@ This is a static website hosted on Neocities.
     - Images: `img/`.
     - Comics: `comics/`.
 
+## The Cloud Uplink (Micro-Blog)
+The site features a "hybrid" architecture for short updates ("Captain's Log").
+1.  **Write Path**: User posts via a secure Google Apps Script Web App (The Uplink).
+    -   *Tech*: `index.html` (in Google Script) uses `google.script.run` to write to a Google Sheet.
+2.  **Read Path**: 
+    -   `loader.js` fetches data from the Google Script via **JSONP** (bypassing CORS).
+    -   Data is merged on-the-fly with the static `data/2026.js` file.
+    -   Displays in Sidebar and Year Grid.
+
 ## Common Tasks
+
+### Archiving Mobile Logs (The Mailman)
+When the Google Sheet gets full, or to make logs permanent:
+1.  Run the Mailman script:
+    ```bash
+    node scripts/mailman.js
+    ```
+2.  This fetches all online logs and appends them to `data/YYYY.js`.
+3.  **Manual Step**: Verify the file formatting in `data/YYYY.js`.
+4.  **Manual Step**: Clear the rows in the Google Sheet (via Google Drive).
+5.  Commit and Push.
 
 ### Adding a New Blog Post
 1.  **Create Markdown File**: Create a new file in `posts/` (e.g., `posts/my-new-post.md`).

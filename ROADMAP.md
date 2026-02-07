@@ -11,12 +11,12 @@
 - [x] **5. Smart "Read More"**
     - *Goal*: Fallback truncation for the home feed.
     - *Implemented*: `engine.js` auto-truncates at 1000 chars.
-- [ ] **2. RSS Feed Generator**
-    - *Goal*: Allow subscriptions (Open Web standard).
-    - *Plan*: Script to generate `feed.xml` on deploy.
-- [ ] **Captain's Log Rollover (2026)**
+- [x] **6. The Cloud Uplink (Mobile Posting)**
+    - *Goal*: Post short "tweets" and log updates from phone without VS Code.
+    - *Tech*: Google Apps Script Bridge + JSONP + Google Sheet Database.
+- [x] **Captain's Log Rollover (2026)**
     - *Goal*: Archive 2025 data and start fresh for the new year.
-    - *Plan*: Create `data/2026.js`, update `year.html` to toggle between years.
+    - *Implemented*: `data/2026.js` creates the new timeline.
 
 ## 🎨 Phase 2: The Collections (Visual & Audio)
 - [ ] **The Demo Tape (Music Player)**
