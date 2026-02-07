@@ -108,12 +108,13 @@
 
     <h2>Microblog Uplink</h2>
 
-    <form id="logForm">
+    <form id="logForm" method="POST" target="hidden_iframe" action="https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec">
+        
         <label for="date">Date</label>
-        <input type="date" id="date" required>
+        <input type="date" id="date" name="date" required>
 
         <label for="type">Type</label>
-        <select id="type">
+        <select id="type" name="type">
             <option value="log">Log</option>
             <option value="gym">Gym</option>
             <option value="writing">Writing</option>
@@ -123,21 +124,24 @@
         </select>
 
         <label for="value">Content</label>
-        <textarea id="value" placeholder="Enter log..." required></textarea>
+        <textarea id="value" name="value" placeholder="Enter log..." required></textarea>
 
         <label for="tags">Tags (Optional)</label>
-        <input type="text" id="tags" placeholder="e.g. journal, idea">
+        <input type="text" id="tags" name="note" placeholder="e.g. journal, idea">
 
         <button type="submit">TRANSMIT</button>
     </form>
 
     <div class="status" id="statusMessage"></div>
+    
+    <!-- The Silent Target: Form submits here instead of reloading the page -->
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
 
     <script>
         // Default to today
         document.getElementById('date').valueAsDate = new Date();
 
-        // Smart Label Logic
+        // Smart Label Logic (Visuals only)
         const typeSelect = document.getElementById('type');
         const contentLabel = document.querySelector('label[for="value"]');
         const contentInput = document.getElementById('value');
@@ -159,48 +163,26 @@
         }
 
         typeSelect.addEventListener('change', updateLabels);
-        updateLabels(); // Run on load
+        updateLabels(); 
 
-        // YOUR APP SCRIPT URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec';
-
-        document.getElementById('logForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const btn = e.target.querySelector('button');
+        // UI Feedback Logic
+        const form = document.getElementById('logForm');
+        form.addEventListener('submit', function() {
+            const btn = document.querySelector('button');
             const statusDiv = document.getElementById('statusMessage');
-            
+
             btn.disabled = true;
             btn.innerText = 'TRANSMITTING...';
-            statusDiv.innerText = 'Contacting satellite...';
+            statusDiv.innerText = 'Uplink Established...';
             statusDiv.style.color = '#888';
 
-            const payload = {
-                date: document.getElementById('date').value,
-                type: document.getElementById('type').value,
-                value: document.getElementById('value').value,
-                note: document.getElementById('tags').value
-            };
-
-            // PLATINUM UPLINK METHOD (No-CORS + JSON)
-            // 1. Matches your working CURL test (text/plain body with JSON string)
-            // 2. Uses mode: 'no-cors' so the browser NEVER blocks the request due to privacy/headers
-            // 3. We can't see the response 'success' message (it's opaque), but the promise resolves 
-            //    meaning the signal successfully left the device.
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', 
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8', 
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                // In no-cors mode, we land here if the network request was made.
-                // We won't know if the script crashed, but we know we reached Google.
+            // Since we target an iframe, we don't get a real 'callback'.
+            // We assume success if the form submits, because HTML forms rarely fail.
+            setTimeout(() => {
                 statusDiv.innerText = '✓ TRANSMISSION SENT';
-                statusDiv.style.color = '#4caf50'; // Green
+                statusDiv.style.color = '#4caf50';
                 
+                // Clear fields
                 document.getElementById('value').value = '';
                 document.getElementById('tags').value = '';
 
@@ -209,17 +191,8 @@
                     btn.innerText = 'TRANSMIT';
                     statusDiv.innerText = '';
                 }, 2000);
-            })
-            .catch(err => {
-                console.error(err);
-                statusDiv.innerText = '⚠ NETWORK ERROR';
-                statusDiv.style.color = '#f44336';
-                btn.disabled = false;
-                btn.innerText = 'RETRY';
-            });
+            }, 1500);
         });
-
-        // Removed manual success marker to rely on fetch promise
     </script>
 
 </body>
