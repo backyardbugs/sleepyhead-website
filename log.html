@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sleepyhead Uplink</title>
+    <style>
+        /* Mobile-First Dark Console Theme */
+        body { 
+            background-color: #111; 
+            color: #ccc; 
+            font-family: 'Courier New', Courier, monospace; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h2 { 
+            color: #fff; 
+            border-bottom: 2px solid #555; 
+            padding-bottom: 10px; 
+            width: 100%; 
+            max-width: 500px;
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        form {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: -10px;
+            margin-left: 5px;
+            text-transform: uppercase;
+        }
+
+        input, textarea, select {
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 15px;
+            font-size: 16px;
+            font-family: inherit;
+            border-radius: 4px;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #777;
+            background: #2a2a2a;
+        }
+
+        textarea {
+            height: 150px;
+            resize: none;
+        }
+
+        button {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        button:active {
+            background: #ccc;
+        }
+
+        button:disabled {
+            background: #555;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 14px;
+            height: 20px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Microblog Uplink</h2>
+
+    <form id="logForm">
+        <label for="date">Date</label>
+        <input type="date" id="date" required>
+
+        <label for="type">Type</label>
+        <select id="type">
+            <option value="log">Log</option>
+            <option value="gym">Gym</option>
+            <option value="writing">Writing</option>
+            <option value="movie">Movie</option>
+            <option value="music">Music</option>
+            <option value="reading">Reading</option>
+        </select>
+
+        <label for="value">Content</label>
+        <textarea id="value" placeholder="Enter log..." required></textarea>
+
+        <label for="tags">Tags (Optional)</label>
+        <input type="text" id="tags" placeholder="e.g. journal, idea">
+
+        <button type="submit">TRANSMIT</button>
+    </form>
+
+    <div class="status" id="statusMessage"></div>
+
+    <script>
+        // Default to today
+        document.getElementById('date').valueAsDate = new Date();
+
+        // YOUR APP SCRIPT URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec';
+
+        document.getElementById('logForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = e.target.querySelector('button');
+            const statusDiv = document.getElementById('statusMessage');
+            
+            btn.disabled = true;
+            btn.innerText = 'TRANSMITTING...';
+            statusDiv.innerText = 'Contacting satellite...';
+            statusDiv.style.color = '#888';
+
+            const payload = {
+                date: document.getElementById('date').value,
+                type: document.getElementById('type').value,
+                value: document.getElementById('value').value,
+                note: document.getElementById('tags').value
+            };
+
+            // Using no-cors mode, so we can't read the response JSON, but it avoids CORS errors.
+            // We assume success if the fetch promise resolves.
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                statusDiv.innerText = '✓ UPLINK SUCCESSFUL';
+                statusDiv.style.color = '#4caf50'; // Green
+                
+                // Reset form but keep date
+                document.getElementById('value').value = '';
+                document.getElementById('tags').value = '';
+                
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerText = 'TRANSMIT';
+                    statusDiv.innerText = '';
+                }, 2000);
+            }).catch(err => {
+                statusDiv.innerText = '⚠ CONNECTION FAILED';
+                statusDiv.style.color = '#f44336'; // Red
+                console.error(err);
+                
+                btn.disabled = false;
+                btn.innerText = 'RETRY';
+            });
+        });
+    </script>
+
+</body>
+</html>
