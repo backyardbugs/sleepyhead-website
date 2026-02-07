@@ -136,7 +136,8 @@
     <script>
         // Default to today
         document.getElementById('date').valueAsDate = new Date();
-Smart Label Logic
+
+        // Smart Label Logic
         const typeSelect = document.getElementById('type');
         const contentLabel = document.querySelector('label[for="value"]');
         const contentInput = document.getElementById('value');
@@ -146,10 +147,8 @@ Smart Label Logic
             if (type === 'writing') {
                 contentLabel.innerText = "Word Count";
                 contentInput.placeholder = "e.g. 1500";
-                contentInput.type = "number"; // Optional: Force number keyboard on mobile
             } else {
                 contentLabel.innerText = "Content";
-                contentInput.type = "text"; // Revert to text
                 
                 if (type === 'gym') contentInput.placeholder = "e.g. Chest & Triceps";
                 else if (type === 'movie') contentInput.placeholder = "Title of the movie...";
