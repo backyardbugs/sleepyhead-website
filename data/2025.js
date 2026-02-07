@@ -4,7 +4,7 @@
    [ "YYYY-MM-DD", WordCount, WorkoutBoolean, "Short Note (Optional)" ]
 */
 
-const history2025 = [
+var history2025 = [
     /* --- JANUARY --- */
     ["2025-01-01", 1249, false, "DraftZero Start"],
     ["2025-01-02", 445,  true,  ""], // Gym

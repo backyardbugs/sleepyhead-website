@@ -4,7 +4,7 @@
    [ "YYYY-MM-DD", WordCount, WorkoutBoolean, "Short Note (Optional)" ]
 */
 
-const history2026 = [
+var history2026 = [
     /* --- JANUARY --- */
     ["2026-01-01", 0, true, "Start of 2026"],
     ["2026-01-02", 1057, true, ""],

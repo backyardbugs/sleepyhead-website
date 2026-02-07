@@ -32,40 +32,31 @@
     (function() {
         var stamp = Date.now(); // Get the current time (e.g., 170234...)
 
-        // 1. Create the Blog Script (The Data)
-        var blogScript = document.createElement('script');
-        blogScript.src = "blog.js?v=" + stamp;
+        // List of scripts to load
+        var scriptsToLoad = [
+            "loader.js", // The Sidebar Agent
+            "blog.js"    // The Blog Data
+        ];
         
-        // 2. When Blog is ready, load the Engine
-        blogScript.onload = function() {
-            var engineScript = document.createElement('script');
-            engineScript.src = "engine.js?v=" + stamp;
-            document.body.appendChild(engineScript);
-        };
+        // Helper: load script
+        function loadScript(src, callback) {
+            var s = document.createElement('script');
+            s.src = src + "?v=" + stamp;
+            s.onload = callback;
+            document.body.appendChild(s);
+        }
 
-        // 3. Fire!
-        document.body.appendChild(blogScript);
+        // LOAD SEQUENCE
+        // 1. Sidebar Loader & Blog Data (Parallel-ish)
+        loadScript("loader.js");
+        
+        loadScript("blog.js", function() {
+            // 2. Only after Blog Data is ready, load the Engine
+            loadScript("engine.js");
+        });
+
     })();
 </script>
 
 </body>
-<script>
-    // THE DIAGNOSTIC TOOL
-    // This prints invisible errors to the screen so we can see them.
-    window.onerror = function(msg, url, line) {
-        var container = document.getElementById('blog-feed');
-        if (!container) container = document.body;
-        
-        container.innerHTML += `
-            <div style="background:white; color:red; padding:20px; border:2px solid red; margin:20px;">
-                <h3>⚠️ WE HAVE A PROBLEM</h3>
-                <p><strong>Error Message:</strong> ${msg}</p>
-                <p><strong>Location:</strong> ${url} (Line: ${line})</p>
-                <p><em>Take a screenshot of this and show Gemini!</em></p>
-            </div>
-        `;
-        return false;
-    };
-</script>
-<script src="loader.js?v=4"></script>
 </html>
