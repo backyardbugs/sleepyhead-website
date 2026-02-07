@@ -182,48 +182,44 @@
                 note: document.getElementById('tags').value
             };
 
-            // STANDARD FETCH (Mimics the working CURL command)
-            // Header: text/plain (avoids CORS preflight)
-            // Body: JSON string (matches what the script parses)
+            // PLATINUM UPLINK METHOD (No-CORS + JSON)
+            // 1. Matches your working CURL test (text/plain body with JSON string)
+            // 2. Uses mode: 'no-cors' so the browser NEVER blocks the request due to privacy/headers
+            // 3. We can't see the response 'success' message (it's opaque), but the promise resolves 
+            //    meaning the signal successfully left the device.
             fetch(SCRIPT_URL, {
                 method: 'POST',
+                mode: 'no-cors', 
                 headers: {
-                    'Content-Type': 'text/plain;charset=utf-8',
+                    'Content-Type': 'text/plain;charset=utf-8', 
                 },
                 body: JSON.stringify(payload)
             })
-            .then(response => {
-                // Google Scripts redirect to a confirmation page. 
-                // Even if the final redirect gives a weird status (like 405), 
-                // the fact that we got a response means the Script executed.
-                console.log("Response status:", response.status);
-                markSuccess();
+            .then(() => {
+                // In no-cors mode, we land here if the network request was made.
+                // We won't know if the script crashed, but we know we reached Google.
+                statusDiv.innerText = '✓ TRANSMISSION SENT';
+                statusDiv.style.color = '#4caf50'; // Green
+                
+                document.getElementById('value').value = '';
+                document.getElementById('tags').value = '';
+
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerText = 'TRANSMIT';
+                    statusDiv.innerText = '';
+                }, 2000);
             })
             .catch(err => {
                 console.error(err);
-                statusDiv.innerText = '⚠ UPLINK FAILED';
+                statusDiv.innerText = '⚠ NETWORK ERROR';
                 statusDiv.style.color = '#f44336';
                 btn.disabled = false;
                 btn.innerText = 'RETRY';
             });
         });
 
-        function markSuccess() {
-            const btn = document.querySelector('button');
-            const statusDiv = document.getElementById('statusMessage');
-            
-            statusDiv.innerText = '✓ TRANSMISSION SENT';
-            statusDiv.style.color = '#4caf50'; // Green
-            
-            document.getElementById('value').value = '';
-            document.getElementById('tags').value = '';
-
-            setTimeout(() => {
-                btn.disabled = false;
-                btn.innerText = 'TRANSMIT';
-                statusDiv.innerText = '';
-            }, 2000);
-        }
+        // Removed manual success marker to rely on fetch promise
     </script>
 
 </body>
