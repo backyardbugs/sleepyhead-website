@@ -57,16 +57,34 @@ function loadStatus() {
 function fetchUplink(year, dataVar) {
     // DEBUG: Visual indicator
     const dbg = document.createElement('div');
-    dbg.style.padding = "5px"; dbg.style.fontSize = "10px"; dbg.style.color = "red";
+    dbg.style.padding = "5px"; dbg.style.fontSize = "10px"; dbg.style.color = "orange";
     dbg.id = "uplink-debug";
-    dbg.innerText = "Connecting to Uplink...";
+    dbg.innerText = "Connecting...";
     const sb = document.getElementById('sidebar-container');
     if (sb) sb.appendChild(dbg);
 
-    fetch(UPLINK_URL)
-        .then(res => res.json())
+    // Add timestamp to prevent caching
+    // Add 'action=read' just in case the script needs it to distinguish from the form
+    const url = UPLINK_URL + (UPLINK_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
+
+    fetch(url)
+        .then(res => {
+             if (dbg) dbg.innerText = "Status: " + res.status;
+             if (!res.ok) throw new Error("HTTP " + res.status);
+             return res.text(); // Get text first to debug if it's HTML
+        })
+        .then(text => {
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.warn("Uplink returned non-JSON:", text.substring(0, 100));
+                throw new Error("Invalid JSON: " + text.substring(0, 20));
+            }
+        })
         .then(rows => {
             if (dbg) dbg.innerText = "Uplink: " + (rows ? rows.length : 0) + " items.";
+            if (dbg) dbg.style.color = "green";
+            
             if (!rows || rows.length === 0) return;
 
             // Map Sheet Data (Objects) to Site Data (Arrays)
