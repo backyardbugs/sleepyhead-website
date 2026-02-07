@@ -23,67 +23,93 @@ function highlightCurrentPage() {
     });
 }
 
-/* --- MICRO-BLOG LOGIC (FADED SYSTEM LOG) --- */
+/* --- MICRO-BLOG LOGIC (Powered by Captain's Log) --- */
 function loadStatus() {
-    fetch('posts/status.txt?v=' + Date.now())
-    .then(response => {
-        if (!response.ok) throw new Error("No status file found");
-        return response.text();
-    })
-    .then(text => {
-        var lines = text.split('\n');
-        var contentLines = lines.filter(line => line.trim() !== "");
-        
-        if (contentLines.length > 0) {
-            var html = "";
-            var limit = 3; 
-            
-            for (var i = 0; i < Math.min(contentLines.length, limit); i++) {
-                
-                var parts = contentLines[i].split('|');
-                
-                if (parts.length >= 2) {
-                    var date = parts[0].trim();
-                    var msg = parts.slice(1).join('|').trim();
-                    
-                    html += `
-                        <div style="margin-bottom: 12px; font-family: var(--font-head);">
-                            
-                            <div style="margin-bottom: 2px;">
-                                <span style="color: var(--accent-color); font-size: 0.7rem; opacity: 0.6;">></span>
-                                <span style="
-                                    color: #444; /* Very dark grey - recedes into background */
-                                    font-size: 0.65rem; 
-                                    text-transform: uppercase; 
-                                    letter-spacing: 1px;
-                                ">${date}</span>
-                            </div>
+    // 1. Determine the file to load (Current Year)
+    var year = new Date().getFullYear();
+    var scriptPath = "data/" + year + ".js";
 
-                            <div style="
-                                color: #777; /* The Hierarchy Fix: Dark Grey Text */
-                                font-size: 0.75rem; 
-                                line-height: 1.3;
-                                padding-left: 12px; 
-                                border-left: 1px solid #222; /* Almost invisible guide line */
-                            ">
-                                ${msg}
-                            </div>
-                        </div>
-                    `;
-                }
+    // 2. Check if it's already loaded (e.g., we are on year.html)
+    // The data file defines a variable like 'history2026'
+    var dataVar = "history" + year;
+
+    if (window[dataVar]) {
+        renderStatusBox(window[dataVar]);
+    } else {
+        // 3. If not loaded, fetch it dynamically
+        var script = document.createElement('script');
+        script.src = scriptPath + "?v=" + Date.now();
+        script.onload = function() {
+            if (window[dataVar]) {
+                renderStatusBox(window[dataVar]);
             }
-            
-            var box = document.getElementById('status-box');
-            if (box) {
-                // Added opacity: 0.8 to the whole container to push it back further
-                box.innerHTML = `<div style="margin-top: 30px; margin-bottom: 40px;">${html}</div>`;
-                box.style.display = "block";
-            }
-        }
-    })
-    .catch(e => {
-        console.log("No status update found."); 
+        };
+        // Handle 404s or errors silently
+        script.onerror = function() { console.log("No log data found for " + year); };
+        document.body.appendChild(script);
+    }
+}
+
+function renderStatusBox(historyData) {
+    if (!historyData || historyData.length === 0) return;
+
+    // Filter for entries that have a "Note" (index 3)
+    // AND filter out boring generic logs like just "Gym" (length <= 3)
+    var updates = historyData.filter(entry => {
+        var note = entry[3];
+        return note && note.length > 3; 
     });
+
+    // Get the last 3 interesting updates
+    var recent = updates.slice(-3).reverse();
+
+    if (recent.length > 0) {
+        var html = "";
+        
+        recent.forEach(item => {
+            var dateStr = item[0]; // "2026-02-06"
+            var note = item[3];
+
+            // Fix Date Parsing (handle timezones safely by splitting string)
+            // "2026-02-06" -> Parts [2026, 02, 06]
+            var parts = dateStr.split("-");
+            var monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            var monthIndex = parseInt(parts[1]) - 1;
+            var day = parts[2];
+            var niceDate = `${day} ${monthNames[monthIndex]}`;
+
+            html += `
+                <div style="margin-bottom: 12px; font-family: var(--font-head);">
+                    
+                    <div style="margin-bottom: 2px;">
+                        <span style="color: var(--accent-color); font-size: 0.7rem; opacity: 0.6;">></span>
+                        <span style="
+                            color: #444; /* Very dark grey - recedes into background */
+                            font-size: 0.65rem; 
+                            text-transform: uppercase; 
+                            letter-spacing: 1px;
+                        ">${niceDate}</span>
+                    </div>
+
+                    <div style="
+                        color: #777; /* The Hierarchy Fix: Dark Grey Text */
+                        font-size: 0.75rem; 
+                        line-height: 1.3;
+                        padding-left: 12px; 
+                        border-left: 1px solid #222; /* Almost invisible guide line */
+                    ">
+                        ${note}
+                    </div>
+                </div>
+            `;
+        });
+        
+        var box = document.getElementById('status-box');
+        if (box) {
+            box.innerHTML = `<div style="margin-top: 30px; margin-bottom: 40px;">${html}</div>`;
+            box.style.display = "block";
+        }
+    }
 }
 
 function loadNowPlaying() {
