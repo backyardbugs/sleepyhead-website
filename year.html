@@ -97,11 +97,43 @@
             transform: translate(-50%, -120%); /* Center above cursor */
         }
 
-        /* COLOR LEVELS (Word Count) */
-        .lvl-0 { background-color: #222; }
-        .lvl-1 { background-color: #333; }             /* < 500 words */
-        .lvl-2 { background-color: #8a703e; }          /* 500 - 1500 */
-        .lvl-3 { background-color: var(--accent-color); } /* 1500+ */
+        /* COLOR LEVELS (Word Count) - REDESIGNED FOR SEASONS */
+        .day-cell {
+            /* Base dark track */
+            background-color: #1a1a1a; 
+            border: 1px solid #222; /* Subtle separation */
+        }
+
+        /* The Colored Layer */
+        .day-cell::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-color: var(--theme-color, #8a703e); /* Default if no season */
+            opacity: var(--theme-opacity, 0);
+            z-index: 1;
+            transition: opacity 0.2s;
+        }
+
+        /* Opacity Levels */
+        .lvl-0 { --theme-opacity: 0; }
+        .lvl-1 { --theme-opacity: 0.25; }
+        .lvl-2 { --theme-opacity: 0.55; }
+        .lvl-3 { --theme-opacity: 1; }
+
+        /* SEASONAL HUES */
+        /* Winter (Dec, Jan, Feb): Deep Ice */
+        .season-winter { --theme-color: #64b5f6; } 
+
+        /* Spring (Mar, Apr, May): Fresh Green */
+        .season-spring { --theme-color: #9ccc65; }
+
+        /* Summer (Jun, Jul, Aug): Solar Gold */
+        .season-summer { --theme-color: #ffb74d; }
+
+        /* Fall (Sep, Oct, Nov): Burnt Orange/Rust */
+        .season-fall   { --theme-color: #e57373; }
+
 
         /* GYM INDICATOR (The Dot) */
         .gym-dot {
@@ -113,8 +145,30 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 2px #000; /* Shadow to make it pop on bright gold */
+            box-shadow: 0 0 2px #000;
+            z-index: 5; /* Above background */
         }
+
+        /* DOG-EAR (Micro-Note Indicator) */
+        .has-note::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-style: solid;
+            border-width: 0 6px 6px 0;
+            border-color: transparent #fff transparent transparent;
+            opacity: 0.8;
+            z-index: 5;
+        }
+
+        /* BLOG POST LANDMARK (Border) */
+        .has-post {
+            border: 1px solid #fff !important;
+            box-shadow: 0 0 5px rgba(255,255,255,0.3);
+            cursor: pointer;
+        }
+
 
         /* 4. THE LEDGERS (Lists) */
         .ledger-grid {
@@ -212,7 +266,8 @@
     /* --- AUTO-LOADER (Cache Busting) --- */
     (function() {
         var stamp = Date.now();
-        var scripts = ["data/2025.js", "data/2026.js", "loader.js"];
+        // Added blog.js to the list to get post data
+        var scripts = ["data/2025.js", "data/2026.js", "blog.js", "loader.js"];
         var loaded = 0;
 
         scripts.forEach(function(src) {
@@ -462,32 +517,66 @@
                             injectGhostStat('total-workouts', workouts2025, gymDiff);
 
                         } else {
-                            // TURN OFF
-                            toggleBtn.classList.remove('active');
-                            toggleBtn.innerHTML = "[ Show Last Year Pace ]";
-                            toggleBtn.style.color = "#444";
-                            
-                            // Remove elements
-                            document.querySelectorAll('.ghost-stat').forEach(el => el.remove());
+                    
+                    // 1. SEASONAL HUES
+                    // Month is 0-indexed (0 = Jan, 11 = Dec)
+                    const month = d.getMonth(); 
+                    if (month === 11 || month === 0 || month === 1) cell.classList.add('season-winter');
+                    else if (month >= 2 && month <= 4) cell.classList.add('season-spring');
+                    else if (month >= 5 && month <= 7) cell.classList.add('season-summer');
+                    else cell.classList.add('season-fall');
+
+                    // 2. BLOG POSTS (Landmarks)
+                    // Check global 'posts' array from blog.js
+                    // Format: ["slug", "Title", "YYYY-MM-DD", ...]
+                    if (typeof posts !== 'undefined') {
+                        const blogPost = posts.find(p => p[2] === isoDate);
+                        if (blogPost) {
+                            cell.classList.add('has-post');
+                            // Add click to go to post
+                            cell.onclick = () => window.location.href = `index.html?post=${blogPost[0]}`;
                         }
-                    });
-                }
-            }
+                    }
 
-            function injectGhostStat(elementId, pastValue, diff) {
-                const el = document.getElementById(elementId);
-                if (!el) return;
-                
-                const parent = el.parentNode;
-                // Remove existing if any (safety)
-                const existing = parent.querySelector('.ghost-stat');
-                if (existing) existing.remove();
+                    // 3. MICRO-NOTES (Dog Ear)
+                    // Filter out generic short notes if you want, or show all
+                    if (data.note && data.note.length > 0) {
+                        cell.classList.add('has-note');
+                    }
 
-                const sign = diff >= 0 ? "+" : "";
-                const color = diff >= 0 ? "var(--accent-color)" : "#ff4444";
-                
-                const html = `
-                    <div class="ghost-stat" style="font-family: var(--font-head); font-size: 0.8rem; color: #666; margin-top: 5px; animation: fadeIn 0.5s;">
+                    // Current Day Indicator
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    if (isoDate === todayStr) {
+                        cell.style.border = "2px solid #fff";
+                        cell.style.zIndex = "10";
+                    }
+                    
+                    // Determine Color Level
+                    if (data.words > 1500) cell.classList.add('lvl-3');
+                    else if (data.words > 500) cell.classList.add('lvl-2');
+                    else if (data.words > 0) cell.classList.add('lvl-1');
+                    else cell.classList.add('lvl-0');
+
+                    // Add Gym Dot
+                    if (data.gym) {
+                        const dot = document.createElement('div');
+                        dot.className = 'gym-dot';
+                        cell.appendChild(dot);
+                    }
+
+                    // Prepare Tooltip Data
+                    const dateString = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    let tooltipText = `${dateString}\nWords: ${data.words}`;
+                    if (data.gym) tooltipText += `\nGym: Yes`;
+                    
+                    // Show Blog Post title in tooltip
+                    if (typeof posts !== 'undefined') {
+                        const blogPost = posts.find(p => p[2] === isoDate);
+                        if (blogPost) tooltipText += `\n\n★ Posted: ${blogPost[1]}`;
+                    }
+
+                    // Show Note in Tooltip
+                    if (data.note) tooltipText += `\nfont-family: var(--font-head); font-size: 0.8rem; color: #666; margin-top: 5px; animation: fadeIn 0.5s;">
                         <span style="color:${color}">${sign}${diff.toLocaleString()}</span> vs 2025
                     </div>
                 `;
