@@ -618,14 +618,14 @@
                     const todayStr = new Date().toISOString().split('T')[0];
                     if (isoDate === todayStr) {
                         // Use inline style for dynamic color
-                        let glowColor = '#fff'; // Fallback
-                        if (month === 11 || month === 0 || month === 1) glowColor = '#64b5f6';
-                        else if (month >= 2 && month <= 4) glowColor = '#9ccc65';
-                        else if (month >= 5 && month <= 7) glowColor = '#ffb74d';
-                        else glowColor = '#e57373';
+                        let borderColor = '#fff'; // Fallback
+                        if (month === 11 || month === 0 || month === 1) borderColor = '#64b5f6';
+                        else if (month >= 2 && month <= 4) borderColor = '#9ccc65';
+                        else if (month >= 5 && month <= 7) borderColor = '#ffb74d';
+                        else borderColor = '#e57373';
 
-                        // Just glow, no extra border
-                        cell.style.boxShadow = `0 0 10px ${glowColor}`; 
+                        cell.style.border = `1px solid ${borderColor}`;
+                        cell.style.boxShadow = `0 0 6px ${borderColor}`;
                         cell.style.zIndex = "10";
                     }
                     
