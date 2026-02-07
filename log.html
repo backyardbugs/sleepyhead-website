@@ -181,31 +181,43 @@
             statusDiv.innerText = 'Contacting satellite...';
             statusDiv.style.color = '#888';
             
-            // We can't actually detect failure easily with an iframe (CORS hides it),
-            // So we assume success if it loads.
+            // FALLBACK TIMER: 
+            // If the iframe 'onload' is blocked by privacy settings (common in Safari),
+            // we assume the form submission succeeded after 2.5 seconds.
+            setTimeout(() => {
+                if (btn.disabled && btn.innerText !== 'TRANSMIT') {
+                    console.log("Fallback success trigger");
+                    markSuccess();
+                }
+            }, 2500);
         });
 
         // Listen for iframe load (response from Google)
+        // Note: This often fails to fire on Safari/iOS due to X-Frame-Options
         document.getElementById('hidden_iframe').onload = function() {
+            markSuccess();
+        };
+
+        function markSuccess() {
             const btn = document.querySelector('button');
             const statusDiv = document.getElementById('statusMessage');
             
-            // If the button is disabled, it means we recently submitted
-            if (btn.disabled) {
-                statusDiv.innerText = '✓ UPLINK SUCCESSFUL';
-                statusDiv.style.color = '#4caf50'; // Green
+            // Prevent double-firing
+            if (!btn.disabled || btn.innerText === 'TRANSMIT') return;
 
-                // Reset form
-                document.getElementById('value').value = '';
-                document.getElementById('tags').value = '';
+            statusDiv.innerText = '✓ TRANSMISSION SENT';
+            statusDiv.style.color = '#4caf50'; // Green
 
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.innerText = 'TRANSMIT';
-                    statusDiv.innerText = '';
-                }, 2000);
-            }
-        };
+            // Reset form
+            document.getElementById('value').value = '';
+            document.getElementById('tags').value = '';
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerText = 'TRANSMIT';
+                statusDiv.innerText = '';
+            }, 2000);
+        }
     </script>
 
 </body>
