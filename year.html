@@ -87,7 +87,8 @@
             border: 1px solid #444;
             font-size: 0.75rem;
             font-family: var(--font-head);
-            white-space: pre;
+            white-space: pre-wrap; /* Allows text to wrap */
+            max-width: 300px; /* Prevent it from being too wide */
             z-index: 1000; /* Super high priority */
             pointer-events: none; /* Let mouse click through it */
             opacity: 0; /* Hidden by default */
