@@ -456,7 +456,7 @@
             // Inject into DOM 
             
             let advancedStatsHTML = `
-                <div class="hud-box" style="grid-column: span 2;">
+                <div id="advanced-stats-box" class="hud-box" style="grid-column: span 2;">
                    <div style="display:flex; justify-content:space-around; text-align:center;">
                         <div>
                             <span class="hud-label">Longest Write Streak</span>
@@ -502,6 +502,10 @@
             // Append to HUD
             const hud = document.querySelector('.hud-container');
             if(hud) {
+                // Remove existing to avoid duplicates on re-render
+                const existing = document.getElementById('advanced-stats-box');
+                if (existing) existing.remove();
+
                 // Check if we already added it to avoid dupes on re-renders (if specific logic existed)
                 // Just appending is fine for now as this runs once on load
                 hud.insertAdjacentHTML('beforeend', advancedStatsHTML);
