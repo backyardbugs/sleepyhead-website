@@ -24,7 +24,7 @@ var history2026 = [
     ["2026-02-05", 0, true, "Gym"],
     ["2026-02-06", 723, true, "Gym"],
     ["2026-02-07", 0, false, "Blog admin. Barcade with Parker, Mack, and L tonight."],
-    ["2026-02-08", 206, false, "Did a little outlining and planning for Gatebound. I find it's hardest to write at the beginning of new acts. There's a lot of transitional moments that need to happen. Once it's up and running it'll feel easier to write I think, but even these 200 words took me like an hour."],
+    ["2026-02-08", 206, true, "Did a little outlining and planning for Gatebound. I find it's hardest to write at the beginning of new acts. There's a lot of transitional moments that need to happen. Once it's up and running it'll feel easier to write I think, but even these 200 words took me like an hour."],
 ];
 
 const books2026 = [
