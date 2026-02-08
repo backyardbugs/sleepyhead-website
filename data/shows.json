@@ -1,5 +1,12 @@
 [
     {
+        "band": "HIGH PRESS",
+        "date": "2026-02-12",
+        "venue": "CROWBAR",
+        "location": "TAMPA, FL",
+        "upcoming": true
+    },
+    {
         "band": "JULEP",
         "date": "2026-02-15",
         "venue": "UNION HALL",
