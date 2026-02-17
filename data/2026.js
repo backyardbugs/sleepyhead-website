@@ -29,6 +29,7 @@ var history2026 = [
     ["2026-02-14", 0, true, "Gym"],
     ["2026-02-14", 0, true, "Gym (2nd)"],
     ["2026-02-16", 0, true, "Gym"],
+    ["2026-02-17", 188, false, "Not much, but something."],
 ];
 
 const books2026 = [
