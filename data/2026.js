@@ -29,7 +29,16 @@ var history2026 = [
     ["2026-02-14", 0, true, "Gym"],
     ["2026-02-14", 0, true, "Gym (2nd)"],
     ["2026-02-16", 0, true, "Gym"],
-    ["2026-02-17", 188, false, "Not much, but something."],
+    ["2026-02-17", 188, true, "Not much, but something."],
+    ["2026-02-17", 0, true, "Gym (2nd)"],
+    ["2026-02-19", 0, true, "Gym"],
+    ["2026-02-21", 0, true, "Gym"],
+    ["2026-02-24", 0, true, "Gym"],
+    ["2026-02-26", 0, true, "Gym"],
+    ["2026-02-27", 0, true, "Gym"],
+    /* --- MARCH --- */
+    ["2026-03-01", 0, true, "Gym"],
+    ["2026-03-03", 0, true, "Gym"],
 ];
 
 const books2026 = [
