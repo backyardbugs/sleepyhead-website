@@ -27,7 +27,7 @@ Who knows, maybe the side quest will be worth it. If we suddenly got 100,000 mon
 
 ### Julep
 
-Lindsey and I released the new single, [Waterworks](https://open.spotify.com/track/57y2rVhmyHkko7tRQ3nc4g?si=a96a87ac89b44af5). I love this song. It’s got some really cool production elements that I wouldn’t have known to do a year ago. It’s just little things like saturating the top end of the kick with FabFilter’s Volcano, or making a texture by processing a jungle beat sample through tremolo and a phaser, but it’s exciting to know that I’m growing as a songwriter and a producer.
+Lindsey and I released the new single, [Waterworks](https://open.spotify.com/track/57y2rVhmyHkko7tRQ3nc4g?si=a96a87ac89b44af5). I love this song. It’s got some really cool production elements that I wouldn’t have known to do a year ago. It’s just little things like saturating the top end of the kick with FabFilter’s Saturn, or making a texture by processing a jungle beat sample through tremolo and a phaser, but it’s exciting to know that I’m growing as a songwriter and a producer.
 
 So far, the song has 200 listens. That’s not much, of course. And really, we don’t care either way. I mean, we do—like if it suddenly got a million listens we’d be incredibly happy—but we make music because it helps us understand ourselves and because it’s fun and because we’re good at it and it’s satisfying to watch ourselves get better each time. We have and would make music that only we hear. All that being said, numbers wise, it’s the best release we’ve had since we released I Miss Halloween.
 
