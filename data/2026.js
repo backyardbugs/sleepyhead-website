@@ -39,10 +39,17 @@ var history2026 = [
     /* --- MARCH --- */
     ["2026-03-01", 0, true, "Gym"],
     ["2026-03-03", 0, true, "Gym"],
+    ["2026-03-05", 0, true, "Gym"],
+    ["2026-03-09", 0, true, "Gym"],
+    ["2026-03-11", 0, true, "Gym"],
+    ["2026-03-17", 0, true, "Gym"],
+    ["2026-03-18", 0, true, "Gym"],
+    ["2026-03-19", 0, true, "Gym"],
 ];
 
 const books2026 = [
-    { title: "Red Rising", author: "Pierce Brown", rating: 5, review: "" }
+    { title: "Red Rising", author: "Pierce Brown", rating: 5, review: "" },
+    { title: "For We Are Many", author: "Dennis E. Taylor", rating: 5, review: "Bobiverse #2" }
 ];
 
 const shows2026 = [];

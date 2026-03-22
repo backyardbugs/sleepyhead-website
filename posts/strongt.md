@@ -41,4 +41,4 @@ I started The Way of Kings last week. I’m about 800 pages in and very obsessed
 
 Well, anyways, that’s it from me. Thanks for reading. Ta ta.
 
-— Sleepyhead **#bear**
+— Sleepyhead
