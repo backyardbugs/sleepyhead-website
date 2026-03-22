@@ -52,6 +52,9 @@ const books2026 = [
     { title: "For We Are Many", author: "Dennis E. Taylor", rating: 5, review: "Bobiverse #2" }
 ];
 
-const shows2026 = [];
+const shows2026 = [
+    "Knuckle Puck — House of Blues, Orlando",
+    "The Wonder Years — House of Blues, Orlando"
+];
 const albums2026 = [];
 const stats2026 = [];

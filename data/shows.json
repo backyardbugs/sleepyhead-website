@@ -4,14 +4,14 @@
         "date": "2026-02-12",
         "venue": "CROWBAR",
         "location": "TAMPA, FL",
-        "upcoming": true
+        "upcoming": false
     },
     {
         "band": "JULEP",
         "date": "2026-02-15",
         "venue": "UNION HALL",
         "location": "LAKELAND, FL",
-        "upcoming": true
+        "upcoming": false
     },
     {
         "band": "HIGH PRESS",
