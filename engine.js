@@ -2,6 +2,7 @@
 
 var postFolder = "./posts/";
 var COMMENTS_API_URL = window.COMMENTS_API_URL || "https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec";
+var COMMENTS_FALLBACK_INJECTED = false;
 
 function loadBlogFeed() {
     var container = document.getElementById("blog-feed");
@@ -231,7 +232,44 @@ function injectComments(term) {
             });
     });
 
-    loadComments(term);
+    loadComments(term).catch(function() {
+        injectGiscusFallback(term);
+    });
+}
+
+function injectGiscusFallback(term) {
+    if (COMMENTS_FALLBACK_INJECTED) return;
+    COMMENTS_FALLBACK_INJECTED = true;
+
+    var list = document.getElementById("comment-list");
+    if (list) {
+        list.innerHTML = `<p class="comment-status">Comments API unavailable right now. Falling back to GitHub comments.</p>`;
+    }
+
+    var container = document.getElementById("blog-feed");
+    if (!container) return;
+
+    var fallbackBox = document.createElement("div");
+    fallbackBox.className = "giscus";
+    container.appendChild(fallbackBox);
+
+    var script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.setAttribute("data-repo", "backyardbugs/sleepyhead-comments");
+    script.setAttribute("data-repo-id", "R_kgDOQq0_1w");
+    script.setAttribute("data-category", "General");
+    script.setAttribute("data-category-id", "DIC_kwDOQq0_184ClU_l");
+    script.setAttribute("data-mapping", "specific");
+    script.setAttribute("data-term", term);
+    script.setAttribute("data-strict", "0");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("data-emit-metadata", "0");
+    script.setAttribute("data-input-position", "top");
+    script.setAttribute("data-theme", "dark");
+    script.setAttribute("data-lang", "en");
+    script.setAttribute("crossorigin", "anonymous");
+    script.async = true;
+    container.appendChild(script);
 }
 
 function jsonpRequest(url, timeoutMs) {
@@ -361,8 +399,9 @@ function loadComments(slug) {
 
             list.innerHTML = html;
         })
-        .catch(function() {
+        .catch(function(error) {
             list.innerHTML = `<p class="comment-status">Comments are temporarily unavailable.</p>`;
+            return Promise.reject(error);
         });
 }
 
