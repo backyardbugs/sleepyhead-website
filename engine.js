@@ -165,7 +165,7 @@ function injectComments(term) {
     commentsRoot.className = "comments-root";
     commentsRoot.innerHTML = `
         <h3 class="comments-title">Comments</h3>
-        <p class="comments-note"><em>Anonymous comments are welcome. Comments may be moderated for spam.</em></p>
+        <p class="comments-note"><em>If you leave a comment, I bet good things will come your way. Like, maybe you'll find $5 on the ground at Walmart or something. Who can say.</em></p>
 
         <form id="comment-form" class="comment-form">
             <div class="comment-row">
