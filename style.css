@@ -517,6 +517,113 @@ pre.poem {
     filter: grayscale(0%); 
 }
 
+/* --- COMMENTS --- */
+.comments-root {
+    margin-top: 40px;
+    margin-bottom: 60px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 30px;
+}
+
+.comments-title {
+    font-family: var(--font-head);
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.comments-note {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.comment-form {
+    margin-bottom: 30px;
+}
+
+.comment-row {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.comment-row label {
+    font-family: var(--font-head);
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+.comment-row input,
+.comment-row textarea {
+    background: #161616;
+    border: 1px solid #333;
+    color: var(--text-color);
+    padding: 10px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+}
+
+.comment-row input:focus,
+.comment-row textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+#comment-submit {
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 8px 14px;
+    font-family: var(--font-head);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+#comment-submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+#comment-submit:hover:enabled {
+    background: var(--accent-color);
+    color: #000;
+}
+
+.comment-status {
+    color: #777;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.comment-item {
+    border: 1px solid #2a2a2a;
+    background: #151515;
+    padding: 14px;
+    margin: 0;
+}
+
+.comment-meta {
+    font-family: var(--font-head);
+    font-size: 0.75rem;
+    color: #aaa;
+    margin-bottom: 8px;
+}
+
+.comment-body {
+    color: #ddd;
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+
 .gear-name {
     font-family: var(--font-head);
     font-size: 0.85rem;

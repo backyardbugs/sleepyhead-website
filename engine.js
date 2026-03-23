@@ -1,6 +1,7 @@
 /* --- engine.js --- */
 
 var postFolder = "./posts/";
+var COMMENTS_API_URL = window.COMMENTS_API_URL || "https://script.google.com/macros/s/AKfycbxWvLNwivMBlKL9ODO72RbqKemf-qAAFSIjVK9lNvllPHpZDGnSyEeECQ4r7sADquXr8Q/exec";
 
 function loadBlogFeed() {
     var container = document.getElementById("blog-feed");
@@ -154,49 +155,215 @@ function fetchPostContent(filename, isFeedView) {
         });
 }
 
-// HELPER: Injects Giscus comments dynamically
+// HELPER: Injects anonymous comments dynamically
 function injectComments(term) {
     var container = document.getElementById("blog-feed");
-    
-    // 1. THE DISCLAIMER (The Friendly Nudge)
-    var disclaimer = document.createElement("p");
-    disclaimer.innerHTML = "<em>(Note: To leave a comment, you must log in with GitHub. I promise it takes like two seconds to make an account. I'm sorry, mom, but I know you can do it!)</em>";
-    disclaimer.style.textAlign = "center";
-    disclaimer.style.color = "#666";
-    disclaimer.style.fontSize = "0.85rem";
-    disclaimer.style.marginTop = "60px";
-    disclaimer.style.marginBottom = "20px";
-    disclaimer.style.fontFamily = "var(--font-head)"; // Courier Prime
-    container.appendChild(disclaimer);
+    if (!container) return;
 
-    // 2. THE COMMENT BOX CONTAINER
-    var commentBox = document.createElement("div");
-    commentBox.className = "giscus";
-    container.appendChild(commentBox);
+    var commentsRoot = document.createElement("section");
+    commentsRoot.className = "comments-root";
+    commentsRoot.innerHTML = `
+        <h3 class="comments-title">Comments</h3>
+        <p class="comments-note"><em>Anonymous comments are welcome. Comments may be moderated for spam.</em></p>
 
-    // 3. THE SCRIPT
-    var script = document.createElement("script");
-    script.src = "https://giscus.app/client.js";
-    
-    // --- YOUR SETTINGS ---
-    script.setAttribute("data-repo", "backyardbugs/sleepyhead-comments"); 
-    script.setAttribute("data-repo-id", "R_kgDOQq0_1w");
-    script.setAttribute("data-category", "General");
-    script.setAttribute("data-category-id", "DIC_kwDOQq0_184ClU_l"); 
-    
-    // --- STANDARD SETTINGS ---
-    script.setAttribute("data-mapping", "specific");
-    script.setAttribute("data-term", term);
-    script.setAttribute("data-strict", "0");
-    script.setAttribute("data-reactions-enabled", "1");
-    script.setAttribute("data-emit-metadata", "0");
-    script.setAttribute("data-input-position", "top");
-    script.setAttribute("data-theme", "dark");
-    script.setAttribute("data-lang", "en");
-    script.setAttribute("crossorigin", "anonymous");
-    script.async = true;
+        <form id="comment-form" class="comment-form">
+            <div class="comment-row">
+                <label for="comment-name">Name</label>
+                <input id="comment-name" name="name" type="text" maxlength="60" required />
+            </div>
+            <div class="comment-row">
+                <label for="comment-website">Website (optional)</label>
+                <input id="comment-website" name="website" type="url" maxlength="120" />
+            </div>
+            <div style="display:none;">
+                <label for="comment-hp">Leave this empty</label>
+                <input id="comment-hp" name="hp" type="text" autocomplete="off" />
+            </div>
+            <div class="comment-row">
+                <label for="comment-text">Comment</label>
+                <textarea id="comment-text" name="comment" rows="5" maxlength="3000" required></textarea>
+            </div>
+            <button id="comment-submit" type="submit">Post Comment</button>
+            <p id="comment-form-status" class="comment-status" aria-live="polite"></p>
+        </form>
 
-    container.appendChild(script);
+        <div id="comment-list" class="comment-list">
+            <p class="comment-status">Loading comments...</p>
+        </div>
+    `;
+    container.appendChild(commentsRoot);
+
+    var form = document.getElementById("comment-form");
+    var statusEl = document.getElementById("comment-form-status");
+    var submitBtn = document.getElementById("comment-submit");
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        var payload = {
+            action: "addComment",
+            post: term,
+            name: document.getElementById("comment-name").value.trim(),
+            website: document.getElementById("comment-website").value.trim(),
+            comment: document.getElementById("comment-text").value.trim(),
+            hp: document.getElementById("comment-hp").value.trim()
+        };
+
+        if (!payload.name || !payload.comment) {
+            statusEl.textContent = "Please add a name and comment.";
+            return;
+        }
+
+        submitBtn.disabled = true;
+        statusEl.textContent = "Sending...";
+
+        submitComment(payload)
+            .then(function() {
+                statusEl.textContent = "Thanks. Your comment was submitted.";
+                form.reset();
+                return loadComments(term);
+            })
+            .catch(function() {
+                statusEl.textContent = "Could not submit comment right now. Please try again.";
+            })
+            .finally(function() {
+                submitBtn.disabled = false;
+            });
+    });
+
+    loadComments(term);
+}
+
+function jsonpRequest(url, timeoutMs) {
+    timeoutMs = timeoutMs || 8000;
+    return new Promise(function(resolve, reject) {
+        var callbackName = "__comments_cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+        var fullUrl = url + (url.includes("?") ? "&" : "?") + "callback=" + callbackName;
+        var script = document.createElement("script");
+        var done = false;
+        var timer = setTimeout(cleanupAndReject, timeoutMs);
+
+        function cleanup() {
+            if (script && script.parentNode) script.parentNode.removeChild(script);
+            try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+            clearTimeout(timer);
+        }
+
+        function cleanupAndReject() {
+            if (done) return;
+            done = true;
+            cleanup();
+            reject(new Error("JSONP timeout"));
+        }
+
+        window[callbackName] = function(data) {
+            if (done) return;
+            done = true;
+            cleanup();
+            resolve(data);
+        };
+
+        script.src = fullUrl;
+        script.async = true;
+        script.onerror = cleanupAndReject;
+        document.body.appendChild(script);
+    });
+}
+
+function submitComment(payload) {
+    var query = new URLSearchParams(payload).toString();
+    return jsonpRequest(COMMENTS_API_URL + "?" + query).then(function(data) {
+        if (data && data.ok === false) {
+            throw new Error(data.error || "Submission failed");
+        }
+        return data;
+    });
+}
+
+function normalizeComments(data, slug) {
+    if (data && Array.isArray(data.comments)) {
+        return data.comments;
+    }
+
+    if (!Array.isArray(data)) return [];
+
+    // Backward-compatible parser: if endpoint returns uplink rows,
+    // we interpret rows with type=comment and note beginning with `${slug}|name`.
+    return data
+        .filter(function(row) {
+            return row && String(row.type || "").toLowerCase() === "comment";
+        })
+        .map(function(row) {
+            var parts = String(row.note || "").split("|");
+            var rowSlug = parts[0] || "";
+            var rowName = parts[1] || "Anonymous";
+            if (rowSlug !== slug) return null;
+            return {
+                id: row.date || Math.random().toString(36).slice(2),
+                name: rowName,
+                website: "",
+                comment: row.val || "",
+                comment_html: "",
+                created_at: row.date || ""
+            };
+        })
+        .filter(Boolean);
+}
+
+function escapeHtml(str) {
+    return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function formatDate(dateInput) {
+    var d = new Date(dateInput);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+}
+
+function loadComments(slug) {
+    var list = document.getElementById("comment-list");
+    if (!list) return Promise.resolve();
+
+    list.innerHTML = `<p class="comment-status">Loading comments...</p>`;
+
+    var query = new URLSearchParams({ action: "getComments", post: slug, t: Date.now().toString() }).toString();
+    return jsonpRequest(COMMENTS_API_URL + "?" + query)
+        .then(function(data) {
+            var comments = normalizeComments(data, slug);
+            if (!comments.length) {
+                list.innerHTML = `<p class="comment-status">No comments yet. Be the first.</p>`;
+                return;
+            }
+
+            var html = comments.map(function(c) {
+                var safeName = escapeHtml(c.name || "Anonymous");
+                var safeWebsite = escapeHtml(c.website || "");
+                var safeDate = escapeHtml(formatDate(c.created_at || c.date || ""));
+                var body = c.comment_html
+                    ? c.comment_html
+                    : escapeHtml(c.comment || "").replace(/\n/g, "<br>");
+                var linkedName = safeWebsite
+                    ? `<a href="${safeWebsite}" target="_blank" rel="noopener noreferrer">${safeName}</a>`
+                    : safeName;
+
+                return `
+                    <article class="comment-item">
+                        <div class="comment-meta">${linkedName}${safeDate ? ` <span>· ${safeDate}</span>` : ""}</div>
+                        <div class="comment-body">${body}</div>
+                    </article>
+                `;
+            }).join("");
+
+            list.innerHTML = html;
+        })
+        .catch(function() {
+            list.innerHTML = `<p class="comment-status">Comments are temporarily unavailable.</p>`;
+        });
 }
 
 // Check if the page is already loaded. If yes, run immediately.
