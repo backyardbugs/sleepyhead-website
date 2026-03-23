@@ -1,7 +1,7 @@
 /* --- engine.js --- */
 
 var postFolder = "./posts/";
-var COMMENTS_API_URL = window.COMMENTS_API_URL || "https://script.google.com/macros/s/AKfycbxfMGbprbCw3B_oMwDT93CZqpYOByxKtgBrSM3UvEYee7Uz1RwhIjhBTuKfs3k3wKy7ig/exec";
+var COMMENTS_API_URL = window.COMMENTS_API_URL || "https://script.google.com/macros/s/AKfycbxDwBHAPGdZa6yYapHIqOu_uJSM4EYHZ6Qp4Cf4kD3diM08sUCa1r4XspRfM8KiYfH8Mg/exec";
 var COMMENTS_FALLBACK_INJECTED = false;
 
 function loadBlogFeed() {
