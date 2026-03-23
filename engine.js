@@ -172,10 +172,6 @@ function injectComments(term) {
                 <label for="comment-name">Name</label>
                 <input id="comment-name" name="name" type="text" maxlength="60" required />
             </div>
-            <div class="comment-row">
-                <label for="comment-website">Website (optional)</label>
-                <input id="comment-website" name="website" type="url" maxlength="120" />
-            </div>
             <div style="display:none;">
                 <label for="comment-hp">Leave this empty</label>
                 <input id="comment-hp" name="hp" type="text" autocomplete="off" />
@@ -205,7 +201,6 @@ function injectComments(term) {
             action: "addComment",
             post: term,
             name: document.getElementById("comment-name").value.trim(),
-            website: document.getElementById("comment-website").value.trim(),
             comment: document.getElementById("comment-text").value.trim(),
             hp: document.getElementById("comment-hp").value.trim()
         };
@@ -219,8 +214,12 @@ function injectComments(term) {
         statusEl.textContent = "Sending...";
 
         submitComment(payload)
-            .then(function() {
-                statusEl.textContent = "Thanks. Your comment was submitted.";
+            .then(function(result) {
+                if (result && result.status === "approved") {
+                    statusEl.textContent = "Thanks. Your comment is live.";
+                } else {
+                    statusEl.textContent = "Thanks. Your comment was submitted for review.";
+                }
                 form.reset();
                 return loadComments(term);
             })
@@ -380,18 +379,14 @@ function loadComments(slug) {
 
             var html = comments.map(function(c) {
                 var safeName = escapeHtml(c.name || "Anonymous");
-                var safeWebsite = escapeHtml(c.website || "");
                 var safeDate = escapeHtml(formatDate(c.created_at || c.date || ""));
                 var body = c.comment_html
                     ? c.comment_html
                     : escapeHtml(c.comment || "").replace(/\n/g, "<br>");
-                var linkedName = safeWebsite
-                    ? `<a href="${safeWebsite}" target="_blank" rel="noopener noreferrer">${safeName}</a>`
-                    : safeName;
 
                 return `
                     <article class="comment-item">
-                        <div class="comment-meta">${linkedName}${safeDate ? ` <span>· ${safeDate}</span>` : ""}</div>
+                        <div class="comment-meta">${safeName}${safeDate ? ` <span>· ${safeDate}</span>` : ""}</div>
                         <div class="comment-body">${body}</div>
                     </article>
                 `;

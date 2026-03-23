@@ -2,7 +2,7 @@
  * Apps Script template for anonymous comments.
  *
  * Sheet columns (header row):
- * id,post_slug,name,website,comment,status,created_at
+ * id,post_slug,name,comment,status,created_at
  *
  * Deploy as Web App:
  * - Execute as: Me
@@ -25,11 +25,10 @@ function doGet(e) {
   if (action === "addComment") {
     const post = (e.parameter.post || "").trim();
     const name = (e.parameter.name || "").trim();
-    const website = (e.parameter.website || "").trim();
     const comment = (e.parameter.comment || "").trim();
     const hp = (e.parameter.hp || "").trim();
 
-    const result = addComment_(post, name, website, comment, hp);
+    const result = addComment_(post, name, comment, hp);
     return respond_(callback, result);
   }
 
@@ -43,19 +42,21 @@ function getComments_(postSlug) {
   const values = sheet.getDataRange().getValues();
   if (values.length < 2) return [];
 
+  const headers = values[0].map(h => String(h || "").trim());
   const rows = values.slice(1);
+  const idx = indexMap_(headers);
+
   return rows
-    .filter(r => String(r[1] || "") === postSlug && String(r[5] || "") === "approved")
+    .filter(r => String(r[idx.post_slug] || "") === postSlug && String(r[idx.status] || "") === "approved")
     .map(r => ({
-      id: String(r[0] || ""),
-      name: String(r[2] || "Anonymous"),
-      website: String(r[3] || ""),
-      comment: String(r[4] || ""),
-      created_at: String(r[6] || "")
+      id: String(r[idx.id] || ""),
+      name: String(r[idx.name] || "Anonymous"),
+      comment: String(r[idx.comment] || ""),
+      created_at: String(r[idx.created_at] || "")
     }));
 }
 
-function addComment_(post, name, website, comment, hp) {
+function addComment_(post, name, comment, hp) {
   if (hp) return { ok: false, error: "Spam detected" };
   if (!post || !name || !comment) return { ok: false, error: "Missing required fields" };
 
@@ -63,8 +64,8 @@ function addComment_(post, name, website, comment, hp) {
   const id = Utilities.getUuid();
   const status = AUTO_APPROVE ? "approved" : "pending";
 
-  getSheet_().appendRow([id, post, name, website, comment, status, nowIso]);
-  notifyAdmin_(id, post, name, website, comment, status, nowIso);
+  getSheet_().appendRow([id, post, name, comment, status, nowIso]);
+  notifyAdmin_(id, post, name, comment, status, nowIso);
   return { ok: true, status: status };
 }
 
@@ -73,9 +74,24 @@ function getSheet_() {
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(["id", "post_slug", "name", "website", "comment", "status", "created_at"]);
+    sheet.appendRow(["id", "post_slug", "name", "comment", "status", "created_at"]);
   }
   return sheet;
+}
+
+function indexMap_(headers) {
+  function at(name, fallback) {
+    const i = headers.indexOf(name);
+    return i === -1 ? fallback : i;
+  }
+  return {
+    id: at("id", 0),
+    post_slug: at("post_slug", 1),
+    name: at("name", 2),
+    comment: at("comment", 3),
+    status: at("status", 4),
+    created_at: at("created_at", 5)
+  };
 }
 
 function respond_(callback, payload) {
@@ -86,7 +102,7 @@ function respond_(callback, payload) {
   return ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(ContentService.MimeType.JSON);
 }
 
-function notifyAdmin_(id, post, name, website, comment, status, createdAt) {
+function notifyAdmin_(id, post, name, comment, status, createdAt) {
   if (!ADMIN_EMAIL) return;
 
   const postUrl = `https://sleepyhead.neocities.org/index.html?post=${encodeURIComponent(post)}`;
@@ -97,7 +113,6 @@ function notifyAdmin_(id, post, name, website, comment, status, createdAt) {
     `Post slug: ${post}`,
     `Post URL: ${postUrl}`,
     `Name: ${name}`,
-    `Website: ${website || "(none)"}`,
     `Status: ${status}`,
     `Created: ${createdAt}`,
     `ID: ${id}`,
