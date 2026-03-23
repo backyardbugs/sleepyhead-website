@@ -10,6 +10,8 @@
  */
 
 const SHEET_NAME = "comments";
+const AUTO_APPROVE = true; // true = comments show immediately
+const ADMIN_EMAIL = ""; // e.g. "you@example.com" (leave blank to disable email alerts)
 
 function doGet(e) {
   const action = (e.parameter.action || "").trim();
@@ -59,9 +61,10 @@ function addComment_(post, name, website, comment, hp) {
 
   const nowIso = new Date().toISOString();
   const id = Utilities.getUuid();
-  const status = "pending"; // switch to "approved" for auto-approve
+  const status = AUTO_APPROVE ? "approved" : "pending";
 
   getSheet_().appendRow([id, post, name, website, comment, status, nowIso]);
+  notifyAdmin_(id, post, name, website, comment, status, nowIso);
   return { ok: true, status: status };
 }
 
@@ -81,4 +84,27 @@ function respond_(callback, payload) {
     return ContentService.createTextOutput(body).setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
   return ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function notifyAdmin_(id, post, name, website, comment, status, createdAt) {
+  if (!ADMIN_EMAIL) return;
+
+  const postUrl = `https://sleepyhead.neocities.org/index.html?post=${encodeURIComponent(post)}`;
+  const subject = `[Sleepyhead] New comment on ${post}`;
+  const body = [
+    "A new comment was received.",
+    "",
+    `Post slug: ${post}`,
+    `Post URL: ${postUrl}`,
+    `Name: ${name}`,
+    `Website: ${website || "(none)"}`,
+    `Status: ${status}`,
+    `Created: ${createdAt}`,
+    `ID: ${id}`,
+    "",
+    "Comment:",
+    comment
+  ].join("\n");
+
+  MailApp.sendEmail(ADMIN_EMAIL, subject, body);
 }
