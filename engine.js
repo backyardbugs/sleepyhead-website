@@ -307,9 +307,38 @@ function jsonpRequest(url, timeoutMs) {
     });
 }
 
+function fetchJsonRequest(url, timeoutMs) {
+    timeoutMs = timeoutMs || 8000;
+    var controller = new AbortController();
+    var timer = setTimeout(function() { controller.abort(); }, timeoutMs);
+
+    return fetch(url, {
+        method: "GET",
+        mode: "cors",
+        credentials: "omit",
+        signal: controller.signal
+    })
+        .then(function(res) {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+        })
+        .finally(function() {
+            clearTimeout(timer);
+        });
+}
+
+function requestCommentsApi(params) {
+    var query = new URLSearchParams(params).toString();
+    var url = COMMENTS_API_URL + "?" + query;
+
+    // Prefer normal JSON requests; fall back to JSONP for older/script-only endpoints.
+    return fetchJsonRequest(url).catch(function() {
+        return jsonpRequest(url);
+    });
+}
+
 function submitComment(payload) {
-    var query = new URLSearchParams(payload).toString();
-    return jsonpRequest(COMMENTS_API_URL + "?" + query).then(function(data) {
+    return requestCommentsApi(payload).then(function(data) {
         if (data && data.ok === false) {
             throw new Error(data.error || "Submission failed");
         }
@@ -368,8 +397,7 @@ function loadComments(slug) {
 
     list.innerHTML = `<p class="comment-status">Loading comments...</p>`;
 
-    var query = new URLSearchParams({ action: "getComments", post: slug, t: Date.now().toString() }).toString();
-    return jsonpRequest(COMMENTS_API_URL + "?" + query)
+    return requestCommentsApi({ action: "getComments", post: slug, t: Date.now().toString() })
         .then(function(data) {
             var comments = normalizeComments(data, slug);
             if (!comments.length) {
