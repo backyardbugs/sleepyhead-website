@@ -44,15 +44,15 @@ function getComments_(postSlug) {
 
   const headers = values[0].map(h => String(h || "").trim());
   const rows = values.slice(1);
-  const idx = indexMap_(headers);
 
   return rows
-    .filter(r => String(r[idx.post_slug] || "") === postSlug && String(r[idx.status] || "") === "approved")
-    .map(r => ({
-      id: String(r[idx.id] || ""),
-      name: String(r[idx.name] || "Anonymous"),
-      comment: String(r[idx.comment] || ""),
-      created_at: String(r[idx.created_at] || "")
+    .map(r => normalizeRecord_(rowToRecord_(headers, r)))
+    .filter(rec => rec.post_slug === postSlug && rec.status === "approved")
+    .map(rec => ({
+      id: rec.id || "",
+      name: rec.name || "Anonymous",
+      comment: rec.comment || "",
+      created_at: rec.created_at || ""
     }));
 }
 
@@ -64,7 +64,18 @@ function addComment_(post, name, comment, hp) {
   const id = Utilities.getUuid();
   const status = AUTO_APPROVE ? "approved" : "pending";
 
-  getSheet_().appendRow([id, post, name, comment, status, nowIso]);
+  const sheet = getSheet_();
+  const headers = sheet.getDataRange().getValues()[0].map(h => String(h || "").trim());
+  const row = buildRowFromHeaders_(headers, {
+    id: id,
+    post_slug: post,
+    name: name,
+    comment: comment,
+    status: status,
+    created_at: nowIso,
+    website: "" // legacy column support
+  });
+  sheet.appendRow(row);
   notifyAdmin_(id, post, name, comment, status, nowIso);
   return { ok: true, status: status };
 }
@@ -79,19 +90,34 @@ function getSheet_() {
   return sheet;
 }
 
-function indexMap_(headers) {
-  function at(name, fallback) {
-    const i = headers.indexOf(name);
-    return i === -1 ? fallback : i;
+function rowToRecord_(headers, row) {
+  const rec = {};
+  headers.forEach((h, i) => {
+    rec[h] = String(row[i] || "");
+  });
+  return rec;
+}
+
+function normalizeRecord_(rec) {
+  const validStatus = rec.status === "approved" || rec.status === "pending";
+  const commentLooksLikeStatus = rec.comment === "approved" || rec.comment === "pending";
+  const statusLooksLikeDate = /^\d{4}-\d{2}-\d{2}T/.test(rec.status || "");
+
+  // Repair rows written against old header shape where website existed but payload did not include it.
+  if (!validStatus && commentLooksLikeStatus && statusLooksLikeDate) {
+    rec.created_at = rec.status || rec.created_at || "";
+    rec.status = rec.comment;
+    rec.comment = rec.website || "";
+    rec.website = "";
   }
-  return {
-    id: at("id", 0),
-    post_slug: at("post_slug", 1),
-    name: at("name", 2),
-    comment: at("comment", 3),
-    status: at("status", 4),
-    created_at: at("created_at", 5)
-  };
+
+  return rec;
+}
+
+function buildRowFromHeaders_(headers, values) {
+  return headers.map(h => {
+    return Object.prototype.hasOwnProperty.call(values, h) ? values[h] : "";
+  });
 }
 
 function respond_(callback, payload) {
