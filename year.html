@@ -348,6 +348,14 @@
             // Create a quick lookup map for dates
             const dayMap = {};
 
+            // Workout rows often carry a short "Gym" label for counting; that should not
+            // trigger the dog-ear (tweet-style notes only). Gym dot still comes from `gym`.
+            function isGymOnlyNote(text) {
+                const t = (text || "").trim();
+                if (!t) return false;
+                return /^Gym(\s*\([^)]+\))?\.?$/i.test(t);
+            }
+
             activeHistory.forEach(entry => {
                 const date = entry[0];
                 const words = entry[1];
@@ -363,7 +371,9 @@
                 
                 dayMap[date].words += words;
                 if (gym) dayMap[date].gym = true;
-                if (note) dayMap[date].notes.push(note);
+                if (note && !(gym && isGymOnlyNote(note))) {
+                    dayMap[date].notes.push(note);
+                }
             });
 
             // Update HUD
