@@ -45,11 +45,22 @@ var history2026 = [
     ["2026-03-17", 0, true, "Gym"],
     ["2026-03-18", 0, true, "Gym"],
     ["2026-03-19", 0, true, "Gym"],
+    ["2026-03-24", 0, true, "Gym"],
+    ["2026-03-25", 0, true, "Gym"],
+    ["2026-03-26", 0, true, "Gym"],
+    ["2026-03-31", 0, true, "Gym"],
+    /* --- APRIL --- */
+    ["2026-04-02", 0, true, "Gym"],
+    ["2026-04-05", 0, true, "Gym"],
+    ["2026-04-07", 0, true, "Gym"],
+    ["2026-04-10", 0, true, "Gym"],
 ];
 
 const books2026 = [
     { title: "Red Rising", author: "Pierce Brown", rating: 5, review: "" },
-    { title: "For We Are Many", author: "Dennis E. Taylor", rating: 5, review: "Bobiverse #2" }
+    { title: "For We Are Many", author: "Dennis E. Taylor", rating: 5, review: "Bobiverse #2" },
+    { title: "The Way of Kings", author: "Brandon Sanderson", rating: 5, review: "" },
+    { title: "Thousand Cranes", author: "Yasunari Kawabata", rating: 5, review: "" }
 ];
 
 const shows2026 = [
