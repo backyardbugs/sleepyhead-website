@@ -58,6 +58,33 @@
             scrollbar-color: #333 #111;
         }
 
+        .calendar-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .weekday-labels {
+            display: grid;
+            grid-template-rows: repeat(7, 1fr);
+            gap: 4px;
+            padding-top: 1px; /* minor visual alignment with cells */
+            flex: 0 0 auto;
+        }
+
+        .weekday-label {
+            width: 28px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            font-family: var(--font-head);
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: #555;
+            user-select: none;
+        }
+
         .calendar-grid {
             display: grid;
             /* 53 Columns (Weeks) */
@@ -76,6 +103,11 @@
             border-radius: 2px;
             position: relative;
             cursor: pointer;
+        }
+
+        .day-cell.placeholder {
+            visibility: hidden;
+            pointer-events: none;
         }
 
         /* 3. THE GLOBAL TOOLTIP (The Floating Info Box) */
@@ -262,8 +294,18 @@
             </div>
 
             <div class="calendar-wrapper">
-                <div id="year-grid" class="calendar-grid">
+                <div class="calendar-container">
+                    <div class="weekday-labels" aria-hidden="true">
+                        <div class="weekday-label">SUN</div>
+                        <div class="weekday-label">MON</div>
+                        <div class="weekday-label">TUE</div>
+                        <div class="weekday-label">WED</div>
+                        <div class="weekday-label">THU</div>
+                        <div class="weekday-label">FRI</div>
+                        <div class="weekday-label">SAT</div>
                     </div>
+                    <div id="year-grid" class="calendar-grid"></div>
+                </div>
             </div>
             
             <div class="ledger-grid">
@@ -597,6 +639,15 @@
                 const startDate = new Date(currentYear, 0, 1); // Jan 1
                 const endDate = new Date(currentYear, 11, 31); // Dec 31
                 
+                // Align the grid so each row corresponds to a weekday (SUN..SAT).
+                // We do this by inserting "placeholder" cells before Jan 1.
+                const leadingBlanks = startDate.getDay(); // 0=SUN ... 6=SAT
+                for (let i = 0; i < leadingBlanks; i++) {
+                    const blank = document.createElement('div');
+                    blank.className = 'day-cell placeholder';
+                    gridContainer.appendChild(blank);
+                }
+
                 // Iterate through every single day of the year
                 for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
                     
