@@ -1,5 +1,5 @@
 {
   "formSubmitEmail": "tylerbalkcom@gmail.com",
   "inquiryEndpoint": "",
-  "_comment": "formSubmitEmail uses FormSubmit (https://formsubmit.co) AJAX. inquiryEndpoint is optional Google Apps Script URL if formSubmitEmail is empty."
+  "_comment": "formSubmitEmail: FormSubmit HTML POST to https://formsubmit.co/<email> (no fetch). inquiryEndpoint: optional Google Apps Script if email is empty."
 }

@@ -316,9 +316,15 @@
             </p>
 
             <div id="eng-config-banner" class="eng-config-banner" role="status"></div>
+            <div id="eng-thanks-banner" class="eng-config-banner" style="border-color: #3d5a3d; color: #9cbc9c; display: none;" role="status"></div>
 
             <div class="eng-form-wrap">
-                <form id="eng-inquiry-form" novalidate>
+                <form id="eng-inquiry-form" method="POST" action="https://formsubmit.co/tylerbalkcom@gmail.com" novalidate>
+                    <input type="hidden" name="_subject" value="[Sleepyhead] Audio engineering inquiry">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" id="eng-form-next" value="">
+                    <input type="hidden" name="serviceTypes" id="eng-service-types-hidden" value="">
+                    <input type="hidden" name="serviceSlugs" id="eng-service-slugs-hidden" value="">
                     <div class="eng-hp" aria-hidden="true">
                         <label for="eng-honey">Leave blank</label>
                         <input type="text" id="eng-honey" name="_honey" tabindex="-1" autocomplete="off" value="">
@@ -334,11 +340,11 @@
                     <fieldset class="eng-form-row eng-service-fieldset">
                         <legend>Service types</legend>
                         <p class="eng-field-hint">Select all that apply.</p>
-                        <label class="eng-check-label"><input type="checkbox" name="eng-service" value="mixing"> Mixing</label>
-                        <label class="eng-check-label"><input type="checkbox" name="eng-service" value="mastering"> Mastering</label>
-                        <label class="eng-check-label"><input type="checkbox" name="eng-service" value="production"> Production / arrangement</label>
-                        <label class="eng-check-label"><input type="checkbox" name="eng-service" value="editing"> Editing / restoration</label>
-                        <label class="eng-check-label"><input type="checkbox" name="eng-service" value="other"> Other / not sure</label>
+                        <label class="eng-check-label"><input type="checkbox" class="eng-service-cb" value="mixing"> Mixing</label>
+                        <label class="eng-check-label"><input type="checkbox" class="eng-service-cb" value="mastering"> Mastering</label>
+                        <label class="eng-check-label"><input type="checkbox" class="eng-service-cb" value="production"> Production / arrangement</label>
+                        <label class="eng-check-label"><input type="checkbox" class="eng-service-cb" value="editing"> Editing / restoration</label>
+                        <label class="eng-check-label"><input type="checkbox" class="eng-service-cb" value="other"> Other / not sure</label>
                     </fieldset>
                     <div class="eng-form-row">
                         <label for="eng-timeline">Timeline</label>
@@ -413,7 +419,29 @@
                 }
             }
 
-            const bust = '?v=' + Date.now();
+            var thanksBanner = document.getElementById('eng-thanks-banner');
+            if (thanksBanner) {
+                try {
+                    var params = new URLSearchParams(window.location.search);
+                    if (params.get('thanks') === '1') {
+                        thanksBanner.textContent =
+                            'Thanks — FormSubmit received your message. I will reply by email.';
+                        thanksBanner.style.display = 'block';
+                    }
+                } catch (ignore) {}
+            }
+
+            var nextEl = document.getElementById('eng-form-next');
+            if (nextEl && !neoMode) {
+                try {
+                    var back = new URL(window.location.href);
+                    back.hash = '';
+                    back.searchParams.set('thanks', '1');
+                    nextEl.value = back.toString();
+                } catch (ignore2) {
+                    nextEl.value = INQUIRY_FORM_ORIGIN.replace(/\/$/, '') + '/engineering.html?thanks=1';
+                }
+            }
             const workEl = document.getElementById('eng-work-grid');
             const servicesEl = document.getElementById('eng-services-list');
             const form = document.getElementById('eng-inquiry-form');
@@ -421,6 +449,8 @@
             var msgEl = document.getElementById('eng-form-msg');
             const configBanner = document.getElementById('eng-config-banner');
             let formConfig = { formSubmitEmail: '', inquiryEndpoint: '' };
+
+            const bust = '?v=' + Date.now();
 
             var SERVICE_LABELS = {
                 mixing: 'Mixing',
@@ -435,7 +465,7 @@
                     return [];
                 }
                 return Array.prototype.slice
-                    .call(form.querySelectorAll('input[name="eng-service"]:checked'))
+                    .call(form.querySelectorAll('.eng-service-cb:checked'))
                     .map(function (cb) {
                         return cb.value;
                     });
@@ -476,6 +506,9 @@
 
                 var email = (formConfig.formSubmitEmail || '').trim();
                 var ep = (formConfig.inquiryEndpoint || '').trim();
+                if (email && form) {
+                    form.action = 'https://formsubmit.co/' + encodeURIComponent(email);
+                }
                 if (!email && !ep && !neoMode) {
                     configBanner.textContent = 'Form delivery is not configured yet. Add formSubmitEmail (FormSubmit) or inquiryEndpoint (Google Apps Script) to data/engineering-config.json. You can still use the fields below to copy a brief out manually.';
                     configBanner.classList.add('visible');
@@ -591,22 +624,24 @@
             }
 
             form.addEventListener('submit', function (e) {
-                e.preventDefault();
                 hideMsg();
 
                 var hp = document.getElementById('eng-honey').value.trim();
                 if (hp) {
+                    e.preventDefault();
                     showMsg('Submission could not be sent.', 'err');
                     return;
                 }
 
                 if (!form.checkValidity()) {
+                    e.preventDefault();
                     form.reportValidity();
                     return;
                 }
 
                 var serviceSlugs = getSelectedServiceSlugs();
                 if (serviceSlugs.length === 0) {
+                    e.preventDefault();
                     showMsg('Please select at least one service type.', 'err');
                     return;
                 }
@@ -614,90 +649,49 @@
                 var email = (formConfig.formSubmitEmail || '').trim();
                 var endpoint = (formConfig.inquiryEndpoint || '').trim();
 
-                if (!email && !endpoint) {
-                    showMsg('Add formSubmitEmail or inquiryEndpoint to data/engineering-config.json to enable sending.', 'info');
-                    return;
+                var typesHidden = document.getElementById('eng-service-types-hidden');
+                var slugsHidden = document.getElementById('eng-service-slugs-hidden');
+                if (typesHidden) {
+                    typesHidden.value = getSelectedServiceLabels().join(', ');
                 }
-
-                var serviceLabelsJoined = getSelectedServiceLabels().join(', ');
-
-                var payload = {
-                    _honey: '',
-                    _captcha: 'false',
-                    name: document.getElementById('eng-name').value.trim(),
-                    email: document.getElementById('eng-email').value.trim(),
-                    serviceTypes: serviceLabelsJoined,
-                    serviceSlugs: serviceSlugs.join(', '),
-                    timeline: document.getElementById('eng-timeline').value,
-                    budget: document.getElementById('eng-budget').value,
-                    referenceLinks: document.getElementById('eng-links').value.trim(),
-                    message: document.getElementById('eng-message').value.trim(),
-                    _subject: '[Sleepyhead] Audio engineering inquiry'
-                };
-
-                if (submitBtn) {
-                    submitBtn.disabled = true;
+                if (slugsHidden) {
+                    slugsHidden.value = serviceSlugs.join(', ');
                 }
 
                 if (email) {
-                    var url = 'https://formsubmit.co/ajax/' + encodeURIComponent(email);
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Accept: 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    })
-                        .then(function (res) {
-                            return res.text().then(function (text) {
-                                var data = {};
-                                try {
-                                    data = text ? JSON.parse(text) : {};
-                                } catch (parseErr) {
-                                    if (!res.ok) {
-                                        throw new Error('FormSubmit returned an error (HTTP ' + res.status + ').');
-                                    }
-                                    throw new Error('Could not read FormSubmit response. Try again.');
-                                }
-                                if (data.success === 'false' || data.success === false) {
-                                    throw new Error(data.message || 'FormSubmit rejected this submission.');
-                                }
-                                if (!res.ok) {
-                                    throw new Error(data.message || ('FormSubmit error HTTP ' + res.status));
-                                }
-                                return data;
-                            });
-                        })
-                        .then(function () {
-                            showMsg('Sent. I will get back to you by email.', 'ok');
-                            form.reset();
-                        })
-                        .catch(function (err) {
-                            console.error(err);
-                            var detail =
-                                err && err.message
-                                    ? err.message
-                                    : 'Something went wrong sending the form. Try again or email directly.';
-                            if (detail.length > 280) {
-                                detail = detail.slice(0, 277) + '…';
-                            }
-                            showMsg(detail, 'err');
-                        })
-                        .finally(function () {
-                            if (submitBtn) {
-                                submitBtn.disabled = false;
-                            }
-                        });
-                } else {
+                    form.action = 'https://formsubmit.co/' + encodeURIComponent(email);
+                    return;
+                }
+
+                if (endpoint) {
+                    e.preventDefault();
+                    var payload = {
+                        _honey: '',
+                        name: document.getElementById('eng-name').value.trim(),
+                        email: document.getElementById('eng-email').value.trim(),
+                        serviceTypes: getSelectedServiceLabels().join(', '),
+                        serviceSlugs: serviceSlugs.join(', '),
+                        timeline: document.getElementById('eng-timeline').value,
+                        budget: document.getElementById('eng-budget').value,
+                        referenceLinks: document.getElementById('eng-links').value.trim(),
+                        message: document.getElementById('eng-message').value.trim(),
+                        _subject: '[Sleepyhead] Audio engineering inquiry'
+                    };
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                    }
                     fetch(endpoint, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
                         body: JSON.stringify(payload)
                     })
                         .then(function (res) {
-                            if (!res.ok) throw new Error('POST ' + res.status);
-                            return res.json().catch(function () { return {}; });
+                            if (!res.ok) {
+                                throw new Error('POST ' + res.status);
+                            }
+                            return res.json().catch(function () {
+                                return {};
+                            });
                         })
                         .then(function () {
                             showMsg('Sent. I will get back to you by email.', 'ok');
@@ -711,7 +705,14 @@
                                 submitBtn.disabled = false;
                             }
                         });
+                    return;
                 }
+
+                e.preventDefault();
+                showMsg(
+                    'Add formSubmitEmail or inquiryEndpoint to data/engineering-config.json to enable sending.',
+                    'info'
+                );
             });
         });
     </script>
