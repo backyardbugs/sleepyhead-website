@@ -29,7 +29,7 @@ function doPost(e) {
       new Date(),
       body.name || '',
       body.email || '',
-      body.serviceType || '',
+      body.serviceTypes || body.serviceType || '',
       body.timeline || '',
       body.budget || '',
       body.referenceLinks || '',
@@ -47,5 +47,5 @@ function doPost(e) {
 function setupEngineeringSheet() {
   var sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
   sheet.clear();
-  sheet.appendRow(['Received At', 'Name', 'Email', 'Service', 'Timeline', 'Budget', 'Links', 'Message']);
+  sheet.appendRow(['Received At', 'Name', 'Email', 'Services', 'Timeline', 'Budget', 'Links', 'Message']);
 }

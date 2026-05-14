@@ -157,6 +157,45 @@
             outline: none;
             border-color: var(--accent-color);
         }
+        .eng-service-fieldset {
+            border: 1px solid #444;
+            padding: 14px 16px 16px;
+            margin: 0 0 16px 0;
+        }
+        .eng-service-fieldset legend {
+            font-family: var(--font-head);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #aaa;
+            padding: 0 6px;
+        }
+        .eng-field-hint {
+            font-size: 0.85rem;
+            color: #777;
+            margin: 0 0 12px 0;
+            font-style: italic;
+        }
+        .eng-service-fieldset .eng-check-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            text-transform: none;
+            letter-spacing: normal;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .eng-service-fieldset .eng-check-label:last-of-type {
+            margin-bottom: 0;
+        }
+        .eng-service-fieldset .eng-check-label input[type="checkbox"] {
+            width: auto;
+            flex-shrink: 0;
+            accent-color: var(--accent-color);
+        }
         .eng-hp {
             position: absolute;
             left: -9999px;
@@ -266,17 +305,15 @@
                         <label for="eng-email">Email</label>
                         <input type="email" id="eng-email" name="email" required maxlength="200" autocomplete="email">
                     </div>
-                    <div class="eng-form-row">
-                        <label for="eng-service">Service type</label>
-                        <select id="eng-service" name="serviceType" required>
-                            <option value="">Choose one</option>
-                            <option value="mixing">Mixing</option>
-                            <option value="mastering">Mastering</option>
-                            <option value="production">Production / arrangement</option>
-                            <option value="editing">Editing / restoration</option>
-                            <option value="other">Other / not sure</option>
-                        </select>
-                    </div>
+                    <fieldset class="eng-form-row eng-service-fieldset">
+                        <legend>Service types</legend>
+                        <p class="eng-field-hint">Select all that apply.</p>
+                        <label class="eng-check-label"><input type="checkbox" name="eng-service" value="mixing"> Mixing</label>
+                        <label class="eng-check-label"><input type="checkbox" name="eng-service" value="mastering"> Mastering</label>
+                        <label class="eng-check-label"><input type="checkbox" name="eng-service" value="production"> Production / arrangement</label>
+                        <label class="eng-check-label"><input type="checkbox" name="eng-service" value="editing"> Editing / restoration</label>
+                        <label class="eng-check-label"><input type="checkbox" name="eng-service" value="other"> Other / not sure</label>
+                    </fieldset>
                     <div class="eng-form-row">
                         <label for="eng-timeline">Timeline</label>
                         <select id="eng-timeline" name="timeline" required>
@@ -330,6 +367,28 @@
             const msgEl = document.getElementById('eng-form-msg');
             const configBanner = document.getElementById('eng-config-banner');
             let formConfig = { formSubmitEmail: '', inquiryEndpoint: '' };
+
+            var SERVICE_LABELS = {
+                mixing: 'Mixing',
+                mastering: 'Mastering',
+                production: 'Production / arrangement',
+                editing: 'Editing / restoration',
+                other: 'Other / not sure'
+            };
+
+            function getSelectedServiceSlugs() {
+                return Array.prototype.slice
+                    .call(form.querySelectorAll('input[name="eng-service"]:checked'))
+                    .map(function (cb) {
+                        return cb.value;
+                    });
+            }
+
+            function getSelectedServiceLabels() {
+                return getSelectedServiceSlugs().map(function (slug) {
+                    return SERVICE_LABELS[slug] || slug;
+                });
+            }
 
             function showMsg(text, kind) {
                 msgEl.textContent = text;
@@ -479,6 +538,12 @@
                     return;
                 }
 
+                var serviceSlugs = getSelectedServiceSlugs();
+                if (serviceSlugs.length === 0) {
+                    showMsg('Please select at least one service type.', 'err');
+                    return;
+                }
+
                 var email = (formConfig.formSubmitEmail || '').trim();
                 var endpoint = (formConfig.inquiryEndpoint || '').trim();
 
@@ -487,10 +552,13 @@
                     return;
                 }
 
+                var serviceLabelsJoined = getSelectedServiceLabels().join(', ');
+
                 var payload = {
                     name: document.getElementById('eng-name').value.trim(),
                     email: document.getElementById('eng-email').value.trim(),
-                    serviceType: document.getElementById('eng-service').value,
+                    serviceTypes: serviceLabelsJoined,
+                    serviceSlugs: serviceSlugs.join(', '),
                     timeline: document.getElementById('eng-timeline').value,
                     budget: document.getElementById('eng-budget').value,
                     referenceLinks: document.getElementById('eng-links').value.trim(),
