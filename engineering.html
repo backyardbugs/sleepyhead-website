@@ -555,6 +555,8 @@
                 var serviceLabelsJoined = getSelectedServiceLabels().join(', ');
 
                 var payload = {
+                    _honey: '',
+                    _captcha: 'false',
                     name: document.getElementById('eng-name').value.trim(),
                     email: document.getElementById('eng-email').value.trim(),
                     serviceTypes: serviceLabelsJoined,
@@ -579,15 +581,39 @@
                         body: JSON.stringify(payload)
                     })
                         .then(function (res) {
-                            if (!res.ok) throw new Error('FormSubmit ' + res.status);
-                            return res.json();
+                            return res.text().then(function (text) {
+                                var data = {};
+                                try {
+                                    data = text ? JSON.parse(text) : {};
+                                } catch (parseErr) {
+                                    if (!res.ok) {
+                                        throw new Error('FormSubmit returned an error (HTTP ' + res.status + ').');
+                                    }
+                                    throw new Error('Could not read FormSubmit response. Try again.');
+                                }
+                                if (data.success === 'false' || data.success === false) {
+                                    throw new Error(data.message || 'FormSubmit rejected this submission.');
+                                }
+                                if (!res.ok) {
+                                    throw new Error(data.message || ('FormSubmit error HTTP ' + res.status));
+                                }
+                                return data;
+                            });
                         })
                         .then(function () {
                             showMsg('Sent. I will get back to you by email.', 'ok');
                             form.reset();
                         })
-                        .catch(function () {
-                            showMsg('Something went wrong sending the form. Try again or email directly.', 'err');
+                        .catch(function (err) {
+                            console.error(err);
+                            var detail =
+                                err && err.message
+                                    ? err.message
+                                    : 'Something went wrong sending the form. Try again or email directly.';
+                            if (detail.length > 280) {
+                                detail = detail.slice(0, 277) + '…';
+                            }
+                            showMsg(detail, 'err');
                         })
                         .finally(function () {
                             submitBtn.disabled = false;
