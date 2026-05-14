@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Mixing",
+    "description": "Balancing tracks, EQ, compression, effects, and automation so your song sits together and translates on speakers and headphones.",
+    "pricing": "Project-based — request a quote"
+  },
+  {
+    "name": "Mastering",
+    "description": "Final polish, loudness and tone for release-ready masters (streaming, CD, or vinyl prep as needed).",
+    "pricing": "Per track or EP/LP — request a quote"
+  },
+  {
+    "name": "Production & arrangement",
+    "description": "Building or refining parts, programming, and structure—from demos to fuller productions.",
+    "pricing": "Inquire with references"
+  },
+  {
+    "name": "Editing & restoration",
+    "description": "Comping vocals, timing/tuning cleanup, noise reduction, and prep before mix.",
+    "pricing": "Hourly or flat — request a quote"
+  }
+]

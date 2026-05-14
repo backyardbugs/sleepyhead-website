@@ -1,0 +1,5 @@
+{
+  "formSubmitEmail": "",
+  "inquiryEndpoint": "",
+  "_comment": "Set formSubmitEmail to your address for FormSubmit (https://formsubmit.co) AJAX delivery, OR set inquiryEndpoint to a deployed Google Apps Script web app URL that accepts POST JSON. Leave both empty to show a configuration notice instead of sending."
+}

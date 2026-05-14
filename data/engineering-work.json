@@ -1,0 +1,29 @@
+[
+  {
+    "title": "HIGH PRESS",
+    "credit": "Artist project",
+    "role": "Bass · production · mix (selected releases)",
+    "year": "2024",
+    "type": "spotify",
+    "embedSrc": "https://open.spotify.com/embed/artist/4dNsmfo2ooBsxqbYuwtW0U?utm_source=generator&theme=0",
+    "notes": "Pop-punk / post-hardcore. Replace or add rows in this file as your credits grow."
+  },
+  {
+    "title": "bedroom days",
+    "credit": "Personal / demo",
+    "role": "Production · mix",
+    "year": "2022",
+    "type": "audio",
+    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/bedroom.mp3",
+    "notes": ""
+  },
+  {
+    "title": "Wake The Fuck Up",
+    "credit": "Reel / short-form audio",
+    "role": "Production · sound design",
+    "year": "2023",
+    "type": "audio",
+    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/wakeup.mp3",
+    "notes": ""
+  }
+]
