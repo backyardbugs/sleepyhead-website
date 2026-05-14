@@ -385,7 +385,9 @@
     <script src="loader.js?v=4"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            /* Must match GitHub Pages site for this repo */
+            /* Inquiry form must be used on GitHub Pages (not *.neocities.org) so FormSubmit works.
+               Enable Pages once: repo Settings → Pages → Build and deployment → Source: Deploy from a branch
+               → Branch: main, folder: / (root) → Save. Site: https://backyardbugs.github.io/sleepyhead-website/ */
             var INQUIRY_FORM_ORIGIN = 'https://backyardbugs.github.io/sleepyhead-website';
             var neoMode = /\.neocities\.org$/i.test(location.hostname || '');
             var inquiryUrl = INQUIRY_FORM_ORIGIN.replace(/\/$/, '') + '/engineering.html#inquiry';
