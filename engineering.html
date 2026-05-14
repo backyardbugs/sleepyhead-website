@@ -249,6 +249,32 @@
             color: #999;
         }
         .eng-config-banner.visible { display: block; }
+        .eng-neo-explain {
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            margin: 0 0 18px 0;
+            max-width: 36em;
+        }
+        .eng-neo-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .eng-neo-actions a.eng-btn {
+            display: inline-block;
+            text-decoration: none;
+            border-bottom: none;
+        }
+        .eng-neo-note {
+            font-size: 0.8rem;
+            color: #666;
+            max-width: 36em;
+            line-height: 1.45;
+            margin: 0 0 16px 0;
+        }
     </style>
 </head>
 <body>
@@ -359,12 +385,38 @@
     <script src="loader.js?v=4"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            /* Must match GitHub Pages site for this repo */
+            var INQUIRY_FORM_ORIGIN = 'https://backyardbugs.github.io/sleepyhead-website';
+            var neoMode = /\.neocities\.org$/i.test(location.hostname || '');
+            var inquiryUrl = INQUIRY_FORM_ORIGIN.replace(/\/$/, '') + '/engineering.html#inquiry';
+
+            var formWrap = document.querySelector('.eng-form-wrap');
+            if (neoMode && formWrap) {
+                formWrap.innerHTML =
+                    '<p class="eng-neo-explain">This copy of the site is on Neocities, which blocks sending forms to external services. ' +
+                    'Open the same page on GitHub Pages to send a request — no account needed.</p>' +
+                    '<div class="eng-neo-actions">' +
+                    '<a class="eng-btn" href="' +
+                    inquiryUrl +
+                    '" target="_blank" rel="noopener noreferrer">Open inquiry form</a>' +
+                    '</div>' +
+                    '<p class="eng-neo-note">The portfolio above still works here. The button opens a new tab; scroll to &ldquo;Request service&rdquo; if needed.</p>' +
+                    '<p class="eng-privacy">Your details are only used to reply about this project. If submissions are stored (e.g. in a sheet or inbox), ' +
+                    'delete them when you no longer need them.</p>';
+                var cta = document.querySelector('.eng-cta-row a');
+                if (cta) {
+                    cta.href = inquiryUrl;
+                    cta.target = '_blank';
+                    cta.rel = 'noopener noreferrer';
+                }
+            }
+
             const bust = '?v=' + Date.now();
             const workEl = document.getElementById('eng-work-grid');
             const servicesEl = document.getElementById('eng-services-list');
             const form = document.getElementById('eng-inquiry-form');
             const submitBtn = document.getElementById('eng-submit');
-            const msgEl = document.getElementById('eng-form-msg');
+            var msgEl = document.getElementById('eng-form-msg');
             const configBanner = document.getElementById('eng-config-banner');
             let formConfig = { formSubmitEmail: '', inquiryEndpoint: '' };
 
@@ -377,6 +429,9 @@
             };
 
             function getSelectedServiceSlugs() {
+                if (!form) {
+                    return [];
+                }
                 return Array.prototype.slice
                     .call(form.querySelectorAll('input[name="eng-service"]:checked'))
                     .map(function (cb) {
@@ -391,10 +446,16 @@
             }
 
             function showMsg(text, kind) {
+                if (!msgEl) {
+                    return;
+                }
                 msgEl.textContent = text;
                 msgEl.className = 'eng-form-msg visible ' + (kind || '');
             }
             function hideMsg() {
+                if (!msgEl) {
+                    return;
+                }
                 msgEl.className = 'eng-form-msg';
                 msgEl.textContent = '';
             }
@@ -413,7 +474,7 @@
 
                 var email = (formConfig.formSubmitEmail || '').trim();
                 var ep = (formConfig.inquiryEndpoint || '').trim();
-                if (!email && !ep) {
+                if (!email && !ep && !neoMode) {
                     configBanner.textContent = 'Form delivery is not configured yet. Add formSubmitEmail (FormSubmit) or inquiryEndpoint (Google Apps Script) to data/engineering-config.json. You can still use the fields below to copy a brief out manually.';
                     configBanner.classList.add('visible');
                 }
@@ -523,6 +584,10 @@
                 });
             }
 
+            if (!form) {
+                return;
+            }
+
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
                 hideMsg();
@@ -568,7 +633,9 @@
                     _subject: '[Sleepyhead] Audio engineering inquiry'
                 };
 
-                submitBtn.disabled = true;
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                }
 
                 if (email) {
                     var url = 'https://formsubmit.co/ajax/' + encodeURIComponent(email);
@@ -616,7 +683,9 @@
                             showMsg(detail, 'err');
                         })
                         .finally(function () {
-                            submitBtn.disabled = false;
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                            }
                         });
                 } else {
                     fetch(endpoint, {
@@ -636,7 +705,9 @@
                             showMsg('Something went wrong sending the form. Check inquiryEndpoint and CORS on your web app.', 'err');
                         })
                         .finally(function () {
-                            submitBtn.disabled = false;
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                            }
                         });
                 }
             });
