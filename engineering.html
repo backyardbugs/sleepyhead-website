@@ -359,6 +359,19 @@
                 servicesEl.innerHTML = '<li style="color:#ff6b6b;">Could not load services.</li>';
             });
 
+            function wireExclusiveEngineeringAudio(root) {
+                var players = root.querySelectorAll('audio');
+                players.forEach(function (el) {
+                    el.addEventListener('play', function () {
+                        players.forEach(function (other) {
+                            if (other !== el) {
+                                other.pause();
+                            }
+                        });
+                    });
+                });
+            }
+
             function renderWork(items) {
                 if (items.length === 0) {
                     workEl.innerHTML = '<div style="grid-column:1/-1;color:#666;">No credits listed yet. Edit data/engineering-work.json.</div>';
@@ -417,6 +430,7 @@
                     card.appendChild(body);
                     workEl.appendChild(card);
                 });
+                wireExclusiveEngineeringAudio(workEl);
             }
 
             function renderServices(list) {
