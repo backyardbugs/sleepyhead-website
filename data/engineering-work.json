@@ -1,29 +1,65 @@
 [
   {
-    "title": "HIGH PRESS",
-    "credit": "Artist project",
-    "role": "Bass · production · mix (selected releases)",
-    "year": "2024",
-    "type": "spotify",
-    "embedSrc": "https://open.spotify.com/embed/artist/4dNsmfo2ooBsxqbYuwtW0U?utm_source=generator&theme=0",
-    "notes": "Pop-punk / post-hardcore. Replace or add rows in this file as your credits grow."
-  },
-  {
-    "title": "bedroom days",
-    "credit": "Personal / demo",
-    "role": "Production · mix",
-    "year": "2022",
+    "title": "The Great Divide",
+    "credit": "Noah",
+    "role": "Studio producer, mixing and mastering, writing and arrangement",
+    "year": "",
     "type": "audio",
-    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/bedroom.mp3",
+    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/Noah_Mix3.1.mp3",
     "notes": ""
   },
   {
-    "title": "Wake The Fuck Up",
-    "credit": "Reel / short-form audio",
-    "role": "Production · sound design",
-    "year": "2023",
+    "title": "Waterworks",
+    "credit": "",
+    "role": "Studio producer, mixing and mastering, writing and arrangement",
+    "year": "",
     "type": "audio",
-    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/wakeup.mp3",
+    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/Waterworks%20FINISHED%20%28Feb21%29.mp3",
     "notes": ""
+  },
+  {
+    "title": "Ricky Ricardo [unreleased]",
+    "credit": "",
+    "role": "Studio producer, mixing and mastering, writing and arrangement",
+    "year": "",
+    "type": "audio",
+    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/RickyRicardo_New1.mp3",
+    "notes": ""
+  },
+  {
+    "title": "Petty",
+    "credit": "",
+    "role": "Studio producer, mixing and mastering, writing and arrangement",
+    "year": "",
+    "type": "audio",
+    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/Petty-3.mp3",
+    "notes": ""
+  },
+  {
+    "title": "Better Than You",
+    "credit": "",
+    "role": "Mixing and mastering",
+    "year": "",
+    "type": "audio",
+    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/BetterThanYou.mp3",
+    "notes": ""
+  },
+  {
+    "title": "Champion",
+    "credit": "",
+    "role": "Studio producer, mixing and mastering, writing and arrangement",
+    "year": "",
+    "type": "audio",
+    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/champion.mp3",
+    "notes": ""
+  },
+  {
+    "title": "Breakdown Demo",
+    "credit": "",
+    "role": "Production demo (rough mix)",
+    "year": "",
+    "type": "audio",
+    "audioUrl": "https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/hard.mp3",
+    "notes": "Here's an old demo that's not mixed particularly well, but I wanted to include it because 1. it's funny to me and 2. I love heavy music and am one million percent open to heavy clients! I'm in the midst of producing a heavy record, so I should have current examples of my production in this regard soon."
   }
 ]
