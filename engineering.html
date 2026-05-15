@@ -113,18 +113,45 @@
             color: var(--accent-color);
         }
         .eng-inquiry-cta {
-            border: 1px solid var(--border-color);
-            background: #1a1a1a;
-            padding: 24px 22px 28px;
-            max-width: 520px;
-            margin-top: 1.5rem;
+            margin-top: 2.75rem;
+            padding: 28px 28px 32px;
+            max-width: 640px;
+            border: 2px solid var(--accent-color);
+            border-radius: 2px;
+            background: linear-gradient(
+                165deg,
+                rgba(197, 160, 89, 0.14) 0%,
+                rgba(26, 22, 14, 0.95) 38%,
+                #0d0d0d 100%
+            );
+            box-shadow:
+                0 0 0 1px rgba(197, 160, 89, 0.2),
+                0 10px 36px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        .eng-inquiry-cta::before {
+            content: '';
+            display: block;
+            width: 48px;
+            height: 3px;
+            background: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        .eng-inquiry-title {
+            font-family: var(--font-head);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 14px 0;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
         }
         .eng-inquiry-cta .eng-inquiry-copy {
-            color: #aaa;
-            font-size: 0.95rem;
-            max-width: 40em;
-            margin: 0 0 1.25rem 0;
-            line-height: 1.5;
+            color: #d4d4d4;
+            font-size: 1rem;
+            max-width: 38em;
+            margin: 0 0 1.5rem 0;
+            line-height: 1.55;
         }
         .eng-btn {
             font-family: var(--font-head);
@@ -141,12 +168,21 @@
             background: var(--accent-color);
             color: #111;
         }
-        .eng-privacy {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 16px;
-            max-width: 36em;
-            line-height: 1.5;
+        .eng-inquiry-cta .eng-inquiry-btn {
+            background: var(--accent-color);
+            color: #111;
+            border: 2px solid var(--accent-color);
+            padding: 16px 36px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            box-shadow: 0 4px 18px rgba(197, 160, 89, 0.25);
+        }
+        .eng-inquiry-cta .eng-inquiry-btn:hover {
+            background: #d4b56e;
+            border-color: #d4b56e;
+            color: #111;
         }
     </style>
 </head>
@@ -178,15 +214,15 @@
             <ul id="eng-services-list" class="eng-services-list">
                 <li style="color:#666;">Loading services…</li>
             </ul>
-            <section id="inquiry" class="eng-inquiry-cta">
+            <section id="inquiry" class="eng-inquiry-cta" aria-label="Project request">
+                <h2 class="eng-inquiry-title">Start your project</h2>
                 <p class="eng-inquiry-copy">
                     Tell me about your material, timeline, and links (Drive, Dropbox, SoundCloud, etc.).
                     I will reply by email.
                 </p>
                 <p style="margin: 0;">
-                    <a id="eng-inquiry-form-link" class="eng-btn" href="#">Project Request Form</a>
+                    <a id="eng-inquiry-form-link" class="eng-btn eng-inquiry-btn" href="#">Project Request Form</a>
                 </p>
-                <p id="eng-inquiry-privacy-note" class="eng-privacy"></p>
             </section>
         </main>
     </div>
@@ -205,13 +241,6 @@
                 inquiryLink.href = inquiryFormUrl;
                 inquiryLink.target = neoMode ? '_blank' : '_self';
                 inquiryLink.rel = neoMode ? 'noopener noreferrer' : '';
-            }
-
-            var privacyNote = document.getElementById('eng-inquiry-privacy-note');
-            if (privacyNote) {
-                privacyNote.textContent = neoMode
-                    ? 'The form opens on GitHub Pages in a new tab (Neocities cannot send to external services). After you submit, that tab sends you back here.'
-                    : 'The form opens on this site. After you submit, your browser returns to the main copy of this page on Neocities.';
             }
 
             const workEl = document.getElementById('eng-work-grid');
