@@ -11,7 +11,7 @@
  * 6. Put the web app URL in data/engineering-config.json as "inquiryEndpoint".
  *
  * Note: Cross-origin fetch from a static site to Apps Script often hits browser CORS limits.
- * For the least friction, use formSubmitEmail in engineering-config.json (FormSubmit) instead;
+ * For the least friction, use web3formsAccessKey in data/engineering-config.json (Web3Forms);
  * keep this script if you prefer Sheet rows and can call the URL from a context without CORS
  * (e.g. server, or a same-origin proxy).
  */

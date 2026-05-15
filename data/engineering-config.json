@@ -1,5 +1,5 @@
 {
-  "formSubmitEmail": "tylerbalkcom@gmail.com",
+  "web3formsAccessKey": "",
   "inquiryEndpoint": "",
-  "_comment": "formSubmitEmail: FormSubmit HTML POST to https://formsubmit.co/<email> (no fetch). inquiryEndpoint: optional Google Apps Script if email is empty."
+  "_comment": "FormSubmit was unreliable from browsers (Cloudflare 521). Use Web3Forms: open https://web3forms.com → enter your email → copy Access Key → paste as web3formsAccessKey (string). Free tier. inquiryEndpoint: optional Google Apps Script JSON POST if key is empty."
 }

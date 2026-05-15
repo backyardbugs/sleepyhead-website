@@ -319,15 +319,10 @@
             <div id="eng-thanks-banner" class="eng-config-banner" style="border-color: #3d5a3d; color: #9cbc9c; display: none;" role="status"></div>
 
             <div class="eng-form-wrap">
-                <form id="eng-inquiry-form" method="POST" action="https://formsubmit.co/tylerbalkcom@gmail.com" novalidate>
-                    <input type="hidden" name="_subject" value="[Sleepyhead] Audio engineering inquiry">
-                    <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_next" id="eng-form-next" value="">
-                    <input type="hidden" name="serviceTypes" id="eng-service-types-hidden" value="">
-                    <input type="hidden" name="serviceSlugs" id="eng-service-slugs-hidden" value="">
+                <form id="eng-inquiry-form" novalidate>
                     <div class="eng-hp" aria-hidden="true">
-                        <label for="eng-honey">Leave blank</label>
-                        <input type="text" id="eng-honey" name="_honey" tabindex="-1" autocomplete="off" value="">
+                        <label for="eng-hp-field">Leave blank</label>
+                        <input type="text" id="eng-hp-field" tabindex="-1" autocomplete="off" value="">
                     </div>
                     <div class="eng-form-row">
                         <label for="eng-name">Name</label>
@@ -391,9 +386,9 @@
     <script src="loader.js?v=4"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            /* Inquiry form must be used on GitHub Pages (not *.neocities.org) so FormSubmit works.
-               Enable Pages once: repo Settings → Pages → Build and deployment → Source: Deploy from a branch
-               → Branch: main, folder: / (root) → Save. Site: https://backyardbugs.github.io/sleepyhead-website/ */
+            /* Inquiry form: use GitHub Pages (not *.neocities.org) — Neocities blocks outbound posts.
+               Submissions use Web3Forms (https://api.web3forms.com/submit). Add web3formsAccessKey in data/engineering-config.json.
+               Pages: https://backyardbugs.github.io/sleepyhead-website/ */
             var INQUIRY_FORM_ORIGIN = 'https://backyardbugs.github.io/sleepyhead-website';
             var neoMode = /\.neocities\.org$/i.test(location.hostname || '');
             var inquiryUrl = INQUIRY_FORM_ORIGIN.replace(/\/$/, '') + '/engineering.html#inquiry';
@@ -425,30 +420,19 @@
                     var params = new URLSearchParams(window.location.search);
                     if (params.get('thanks') === '1') {
                         thanksBanner.textContent =
-                            'Thanks — FormSubmit received your message. I will reply by email.';
+                            'Thanks — your message was received. I will reply by email.';
                         thanksBanner.style.display = 'block';
                     }
                 } catch (ignore) {}
             }
 
-            var nextEl = document.getElementById('eng-form-next');
-            if (nextEl && !neoMode) {
-                try {
-                    var back = new URL(window.location.href);
-                    back.hash = '';
-                    back.searchParams.set('thanks', '1');
-                    nextEl.value = back.toString();
-                } catch (ignore2) {
-                    nextEl.value = INQUIRY_FORM_ORIGIN.replace(/\/$/, '') + '/engineering.html?thanks=1';
-                }
-            }
             const workEl = document.getElementById('eng-work-grid');
             const servicesEl = document.getElementById('eng-services-list');
             const form = document.getElementById('eng-inquiry-form');
             const submitBtn = document.getElementById('eng-submit');
             var msgEl = document.getElementById('eng-form-msg');
             const configBanner = document.getElementById('eng-config-banner');
-            let formConfig = { formSubmitEmail: '', inquiryEndpoint: '' };
+            let formConfig = { web3formsAccessKey: '', inquiryEndpoint: '' };
 
             const bust = '?v=' + Date.now();
 
@@ -504,13 +488,11 @@
                 renderWork(Array.isArray(work) ? work : []);
                 renderServices(Array.isArray(services) ? services : []);
 
-                var email = (formConfig.formSubmitEmail || '').trim();
+                var w3key = (formConfig.web3formsAccessKey || '').trim();
                 var ep = (formConfig.inquiryEndpoint || '').trim();
-                if (email && form) {
-                    form.action = 'https://formsubmit.co/' + encodeURIComponent(email);
-                }
-                if (!email && !ep && !neoMode) {
-                    configBanner.textContent = 'Form delivery is not configured yet. Add formSubmitEmail (FormSubmit) or inquiryEndpoint (Google Apps Script) to data/engineering-config.json. You can still use the fields below to copy a brief out manually.';
+                if (!w3key && !ep && !neoMode) {
+                    configBanner.textContent =
+                        'Add a Web3Forms access key: go to https://web3forms.com (free), paste your key into web3formsAccessKey in data/engineering-config.json, commit, and push. Or set inquiryEndpoint for a Google Apps Script instead.';
                     configBanner.classList.add('visible');
                 }
             }).catch(function (err) {
@@ -624,57 +606,117 @@
             }
 
             form.addEventListener('submit', function (e) {
+                e.preventDefault();
                 hideMsg();
 
-                var hp = document.getElementById('eng-honey').value.trim();
-                if (hp) {
-                    e.preventDefault();
+                var hp = document.getElementById('eng-hp-field');
+                if (hp && hp.value.trim()) {
                     showMsg('Submission could not be sent.', 'err');
                     return;
                 }
 
                 if (!form.checkValidity()) {
-                    e.preventDefault();
                     form.reportValidity();
                     return;
                 }
 
                 var serviceSlugs = getSelectedServiceSlugs();
                 if (serviceSlugs.length === 0) {
-                    e.preventDefault();
                     showMsg('Please select at least one service type.', 'err');
                     return;
                 }
 
-                var email = (formConfig.formSubmitEmail || '').trim();
+                var w3key = (formConfig.web3formsAccessKey || '').trim();
                 var endpoint = (formConfig.inquiryEndpoint || '').trim();
 
-                var typesHidden = document.getElementById('eng-service-types-hidden');
-                var slugsHidden = document.getElementById('eng-service-slugs-hidden');
-                if (typesHidden) {
-                    typesHidden.value = getSelectedServiceLabels().join(', ');
-                }
-                if (slugsHidden) {
-                    slugsHidden.value = serviceSlugs.join(', ');
-                }
+                var nameVal = document.getElementById('eng-name').value.trim();
+                var emailVal = document.getElementById('eng-email').value.trim();
+                var timelineVal = document.getElementById('eng-timeline').value;
+                var budgetVal = document.getElementById('eng-budget').value;
+                var linksVal = document.getElementById('eng-links').value.trim();
+                var messageVal = document.getElementById('eng-message').value.trim();
+                var serviceLabels = getSelectedServiceLabels().join(', ');
 
-                if (email) {
-                    form.action = 'https://formsubmit.co/' + encodeURIComponent(email);
+                var composed =
+                    messageVal +
+                    '\n\n---\n' +
+                    'Services: ' +
+                    serviceLabels +
+                    '\nTimeline: ' +
+                    timelineVal +
+                    '\nBudget: ' +
+                    (budgetVal || '(not specified)') +
+                    '\nReference links: ' +
+                    (linksVal || '(none)');
+
+                if (w3key) {
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                    }
+                    fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json'
+                        },
+                        body: JSON.stringify({
+                            access_key: w3key,
+                            subject: '[Sleepyhead] Audio engineering inquiry',
+                            name: nameVal,
+                            email: emailVal,
+                            message: composed,
+                            serviceTypes: serviceLabels,
+                            serviceSlugs: serviceSlugs.join(', '),
+                            timeline: timelineVal,
+                            budget: budgetVal,
+                            referenceLinks: linksVal
+                        })
+                    })
+                        .then(function (res) {
+                            return res.json().then(function (data) {
+                                if (!res.ok || data.success === false) {
+                                    var m =
+                                        (data && (data.message || data.body && data.body.message)) ||
+                                        'Web3Forms error HTTP ' +
+                                        res.status;
+                                    throw new Error(m);
+                                }
+                                return data;
+                            });
+                        })
+                        .then(function () {
+                            showMsg('Sent. I will get back to you by email.', 'ok');
+                            form.reset();
+                        })
+                        .catch(function (err) {
+                            console.error(err);
+                            var d =
+                                err && err.message
+                                    ? err.message
+                                    : 'Something went wrong. Check your access key and try again.';
+                            if (d.length > 300) {
+                                d = d.slice(0, 297) + '…';
+                            }
+                            showMsg(d, 'err');
+                        })
+                        .finally(function () {
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                            }
+                        });
                     return;
                 }
 
                 if (endpoint) {
-                    e.preventDefault();
                     var payload = {
-                        _honey: '',
-                        name: document.getElementById('eng-name').value.trim(),
-                        email: document.getElementById('eng-email').value.trim(),
-                        serviceTypes: getSelectedServiceLabels().join(', '),
+                        name: nameVal,
+                        email: emailVal,
+                        serviceTypes: serviceLabels,
                         serviceSlugs: serviceSlugs.join(', '),
-                        timeline: document.getElementById('eng-timeline').value,
-                        budget: document.getElementById('eng-budget').value,
-                        referenceLinks: document.getElementById('eng-links').value.trim(),
-                        message: document.getElementById('eng-message').value.trim(),
+                        timeline: timelineVal,
+                        budget: budgetVal,
+                        referenceLinks: linksVal,
+                        message: messageVal,
                         _subject: '[Sleepyhead] Audio engineering inquiry'
                     };
                     if (submitBtn) {
@@ -708,9 +750,8 @@
                     return;
                 }
 
-                e.preventDefault();
                 showMsg(
-                    'Add formSubmitEmail or inquiryEndpoint to data/engineering-config.json to enable sending.',
+                    'Add web3formsAccessKey (from https://web3forms.com) or inquiryEndpoint to data/engineering-config.json.',
                     'info'
                 );
             });
