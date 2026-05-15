@@ -1,5 +1,5 @@
 {
-  "web3formsAccessKey": "",
+  "web3formsAccessKey": "a3faf684-8b2e-4abb-82c8-7f99157be906",
   "inquiryEndpoint": "",
   "_comment": "FormSubmit was unreliable from browsers (Cloudflare 521). Use Web3Forms: open https://web3forms.com → enter your email → copy Access Key → paste as web3formsAccessKey (string). Free tier. inquiryEndpoint: optional Google Apps Script JSON POST if key is empty."
 }
