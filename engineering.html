@@ -112,99 +112,19 @@
             font-size: 0.8rem;
             color: var(--accent-color);
         }
-        .eng-cta-row {
-            margin-top: 1rem;
-        }
-        .eng-form-wrap {
+        .eng-inquiry-cta {
             border: 1px solid var(--border-color);
             background: #1a1a1a;
             padding: 24px 22px 28px;
             max-width: 520px;
+            margin-top: 1.5rem;
         }
-        .eng-form-row {
-            margin-bottom: 16px;
-        }
-        .eng-form-row label {
-            display: block;
-            font-family: var(--font-head);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
+        .eng-inquiry-cta .eng-inquiry-copy {
             color: #aaa;
-            margin-bottom: 6px;
-        }
-        .eng-form-row input[type="text"],
-        .eng-form-row input[type="email"],
-        .eng-form-row input[type="url"],
-        .eng-form-row select,
-        .eng-form-row textarea {
-            width: 100%;
-            box-sizing: border-box;
-            background: #111;
-            border: 1px solid #444;
-            color: var(--text-color);
-            font-family: var(--font-body);
-            font-size: 1rem;
-            padding: 10px 12px;
-        }
-        .eng-form-row textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        .eng-form-row input:focus,
-        .eng-form-row select:focus,
-        .eng-form-row textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-        .eng-service-fieldset {
-            border: 1px solid #444;
-            padding: 14px 16px 16px;
-            margin: 0 0 16px 0;
-        }
-        .eng-service-fieldset legend {
-            font-family: var(--font-head);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: #aaa;
-            padding: 0 6px;
-        }
-        .eng-field-hint {
-            font-size: 0.85rem;
-            color: #777;
-            margin: 0 0 12px 0;
-            font-style: italic;
-        }
-        .eng-service-fieldset .eng-check-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            text-transform: none;
-            letter-spacing: normal;
-            color: var(--text-color);
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-        .eng-service-fieldset .eng-check-label:last-of-type {
-            margin-bottom: 0;
-        }
-        .eng-service-fieldset .eng-check-label input[type="checkbox"] {
-            width: auto;
-            flex-shrink: 0;
-            accent-color: var(--accent-color);
-        }
-        .eng-hp {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-        .eng-form-actions {
-            margin-top: 20px;
+            font-size: 0.95rem;
+            max-width: 40em;
+            margin: 0 0 1.25rem 0;
+            line-height: 1.5;
         }
         .eng-btn {
             font-family: var(--font-head);
@@ -214,66 +134,19 @@
             padding: 12px 24px;
             cursor: pointer;
             font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
         }
-        .eng-btn:hover:not(:disabled) {
+        .eng-btn:hover {
             background: var(--accent-color);
             color: #111;
         }
-        .eng-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .eng-form-msg {
-            margin-top: 14px;
-            font-size: 0.9rem;
-            display: none;
-        }
-        .eng-form-msg.visible { display: block; }
-        .eng-form-msg.ok { color: #8fbc8f; }
-        .eng-form-msg.err { color: #ff6b6b; }
-        .eng-form-msg.info { color: #aaa; }
         .eng-privacy {
             font-size: 0.8rem;
             color: #666;
             margin-top: 16px;
             max-width: 36em;
             line-height: 1.5;
-        }
-        .eng-config-banner {
-            display: none;
-            border: 1px dashed #555;
-            background: #1a1a1a;
-            padding: 12px 16px;
-            margin-bottom: 18px;
-            font-size: 0.85rem;
-            color: #999;
-        }
-        .eng-config-banner.visible { display: block; }
-        .eng-neo-explain {
-            color: #ccc;
-            font-size: 0.95rem;
-            line-height: 1.55;
-            margin: 0 0 18px 0;
-            max-width: 36em;
-        }
-        .eng-neo-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .eng-neo-actions a.eng-btn {
-            display: inline-block;
-            text-decoration: none;
-            border-bottom: none;
-        }
-        .eng-neo-note {
-            font-size: 0.8rem;
-            color: #666;
-            max-width: 36em;
-            line-height: 1.45;
-            margin: 0 0 16px 0;
         }
     </style>
 </head>
@@ -305,196 +178,56 @@
             <ul id="eng-services-list" class="eng-services-list">
                 <li style="color:#666;">Loading services…</li>
             </ul>
-            <div class="eng-cta-row">
-                <a href="#inquiry" class="eng-btn" style="display:inline-block; text-decoration:none; border-bottom:none;">Request a project</a>
-            </div>
-
-            <h2 class="eng-section-title" id="inquiry">Request service</h2>
-            <p style="color:#aaa; font-size:0.95rem; max-width:40em;">
-                Tell me about your material, timeline, and links (Drive, Dropbox, SoundCloud, etc.).
-                I will reply by email.
-            </p>
-
-            <div id="eng-config-banner" class="eng-config-banner" role="status"></div>
-            <div id="eng-thanks-banner" class="eng-config-banner" style="border-color: #3d5a3d; color: #9cbc9c; display: none;" role="status"></div>
-
-            <div class="eng-form-wrap">
-                <form id="eng-inquiry-form" novalidate>
-                    <div class="eng-hp" aria-hidden="true">
-                        <label for="eng-hp-field">Leave blank</label>
-                        <input type="text" id="eng-hp-field" tabindex="-1" autocomplete="off" value="">
-                    </div>
-                    <div class="eng-form-row">
-                        <label for="eng-name">Name</label>
-                        <input type="text" id="eng-name" name="name" required maxlength="120" autocomplete="name">
-                    </div>
-                    <div class="eng-form-row">
-                        <label for="eng-email">Email</label>
-                        <input type="email" id="eng-email" name="email" required maxlength="200" autocomplete="email">
-                    </div>
-                    <fieldset class="eng-form-row eng-service-fieldset">
-                        <legend>Service types</legend>
-                        <p class="eng-field-hint">Select all that apply.</p>
-                        <label class="eng-check-label"><input type="checkbox" class="eng-service-cb" value="mixing"> Mixing</label>
-                        <label class="eng-check-label"><input type="checkbox" class="eng-service-cb" value="mastering"> Mastering</label>
-                        <label class="eng-check-label"><input type="checkbox" class="eng-service-cb" value="production"> Production / arrangement</label>
-                        <label class="eng-check-label"><input type="checkbox" class="eng-service-cb" value="editing"> Editing / restoration</label>
-                        <label class="eng-check-label"><input type="checkbox" class="eng-service-cb" value="other"> Other / not sure</label>
-                    </fieldset>
-                    <div class="eng-form-row">
-                        <label for="eng-timeline">Timeline</label>
-                        <select id="eng-timeline" name="timeline" required>
-                            <option value="">Choose one</option>
-                            <option value="flexible">Flexible</option>
-                            <option value="2-weeks">Within ~2 weeks</option>
-                            <option value="1-week">Within ~1 week</option>
-                            <option value="rush">Rush (say more in message)</option>
-                        </select>
-                    </div>
-                    <div class="eng-form-row">
-                        <label for="eng-budget">Budget range (optional)</label>
-                        <select id="eng-budget" name="budget">
-                            <option value="">Prefer not to say</option>
-                            <option value="under-200">Under $200</option>
-                            <option value="200-500">$200 – $500</option>
-                            <option value="500-1000">$500 – $1,000</option>
-                            <option value="1000-plus">$1,000+</option>
-                            <option value="discuss">Let’s discuss</option>
-                        </select>
-                    </div>
-                    <div class="eng-form-row">
-                        <label for="eng-links">Links to references / files</label>
-                        <input type="url" id="eng-links" name="referenceLinks" placeholder="https://…" maxlength="2000">
-                    </div>
-                    <div class="eng-form-row">
-                        <label for="eng-message">Message</label>
-                        <textarea id="eng-message" name="message" required maxlength="8000" placeholder="Genre, track count, what you need, etc."></textarea>
-                    </div>
-                    <div class="eng-form-actions">
-                        <button type="submit" class="eng-btn" id="eng-submit">Send request</button>
-                    </div>
-                    <p id="eng-form-msg" class="eng-form-msg" role="alert"></p>
-                </form>
-                <p class="eng-privacy">
-                    Your details are only used to reply about this project. If submissions are stored (e.g. in a sheet or inbox),
-                    delete them when you no longer need them.
+            <section id="inquiry" class="eng-inquiry-cta">
+                <p class="eng-inquiry-copy">
+                    Tell me about your material, timeline, and links (Drive, Dropbox, SoundCloud, etc.).
+                    I will reply by email.
                 </p>
-            </div>
+                <p style="margin: 0;">
+                    <a id="eng-inquiry-form-link" class="eng-btn" href="#">Project Request Form</a>
+                </p>
+                <p id="eng-inquiry-privacy-note" class="eng-privacy"></p>
+            </section>
         </main>
     </div>
 
     <script src="loader.js?v=4"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            /* Inquiry form: use GitHub Pages (not *.neocities.org) — Neocities blocks outbound posts.
-               Submissions use Web3Forms (https://api.web3forms.com/submit). Add web3formsAccessKey in data/engineering-config.json.
-               Pages: https://backyardbugs.github.io/sleepyhead-website/ */
             var INQUIRY_FORM_ORIGIN = 'https://backyardbugs.github.io/sleepyhead-website';
+            var NEO_RETURN_AFTER_FORM = 'https://sleepytyler.neocities.org/engineering.html';
             var neoMode = /\.neocities\.org$/i.test(location.hostname || '');
-            var inquiryUrl = INQUIRY_FORM_ORIGIN.replace(/\/$/, '') + '/engineering.html#inquiry';
+            var inquiryFormUrl = INQUIRY_FORM_ORIGIN.replace(/\/$/, '') + '/engineering-inquiry.html';
+            inquiryFormUrl += '?return=' + encodeURIComponent(NEO_RETURN_AFTER_FORM);
 
-            var formWrap = document.querySelector('.eng-form-wrap');
-            if (neoMode && formWrap) {
-                formWrap.innerHTML =
-                    '<p class="eng-neo-explain">This copy of the site is on Neocities, which blocks sending forms to external services. ' +
-                    'Open the same page on GitHub Pages to send a request — no account needed.</p>' +
-                    '<div class="eng-neo-actions">' +
-                    '<a class="eng-btn" href="' +
-                    inquiryUrl +
-                    '" target="_blank" rel="noopener noreferrer">Open inquiry form</a>' +
-                    '</div>' +
-                    '<p class="eng-neo-note">The portfolio above still works here. The button opens a new tab; scroll to &ldquo;Request service&rdquo; if needed.</p>' +
-                    '<p class="eng-privacy">Your details are only used to reply about this project. If submissions are stored (e.g. in a sheet or inbox), ' +
-                    'delete them when you no longer need them.</p>';
-                var cta = document.querySelector('.eng-cta-row a');
-                if (cta) {
-                    cta.href = inquiryUrl;
-                    cta.target = '_blank';
-                    cta.rel = 'noopener noreferrer';
-                }
+            var inquiryLink = document.getElementById('eng-inquiry-form-link');
+            if (inquiryLink) {
+                inquiryLink.href = inquiryFormUrl;
+                inquiryLink.target = neoMode ? '_blank' : '_self';
+                inquiryLink.rel = neoMode ? 'noopener noreferrer' : '';
             }
 
-            var thanksBanner = document.getElementById('eng-thanks-banner');
-            if (thanksBanner) {
-                try {
-                    var params = new URLSearchParams(window.location.search);
-                    if (params.get('thanks') === '1') {
-                        thanksBanner.textContent =
-                            'Thanks — your message was received. I will reply by email.';
-                        thanksBanner.style.display = 'block';
-                    }
-                } catch (ignore) {}
+            var privacyNote = document.getElementById('eng-inquiry-privacy-note');
+            if (privacyNote) {
+                privacyNote.textContent = neoMode
+                    ? 'The form opens on GitHub Pages in a new tab (Neocities cannot send to external services). After you submit, that tab sends you back here.'
+                    : 'The form opens on this site. After you submit, your browser returns to the main copy of this page on Neocities.';
             }
 
             const workEl = document.getElementById('eng-work-grid');
             const servicesEl = document.getElementById('eng-services-list');
-            const form = document.getElementById('eng-inquiry-form');
-            const submitBtn = document.getElementById('eng-submit');
-            var msgEl = document.getElementById('eng-form-msg');
-            const configBanner = document.getElementById('eng-config-banner');
-            let formConfig = { web3formsAccessKey: '', inquiryEndpoint: '' };
 
             const bust = '?v=' + Date.now();
 
-            var SERVICE_LABELS = {
-                mixing: 'Mixing',
-                mastering: 'Mastering',
-                production: 'Production / arrangement',
-                editing: 'Editing / restoration',
-                other: 'Other / not sure'
-            };
-
-            function getSelectedServiceSlugs() {
-                if (!form) {
-                    return [];
-                }
-                return Array.prototype.slice
-                    .call(form.querySelectorAll('.eng-service-cb:checked'))
-                    .map(function (cb) {
-                        return cb.value;
-                    });
-            }
-
-            function getSelectedServiceLabels() {
-                return getSelectedServiceSlugs().map(function (slug) {
-                    return SERVICE_LABELS[slug] || slug;
-                });
-            }
-
-            function showMsg(text, kind) {
-                if (!msgEl) {
-                    return;
-                }
-                msgEl.textContent = text;
-                msgEl.className = 'eng-form-msg visible ' + (kind || '');
-            }
-            function hideMsg() {
-                if (!msgEl) {
-                    return;
-                }
-                msgEl.className = 'eng-form-msg';
-                msgEl.textContent = '';
-            }
-
             Promise.all([
                 fetch('data/engineering-work.json' + bust).then(function (r) { return r.json(); }),
-                fetch('data/engineering-services.json' + bust).then(function (r) { return r.json(); }),
-                fetch('data/engineering-config.json' + bust).then(function (r) { return r.json(); })
+                fetch('data/engineering-services.json' + bust).then(function (r) { return r.json(); })
             ]).then(function (results) {
                 var work = results[0];
                 var services = results[1];
-                formConfig = results[2] || {};
 
                 renderWork(Array.isArray(work) ? work : []);
                 renderServices(Array.isArray(services) ? services : []);
-
-                var w3key = (formConfig.web3formsAccessKey || '').trim();
-                var ep = (formConfig.inquiryEndpoint || '').trim();
-                if (!w3key && !ep && !neoMode) {
-                    configBanner.textContent =
-                        'Add a Web3Forms access key: go to https://web3forms.com (free), paste your key into web3formsAccessKey in data/engineering-config.json, commit, and push. Or set inquiryEndpoint for a Google Apps Script instead.';
-                    configBanner.classList.add('visible');
-                }
             }).catch(function (err) {
                 console.error(err);
                 workEl.innerHTML = '<div style="grid-column:1/-1;color:#ff6b6b;">Could not load portfolio data.</div>';
@@ -600,161 +333,6 @@
                     servicesEl.appendChild(li);
                 });
             }
-
-            if (!form) {
-                return;
-            }
-
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-                hideMsg();
-
-                var hp = document.getElementById('eng-hp-field');
-                if (hp && hp.value.trim()) {
-                    showMsg('Submission could not be sent.', 'err');
-                    return;
-                }
-
-                if (!form.checkValidity()) {
-                    form.reportValidity();
-                    return;
-                }
-
-                var serviceSlugs = getSelectedServiceSlugs();
-                if (serviceSlugs.length === 0) {
-                    showMsg('Please select at least one service type.', 'err');
-                    return;
-                }
-
-                var w3key = (formConfig.web3formsAccessKey || '').trim();
-                var endpoint = (formConfig.inquiryEndpoint || '').trim();
-
-                var nameVal = document.getElementById('eng-name').value.trim();
-                var emailVal = document.getElementById('eng-email').value.trim();
-                var timelineVal = document.getElementById('eng-timeline').value;
-                var budgetVal = document.getElementById('eng-budget').value;
-                var linksVal = document.getElementById('eng-links').value.trim();
-                var messageVal = document.getElementById('eng-message').value.trim();
-                var serviceLabels = getSelectedServiceLabels().join(', ');
-
-                var composed =
-                    messageVal +
-                    '\n\n---\n' +
-                    'Services: ' +
-                    serviceLabels +
-                    '\nTimeline: ' +
-                    timelineVal +
-                    '\nBudget: ' +
-                    (budgetVal || '(not specified)') +
-                    '\nReference links: ' +
-                    (linksVal || '(none)');
-
-                if (w3key) {
-                    if (submitBtn) {
-                        submitBtn.disabled = true;
-                    }
-                    fetch('https://api.web3forms.com/submit', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Accept: 'application/json'
-                        },
-                        body: JSON.stringify({
-                            access_key: w3key,
-                            subject: '[Sleepyhead] Audio engineering inquiry',
-                            name: nameVal,
-                            email: emailVal,
-                            message: composed,
-                            serviceTypes: serviceLabels,
-                            serviceSlugs: serviceSlugs.join(', '),
-                            timeline: timelineVal,
-                            budget: budgetVal,
-                            referenceLinks: linksVal
-                        })
-                    })
-                        .then(function (res) {
-                            return res.json().then(function (data) {
-                                if (!res.ok || data.success === false) {
-                                    var m =
-                                        (data && (data.message || data.body && data.body.message)) ||
-                                        'Web3Forms error HTTP ' +
-                                        res.status;
-                                    throw new Error(m);
-                                }
-                                return data;
-                            });
-                        })
-                        .then(function () {
-                            showMsg('Sent. I will get back to you by email.', 'ok');
-                            form.reset();
-                        })
-                        .catch(function (err) {
-                            console.error(err);
-                            var d =
-                                err && err.message
-                                    ? err.message
-                                    : 'Something went wrong. Check your access key and try again.';
-                            if (d.length > 300) {
-                                d = d.slice(0, 297) + '…';
-                            }
-                            showMsg(d, 'err');
-                        })
-                        .finally(function () {
-                            if (submitBtn) {
-                                submitBtn.disabled = false;
-                            }
-                        });
-                    return;
-                }
-
-                if (endpoint) {
-                    var payload = {
-                        name: nameVal,
-                        email: emailVal,
-                        serviceTypes: serviceLabels,
-                        serviceSlugs: serviceSlugs.join(', '),
-                        timeline: timelineVal,
-                        budget: budgetVal,
-                        referenceLinks: linksVal,
-                        message: messageVal,
-                        _subject: '[Sleepyhead] Audio engineering inquiry'
-                    };
-                    if (submitBtn) {
-                        submitBtn.disabled = true;
-                    }
-                    fetch(endpoint, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                        body: JSON.stringify(payload)
-                    })
-                        .then(function (res) {
-                            if (!res.ok) {
-                                throw new Error('POST ' + res.status);
-                            }
-                            return res.json().catch(function () {
-                                return {};
-                            });
-                        })
-                        .then(function () {
-                            showMsg('Sent. I will get back to you by email.', 'ok');
-                            form.reset();
-                        })
-                        .catch(function () {
-                            showMsg('Something went wrong sending the form. Check inquiryEndpoint and CORS on your web app.', 'err');
-                        })
-                        .finally(function () {
-                            if (submitBtn) {
-                                submitBtn.disabled = false;
-                            }
-                        });
-                    return;
-                }
-
-                showMsg(
-                    'Add web3formsAccessKey (from https://web3forms.com) or inquiryEndpoint to data/engineering-config.json.',
-                    'info'
-                );
-            });
         });
     </script>
 </body>
