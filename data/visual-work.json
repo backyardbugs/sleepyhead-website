@@ -1,0 +1,23 @@
+{
+  "_workflow": "1) Create a folder under visuals/<category>/<project-id>/ 2) Add cover.webp plus numbered images (01.webp, 02.webp…). 3) Add an entry below with matching paths. 4) git add, commit, push main — Neocities deploys automatically. Series comics (multi-page reader): type series + pages[]. Stacks: type stack + images[]. Singles: type single + image.",
+  "comics": [
+    {
+      "id": "greening",
+      "type": "series",
+      "title": "Greening",
+      "info": "Winner of the AWP Intro Journals Award. Published in Tampa Review.",
+      "cover": "comics/greening/greeningtitle.webp",
+      "pages": [
+        "comics/greening/greeningtitle.webp",
+        "comics/greening/greening_1-2.webp",
+        "comics/greening/greening_3-4.webp",
+        "comics/greening/greenings_5-6.webp",
+        "comics/greening/greening_7-8.webp",
+        "comics/greening/greening_9-10.webp",
+        "comics/greening/greening_10-11.webp"
+      ]
+    }
+  ],
+  "illustration": [],
+  "graphicDesign": []
+}
