@@ -19,5 +19,19 @@
     }
   ],
   "illustration": [],
-  "graphicDesign": []
+  "graphicDesign": [
+    {
+      "id": "high-press",
+      "type": "stack",
+      "title": "High Press",
+      "subtitle": "Band branding, flyers, and release art",
+      "cover": "visuals/graphic-design/high-press/cover.webp",
+      "images": [
+        "visuals/graphic-design/high-press/cover.webp",
+        "visuals/graphic-design/high-press/01.webp",
+        "visuals/graphic-design/high-press/02.webp",
+        "visuals/graphic-design/high-press/03.webp"
+      ]
+    }
+  ]
 }
