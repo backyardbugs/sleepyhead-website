@@ -105,14 +105,15 @@ if (resolvedType === 'series') {
     image: `${base}/01.webp`
   };
 } else {
-  entry = {
-    id: projectId,
-    type: 'stack',
-    title,
-    subtitle: '',
-    cover,
-    images: [cover, `${base}/01.webp`, `${base}/02.webp`, `${base}/03.webp`]
-  };
+    entry = {
+        id: projectId,
+        type: 'stack',
+        title,
+        subtitle: '',
+        tags: [],
+        cover,
+        images: [cover, `${base}/01.webp`, `${base}/02.webp`, `${base}/03.webp`]
+    };
 }
 
 console.log('\nCreated folder:', dir);

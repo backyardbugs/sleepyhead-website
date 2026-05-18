@@ -4,205 +4,318 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visuals - Sleepyhead</title>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
     <div class="container">
-        
         <aside id="sidebar-container"></aside>
 
         <main>
             <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">Visual Works</h1>
 
             <h2 class="post-title">Comics</h2>
-           <div class="art-grid">
-    
-    <div class="art-item" onclick="openReader('greening')">
-        <img src="comics/greening/greeningtitle.webp" alt="Greening Cover">
-        
-        <div style="position:absolute; bottom:0; background:rgba(0,0,0,0.8); color:white; width:100%; font-size:12px; padding:5px; text-align:center;">
-            GREENING
-        </div>
-    </div>
-
-</div>
-
-            <h2 class="post-title" style="margin-top:60px;">Illustration</h2>
-            <div class="art-grid">
-                
-                <div class="art-item" 
-                     onclick="openSingle('https://via.placeholder.com/800x600?text=Character+Sheet', 'Character Design')" >
-                    <img src="https://via.placeholder.com/400x400?text=Char+Design" alt="Sketch">
-                </div>
-
-                <div class="art-item" 
-                     onclick="openSingle('path/to/animation.gif', 'Walk Cycle Animation')" >
-                    <img src="https://via.placeholder.com/400x400?text=GIF+Example" alt="Animation">
-                    <div style="position:absolute; top:5px; right:5px; background:white; color:black; font-size:10px; padding:2px 4px; font-weight:bold;">GIF</div>
-                </div>
-
+            <div id="comics-grid" class="art-grid art-grid--stacks">
+                <div style="grid-column:1/-1;color:#666;">Loading…</div>
             </div>
 
+            <h2 class="post-title" style="margin-top:60px;">Illustration</h2>
+            <div id="illustration-grid" class="art-grid art-grid--stacks">
+                <div style="grid-column:1/-1;color:#666;">Loading…</div>
+            </div>
+
+            <h2 class="post-title" style="margin-top:60px;">Graphic design</h2>
+            <div id="graphic-design-grid" class="art-grid art-grid--stacks">
+                <div style="grid-column:1/-1;color:#666;">Loading…</div>
+            </div>
         </main>
     </div>
 
     <div id="lightbox">
-        
-        <span class="close-lightbox" onclick="closeLightbox()">×</span>
-        
-        <button id="prev-btn" class="lightbox-nav" onclick="changePage(-1)">❮</button>
-        <button id="next-btn" class="lightbox-nav" onclick="changePage(1)">❯</button>
-
-        <img id="lightbox-img" src="" alt="Full Screen Art">
-        
+        <span class="close-lightbox" onclick="closeLightbox()" role="button" tabindex="0" aria-label="Close">×</span>
+        <button id="prev-btn" class="lightbox-nav" type="button" onclick="changePage(-1)">❮</button>
+        <button id="next-btn" class="lightbox-nav" type="button" onclick="changePage(1)">❯</button>
+        <img id="lightbox-img" src="" alt="">
         <div id="page-counter">1 / 1</div>
         <div id="lightbox-caption"></div>
-    
     </div>
 
     <script src="loader.js?v=4"></script>
-
     <script>
-        /* --- THE COMIC DATA MANIFEST --- */
-        
-        const comicLibrary = {
-            
-            "greening": {
-                title: "Greening",
-                // NEW: This is the optional caption field!
-                info: "Winner of the AWP Intro Journals Award. Published in Tampa Review.",
-                pages: [
-                    "comics/greening/greeningtitle.webp",
-                    "comics/greening/greening_1-2.webp",
-                    "comics/greening/greening_3-4.webp",
-                    "comics/greening/greenings_5-6.webp", 
-                    "comics/greening/greening_7-8.webp",
-                    "comics/greening/greening_9-10.webp",
-                    "comics/greening/greening_10-11.webp"
-                ]
-            },
+        document.addEventListener('DOMContentLoaded', function () {
+            var lightbox = document.getElementById('lightbox');
+            var imgElement = document.getElementById('lightbox-img');
+            var captionElement = document.getElementById('lightbox-caption');
+            var counterElement = document.getElementById('page-counter');
+            var nextBtn = document.getElementById('next-btn');
+            var prevBtn = document.getElementById('prev-btn');
 
-            // Example of a comic WITHOUT a special caption
-            "the_void": {
-                title: "The Void",
-                pages: [
-                    "https://via.placeholder.com/800x1200?text=Page+1",
-                    "https://via.placeholder.com/800x1200?text=Page+2",
-                    "https://via.placeholder.com/800x1200?text=Page+3"
-                ]
+            var currentGallery = [];
+            var currentPageIndex = 0;
+            var currentCaption = { title: '', subtitle: '', info: '' };
+            var seriesById = {};
+
+            function escapeHtml(s) {
+                var d = document.createElement('div');
+                d.textContent = s || '';
+                return d.innerHTML;
             }
-        };
 
-        /* --- THE LOGIC --- */
-        var lightbox = document.getElementById('lightbox');
-        var imgElement = document.getElementById('lightbox-img');
-        var captionElement = document.getElementById('lightbox-caption');
-        var counterElement = document.getElementById('page-counter');
-        var nextBtn = document.getElementById('next-btn');
-        var prevBtn = document.getElementById('prev-btn');
-
-        // State Tracking
-        var currentComicId = null;
-        var currentPageIndex = 0;
-
-        // MODE 1: Open a Sequential Comic
-        function openReader(comicId) {
-            currentComicId = comicId;
-            currentPageIndex = 0; // Always start at page 1
-
-            // Show controls
-            nextBtn.classList.remove('hidden');
-            prevBtn.classList.remove('hidden');
-            counterElement.classList.remove('hidden');
-
-            updateReader();
-            
-            // Allow the CSS 'display: flex' to take over by removing inline styles if any
-            lightbox.style.display = 'flex';
-        }
-
-        // MODE 2: Open a Single Illustration
-        function openSingle(url, caption) {
-            currentComicId = null; // No comic selected
-            
-            // Hide controls
-            nextBtn.classList.add('hidden');
-            prevBtn.classList.add('hidden');
-            counterElement.classList.add('hidden');
-
-            imgElement.src = url;
-            captionElement.innerText = caption;
-            
-            lightbox.style.display = 'flex';
-        }
-
-        // Helper: Updates the image based on current state
-        function updateReader() {
-            var comic = comicLibrary[currentComicId];
-            var total = comic.pages.length;
-            
-            // Set Image
-            imgElement.src = comic.pages[currentPageIndex];
-
-            // Set Counter
-            counterElement.innerText = (currentPageIndex + 1) + " / " + total;
-            
-            // NEW LOGIC: Check for "Info"
-            if (comic.info) {
-                // If info exists: Title + Line Break + Info (in smaller gray text)
-                captionElement.innerHTML = `
-                    <strong>${comic.title}</strong><br>
-                    <span style="font-size: 0.85em; color: #ccc; font-family: var(--font-body);">
-                        ${comic.info}
-                    </span>
-                `;
-            } else {
-                // If no info: Just the Title
-                captionElement.innerText = comic.title;
+            function openLightbox() {
+                lightbox.style.display = 'flex';
             }
-        }
 
-        // Navigation Logic
-        function changePage(direction) {
-            if (!currentComicId) return; // Do nothing if it's a single image
-
-            var comic = comicLibrary[currentComicId];
-            var newIndex = currentPageIndex + direction;
-
-            // Boundary Checks (Don't go past first or last page)
-            if (newIndex >= 0 && newIndex < comic.pages.length) {
-                currentPageIndex = newIndex;
-                updateReader();
+            function closeLightbox() {
+                lightbox.style.display = 'none';
+                imgElement.src = '';
+                currentGallery = [];
             }
-        }
 
-        function closeLightbox() {
-            lightbox.style.display = 'none';
-            imgElement.src = ""; 
-        }
-
-        // Keyboard Support (Left/Right Arrows)
-        document.addEventListener('keydown', function(e) {
-            if (lightbox.style.display === 'flex') {
-                if (e.key === "ArrowLeft") changePage(-1);
-                if (e.key === "ArrowRight") changePage(1);
-                if (e.key === "Escape") closeLightbox();
+            function setNavVisible(show) {
+                [nextBtn, prevBtn, counterElement].forEach(function (el) {
+                    if (show) {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                });
             }
+
+            function renderCaption() {
+                var c = currentCaption;
+                var html = '<strong>' + escapeHtml(c.title) + '</strong>';
+                if (c.subtitle) {
+                    html +=
+                        '<br><span style="font-size:0.85em;color:#aaa;">' +
+                        escapeHtml(c.subtitle) +
+                        '</span>';
+                }
+                if (c.info) {
+                    html +=
+                        '<br><span style="font-size:0.85em;color:#ccc;font-family:var(--font-body);">' +
+                        escapeHtml(c.info) +
+                        '</span>';
+                }
+                captionElement.innerHTML = html;
+            }
+
+            function updateLightbox() {
+                if (!currentGallery.length) {
+                    return;
+                }
+                imgElement.src = currentGallery[currentPageIndex];
+                imgElement.alt = currentCaption.title || 'Artwork';
+                counterElement.textContent = currentPageIndex + 1 + ' / ' + currentGallery.length;
+                renderCaption();
+            }
+
+            function openGallery(images, caption, startIndex) {
+                if (!images || !images.length) {
+                    return;
+                }
+                currentGallery = images.slice();
+                currentPageIndex = startIndex || 0;
+                currentCaption = caption || {};
+                setNavVisible(currentGallery.length > 1);
+                updateLightbox();
+                openLightbox();
+            }
+
+            window.openReader = function (comicId) {
+                var comic = seriesById[comicId];
+                if (!comic || !comic.pages || !comic.pages.length) {
+                    return;
+                }
+                openGallery(comic.pages, {
+                    title: comic.title,
+                    subtitle: '',
+                    info: comic.info || ''
+                }, 0);
+            };
+
+            window.changePage = function (direction) {
+                if (!currentGallery.length) {
+                    return;
+                }
+                var next = currentPageIndex + direction;
+                if (next >= 0 && next < currentGallery.length) {
+                    currentPageIndex = next;
+                    updateLightbox();
+                }
+            };
+
+            window.closeLightbox = closeLightbox;
+
+            function createStackButton(item) {
+                var images = item.images || [];
+                var cover = item.cover || images[0] || '';
+                var back1 = images[1] || cover;
+                var back2 = images[2] || back1;
+                var count = images.length;
+
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'art-stack';
+                btn.setAttribute('aria-label', item.title + ', ' + count + ' images');
+
+                btn.innerHTML =
+                    '<div class="art-stack-layers">' +
+                    '<div class="art-stack-layer art-stack-layer--back1"><img src="' +
+                    escapeHtml(back2) +
+                    '" alt="" loading="lazy"></div>' +
+                    '<div class="art-stack-layer art-stack-layer--back2"><img src="' +
+                    escapeHtml(back1) +
+                    '" alt="" loading="lazy"></div>' +
+                    '<div class="art-stack-layer art-stack-layer--front"><img src="' +
+                    escapeHtml(cover) +
+                    '" alt="' +
+                    escapeHtml(item.title) +
+                    '" loading="lazy"></div>' +
+                    '</div>' +
+                    '<div class="art-stack-meta">' +
+                    '<h3 class="art-stack-title">' +
+                    escapeHtml(item.title) +
+                    '</h3>' +
+                    (item.subtitle
+                        ? '<p class="art-stack-subtitle">' + escapeHtml(item.subtitle) + '</p>'
+                        : '') +
+                    '<div class="art-stack-count">' +
+                    count +
+                    ' piece' +
+                    (count === 1 ? '' : 's') +
+                    '</div>' +
+                    '</div>';
+
+                btn.addEventListener('click', function () {
+                    openGallery(images, {
+                        title: item.title,
+                        subtitle: item.subtitle || '',
+                        info: ''
+                    }, 0);
+                });
+
+                return btn;
+            }
+
+            function createSeriesCard(item) {
+                var wrap = document.createElement('div');
+                wrap.className = 'art-item art-series-card';
+                wrap.setAttribute('role', 'button');
+                wrap.tabIndex = 0;
+                wrap.innerHTML =
+                    '<img src="' +
+                    escapeHtml(item.cover) +
+                    '" alt="' +
+                    escapeHtml(item.title) +
+                    '" loading="lazy">' +
+                    '<div style="position:absolute;bottom:0;background:rgba(0,0,0,0.85);color:#fff;width:100%;font-size:12px;padding:8px 6px;text-align:center;font-family:var(--font-head);">' +
+                    escapeHtml(item.title).toUpperCase() +
+                    '</div>';
+                var open = function () {
+                    openReader(item.id);
+                };
+                wrap.addEventListener('click', open);
+                wrap.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        open();
+                    }
+                });
+                return wrap;
+            }
+
+            function createSingleCard(item) {
+                var url = item.image || item.cover;
+                var wrap = document.createElement('div');
+                wrap.className = 'art-item';
+                wrap.innerHTML =
+                    '<img src="' +
+                    escapeHtml(url) +
+                    '" alt="' +
+                    escapeHtml(item.title) +
+                    '" loading="lazy">';
+                wrap.addEventListener('click', function () {
+                    openGallery([url], { title: item.title, subtitle: item.subtitle || '', info: item.info || '' }, 0);
+                });
+                return wrap;
+            }
+
+            function renderSection(container, items) {
+                if (!container) {
+                    return;
+                }
+                if (!items || !items.length) {
+                    container.innerHTML =
+                        '<div style="grid-column:1/-1;color:#666;font-style:italic;">Nothing here yet.</div>';
+                    return;
+                }
+                container.innerHTML = '';
+                items.forEach(function (item) {
+                    var type = item.type || 'stack';
+                    var el;
+                    if (type === 'series') {
+                        seriesById[item.id] = item;
+                        el = createSeriesCard(item);
+                    } else if (type === 'single') {
+                        el = createSingleCard(item);
+                    } else {
+                        el = createStackButton(item);
+                    }
+                    container.appendChild(el);
+                });
+            }
+
+            document.addEventListener('keydown', function (e) {
+                if (lightbox.style.display === 'flex') {
+                    if (e.key === 'ArrowLeft') {
+                        changePage(-1);
+                    }
+                    if (e.key === 'ArrowRight') {
+                        changePage(1);
+                    }
+                    if (e.key === 'Escape') {
+                        closeLightbox();
+                    }
+                }
+            });
+
+            lightbox.addEventListener('click', function (e) {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+
+            fetch('data/visual-work.json?v=' + Date.now())
+                .then(function (r) {
+                    return r.json();
+                })
+                .then(function (data) {
+                    (data.comics || []).forEach(function (item) {
+                        if (item.type === 'series') {
+                            seriesById[item.id] = item;
+                        }
+                    });
+                    renderSection(document.getElementById('comics-grid'), data.comics || []);
+                    renderSection(document.getElementById('illustration-grid'), data.illustration || []);
+                    renderSection(document.getElementById('graphic-design-grid'), data.graphicDesign || []);
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    var msg =
+                        '<div style="grid-column:1/-1;color:#ff6b6b;">Could not load visual work data.</div>';
+                    ['comics-grid', 'illustration-grid', 'graphic-design-grid'].forEach(function (id) {
+                        var el = document.getElementById(id);
+                        if (el) {
+                            el.innerHTML = msg;
+                        }
+                    });
+                });
         });
-
-        /* --- CLICK OUTSIDE TO CLOSE --- */
-        lightbox.addEventListener('click', function(e) {
-            if (e.target === lightbox) {
-                closeLightbox();
-            }
-        });
-
     </script>
 
 </body>

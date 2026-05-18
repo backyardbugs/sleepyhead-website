@@ -322,6 +322,119 @@ a.permalink:hover {
     padding: 5px 10px;
     border: 1px solid #333;
 }
+
+/* Project stacks (visual work) */
+.art-grid--stacks {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
+}
+
+.art-stack {
+    position: relative;
+    cursor: pointer;
+    min-height: 280px;
+    padding: 8px 12px 0 0;
+    border: none;
+    background: transparent;
+    text-align: left;
+    width: 100%;
+}
+
+.art-stack:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 4px;
+}
+
+.art-stack-layers {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    max-height: 340px;
+}
+
+.art-stack-layer {
+    position: absolute;
+    inset: 0;
+    border: 1px solid #333;
+    background: #111;
+    overflow: hidden;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.art-stack-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(100%);
+    transition: filter 0.35s ease;
+}
+
+.art-stack-layer--back1 {
+    transform: rotate(4deg) translate(10px, -8px);
+    z-index: 1;
+    opacity: 0.55;
+}
+
+.art-stack-layer--back2 {
+    transform: rotate(-3deg) translate(-8px, 6px);
+    z-index: 2;
+    opacity: 0.75;
+}
+
+.art-stack-layer--front {
+    z-index: 3;
+    transform: rotate(0deg);
+}
+
+.art-stack:hover .art-stack-layer--back1,
+.art-stack:focus-visible .art-stack-layer--back1 {
+    transform: rotate(7deg) translate(16px, -12px);
+}
+
+.art-stack:hover .art-stack-layer--back2,
+.art-stack:focus-visible .art-stack-layer--back2 {
+    transform: rotate(-5deg) translate(-14px, 10px);
+}
+
+.art-stack:hover .art-stack-layer img,
+.art-stack:focus-visible .art-stack-layer img {
+    filter: grayscale(0%);
+}
+
+.art-stack-meta {
+    margin-top: 14px;
+    padding-left: 2px;
+}
+
+.art-stack-title {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    color: #fff;
+    margin: 0 0 4px 0;
+}
+
+.art-stack-subtitle {
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0 0 6px 0;
+    line-height: 1.4;
+}
+
+.art-stack-count {
+    font-family: var(--font-head);
+    font-size: 0.72rem;
+    color: var(--accent-color);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.art-series-card .art-item img {
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+}
+
 /* --- READ MORE BUTTON --- */
 a.read-more-btn {
     display: inline-block;

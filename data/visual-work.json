@@ -1,11 +1,15 @@
 {
-  "_workflow": "1) Create a folder under visuals/<category>/<project-id>/ 2) Add cover.webp plus numbered images (01.webp, 02.webp…). 3) Add an entry below with matching paths. 4) git add, commit, push main — Neocities deploys automatically. Series comics (multi-page reader): type series + pages[]. Stacks: type stack + images[]. Singles: type single + image.",
+  "_workflow": "Folders under visuals/<category>/<project-id>/ with cover.webp + 01.webp, 02.webp…. Order = images[] in this file. tags[] enables future filters (flyers, music, etc.). Types: series (comic reader), stack (project deck), single. Run: python3 scripts/convert-high-press.py after adding PNGs to high-press.",
   "comics": [
     {
       "id": "greening",
       "type": "series",
       "title": "Greening",
       "info": "Winner of the AWP Intro Journals Award. Published in Tampa Review.",
+      "tags": [
+        "comics",
+        "award"
+      ],
       "cover": "comics/greening/greeningtitle.webp",
       "pages": [
         "comics/greening/greeningtitle.webp",
@@ -25,12 +29,35 @@
       "type": "stack",
       "title": "High Press",
       "subtitle": "Band branding, flyers, and release art",
+      "tags": [
+        "music",
+        "band",
+        "flyers",
+        "branding"
+      ],
       "cover": "visuals/graphic-design/high-press/cover.webp",
       "images": [
         "visuals/graphic-design/high-press/cover.webp",
         "visuals/graphic-design/high-press/01.webp",
         "visuals/graphic-design/high-press/02.webp",
-        "visuals/graphic-design/high-press/03.webp"
+        "visuals/graphic-design/high-press/03.webp",
+        "visuals/graphic-design/high-press/04.webp",
+        "visuals/graphic-design/high-press/05.webp",
+        "visuals/graphic-design/high-press/06.webp",
+        "visuals/graphic-design/high-press/07.webp",
+        "visuals/graphic-design/high-press/08.webp",
+        "visuals/graphic-design/high-press/09.webp",
+        "visuals/graphic-design/high-press/10.webp",
+        "visuals/graphic-design/high-press/11.webp",
+        "visuals/graphic-design/high-press/12.webp",
+        "visuals/graphic-design/high-press/13.webp",
+        "visuals/graphic-design/high-press/14.webp",
+        "visuals/graphic-design/high-press/15.webp",
+        "visuals/graphic-design/high-press/16.webp",
+        "visuals/graphic-design/high-press/17.webp",
+        "visuals/graphic-design/high-press/18.webp",
+        "visuals/graphic-design/high-press/19.webp",
+        "visuals/graphic-design/high-press/20.webp"
       ]
     }
   ]
