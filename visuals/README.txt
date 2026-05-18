@@ -19,7 +19,12 @@ Sorting = folder + JSON, not drag-and-drop on the site:
 
 Quick start (from repo root):
 
-  node scripts/visual-work-scaffold.js graphic-design high-press "High Press"
+  node scripts/visual-work-scaffold.js illustration sleepymemoir "Sleepy Memoir"
+
+After adding PNGs/JPGs and a cover.* file, convert to WebP:
+
+  python3 scripts/convert-visual-project.py illustration sleepymemoir "Sleepy Memoir"
+  python3 scripts/convert-visual-project.py graphic-design high-press "High Press"
 
 Drop images into the folder it creates, paste the JSON into data/visual-work.json,
 then:

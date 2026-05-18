@@ -1,5 +1,5 @@
 {
-  "_workflow": "Folders under visuals/<category>/<project-id>/ with cover.webp + 01.webp, 02.webp…. Order = images[] in this file. tags[] enables future filters (flyers, music, etc.). Types: series (comic reader), stack (project deck), single. Run: python3 scripts/convert-high-press.py after adding PNGs to high-press.",
+  "_workflow": "Folders under visuals/<category>/<project-id>/ with cover.* + other images. Run: python3 scripts/convert-visual-project.py <category> <project-id> \"Title\". Example: python3 scripts/convert-visual-project.py illustration sleepymemoir \"Sleepy Memoir\"",
   "comics": [
     {
       "id": "greening",
@@ -22,7 +22,49 @@
       ]
     }
   ],
-  "illustration": [],
+  "illustration": [
+    {
+      "id": "sleepymemoir",
+      "type": "stack",
+      "title": "Sleepy Memoir",
+      "subtitle": "",
+      "tags": [
+        "illustration"
+      ],
+      "cover": "visuals/illustration/sleepymemoir/cover.webp",
+      "images": [
+        "visuals/illustration/sleepymemoir/cover.webp",
+        "visuals/illustration/sleepymemoir/01.webp",
+        "visuals/illustration/sleepymemoir/02.webp",
+        "visuals/illustration/sleepymemoir/03.webp",
+        "visuals/illustration/sleepymemoir/04.webp",
+        "visuals/illustration/sleepymemoir/05.webp",
+        "visuals/illustration/sleepymemoir/06.webp",
+        "visuals/illustration/sleepymemoir/07.webp",
+        "visuals/illustration/sleepymemoir/08.webp",
+        "visuals/illustration/sleepymemoir/09.webp",
+        "visuals/illustration/sleepymemoir/10.webp",
+        "visuals/illustration/sleepymemoir/11.webp",
+        "visuals/illustration/sleepymemoir/12.webp",
+        "visuals/illustration/sleepymemoir/13.webp",
+        "visuals/illustration/sleepymemoir/14.webp",
+        "visuals/illustration/sleepymemoir/15.webp",
+        "visuals/illustration/sleepymemoir/16.webp",
+        "visuals/illustration/sleepymemoir/17.webp",
+        "visuals/illustration/sleepymemoir/18.webp",
+        "visuals/illustration/sleepymemoir/19.webp",
+        "visuals/illustration/sleepymemoir/20.webp",
+        "visuals/illustration/sleepymemoir/21.webp",
+        "visuals/illustration/sleepymemoir/22.webp",
+        "visuals/illustration/sleepymemoir/23.webp",
+        "visuals/illustration/sleepymemoir/24.webp",
+        "visuals/illustration/sleepymemoir/25.webp",
+        "visuals/illustration/sleepymemoir/26.webp",
+        "visuals/illustration/sleepymemoir/27.webp",
+        "visuals/illustration/sleepymemoir/28.webp"
+      ]
+    }
+  ],
   "graphicDesign": [
     {
       "id": "high-press",
