@@ -1,5 +1,5 @@
 {
-  "_workflow": "Folders under visuals/<category>/<project-id>/ with cover.* + other images. Run: python3 scripts/convert-visual-project.py <category> <project-id> \"Title\". Example: python3 scripts/convert-visual-project.py illustration sleepymemoir \"Sleepy Memoir\"",
+  "_workflow": "Raster stacks: python3 scripts/convert-visual-project.py <category> <id> \"Title\". GIF stacks (keep animated): python3 scripts/organize-visual-gifs.py illustration spirits \"Spirits\"",
   "comics": [
     {
       "id": "greening",
@@ -62,6 +62,27 @@
         "visuals/illustration/sleepymemoir/26.webp",
         "visuals/illustration/sleepymemoir/27.webp",
         "visuals/illustration/sleepymemoir/28.webp"
+      ]
+    },
+    {
+      "id": "spirits",
+      "type": "stack",
+      "title": "Spirits",
+      "subtitle": "",
+      "tags": [
+        "illustration",
+        "gif",
+        "animation"
+      ],
+      "media": "gif",
+      "cover": "visuals/illustration/spirits/cover.gif",
+      "images": [
+        "visuals/illustration/spirits/cover.gif",
+        "visuals/illustration/spirits/01.gif",
+        "visuals/illustration/spirits/02.gif",
+        "visuals/illustration/spirits/03.gif",
+        "visuals/illustration/spirits/04.gif",
+        "visuals/illustration/spirits/05.gif"
       ]
     }
   ],
