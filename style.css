@@ -403,16 +403,6 @@ a.permalink:hover {
     filter: grayscale(0%);
 }
 
-/* Animated GIF stacks — keep color and motion (no grayscale filter) */
-.art-stack--gif .art-stack-layer img {
-    filter: none;
-}
-
-.art-stack--gif:hover .art-stack-layer img,
-.art-stack--gif:focus-visible .art-stack-layer img {
-    filter: none;
-}
-
 .art-stack-meta {
     margin-top: 14px;
     padding-left: 2px;
