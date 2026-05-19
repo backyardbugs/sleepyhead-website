@@ -1,0 +1,5 @@
+{
+  "counterApiUrl": "",
+  "hammerAnimationMs": 900,
+  "_comment": "Deploy scripts/hammercookie-counter.gs as a Google Apps Script web app (Anyone), then paste the URL as counterApiUrl."
+}

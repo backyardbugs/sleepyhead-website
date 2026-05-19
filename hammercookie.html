@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hammer — Sleepyhead</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=7">
+    <style>
+        .hc-lead {
+            color: #aaa;
+            font-style: italic;
+            max-width: 36em;
+            margin-bottom: 2rem;
+        }
+        .hc-stage {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+        .hc-character-wrap {
+            flex: 0 0 auto;
+        }
+        .hc-character {
+            width: min(480px, 100%);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0d0d0d;
+            border: 1px solid var(--border-color);
+        }
+        .hc-character img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: grayscale(100%);
+            transition: filter 0.35s ease;
+        }
+        .hc-character-wrap:hover .hc-character img,
+        .hc-character-wrap:focus-within .hc-character img {
+            filter: grayscale(0%);
+        }
+        .hc-panel {
+            flex: 1 1 220px;
+            min-width: 200px;
+            border: 1px solid var(--border-color);
+            background: #1a1a1a;
+            padding: 22px 20px;
+        }
+        .hc-stat {
+            margin-bottom: 1.5rem;
+        }
+        .hc-stat-label {
+            font-family: var(--font-head);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888;
+            margin-bottom: 6px;
+        }
+        .hc-stat-value {
+            font-family: var(--font-head);
+            font-size: 2.2rem;
+            color: var(--accent-color);
+            line-height: 1;
+        }
+        .hc-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .hc-btn {
+            font-family: var(--font-head);
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 14px 22px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .hc-btn:hover:not(:disabled) {
+            background: var(--accent-color);
+            color: #111;
+        }
+        .hc-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        .hc-btn--hammer {
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+        .hc-status {
+            margin-top: 14px;
+            font-size: 0.85rem;
+            color: #666;
+            min-height: 1.2em;
+        }
+        .hc-status.err {
+            color: #ff6b6b;
+        }
+        .hc-setup {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 14px;
+            border: 1px dashed #555;
+            font-size: 0.85rem;
+            color: #999;
+            line-height: 1.5;
+        }
+        .hc-setup.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside id="sidebar-container"></aside>
+        <main>
+            <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">Bonk Tyler</h1>
+            <p class="hc-lead">Idle until you decide otherwise. Global bonk counter powered by visitors.</p>
+
+            <div class="hc-stage">
+                <div class="hc-character-wrap">
+                    <div class="hc-character">
+                        <img id="hc-sprite" src="hammercookie/idle.gif" alt="Tyler idle" width="640" height="640">
+                    </div>
+                </div>
+
+                <div class="hc-panel">
+                    <div class="hc-stat">
+                        <div class="hc-stat-label">Times bonked</div>
+                        <div class="hc-stat-value" id="hc-hammer-count">—</div>
+                    </div>
+                    <div class="hc-actions">
+                        <button type="button" class="hc-btn hc-btn--hammer" id="hc-hammer-btn">🔨 Hammer</button>
+                    </div>
+                    <p class="hc-status" id="hc-status" role="status"></p>
+                    <div class="hc-setup" id="hc-setup">
+                        Counter needs a Google Apps Script URL in <code>data/hammercookie-config.json</code>
+                        (<code>counterApiUrl</code>). Deploy <code>scripts/hammercookie-counter.gs</code> as a web app, then push.
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="loader.js?v=4"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var IDLE_SRC = "hammercookie/idle.gif";
+            var HAMMER_SRC = "hammercookie/hammer.gif";
+
+            var sprite = document.getElementById("hc-sprite");
+            var hammerBtn = document.getElementById("hc-hammer-btn");
+            var countEl = document.getElementById("hc-hammer-count");
+            var statusEl = document.getElementById("hc-status");
+            var setupEl = document.getElementById("hc-setup");
+
+            var apiUrl = "";
+            var hammerAnimMs = 900;
+            var playing = false;
+            var revertTimer = null;
+
+            function setStatus(msg, isErr) {
+                statusEl.textContent = msg || "";
+                statusEl.className = "hc-status" + (isErr ? " err" : "");
+            }
+
+            function jsonpRequest(url) {
+                return new Promise(function (resolve, reject) {
+                    var callbackName = "hcCb_" + Date.now() + "_" + Math.floor(Math.random() * 1e6);
+                    var script = document.createElement("script");
+                    var timer = setTimeout(function () {
+                        cleanup();
+                        reject(new Error("timeout"));
+                    }, 12000);
+
+                    function cleanup() {
+                        clearTimeout(timer);
+                        if (script.parentNode) {
+                            script.parentNode.removeChild(script);
+                        }
+                        try {
+                            delete window[callbackName];
+                        } catch (ignore) {
+                            window[callbackName] = undefined;
+                        }
+                    }
+
+                    window[callbackName] = function (data) {
+                        cleanup();
+                        resolve(data);
+                    };
+
+                    script.onerror = function () {
+                        cleanup();
+                        reject(new Error("network"));
+                    };
+
+                    script.src = url + (url.indexOf("?") >= 0 ? "&" : "?") + "callback=" + callbackName;
+                    document.body.appendChild(script);
+                });
+            }
+
+            function apiCall(params) {
+                if (!apiUrl) {
+                    return Promise.reject(new Error("no-api"));
+                }
+                var q = new URLSearchParams(params);
+                return jsonpRequest(apiUrl + "?" + q.toString());
+            }
+
+            function loadCount() {
+                return apiCall({ action: "get" })
+                    .then(function (data) {
+                        if (!data || !data.ok) {
+                            throw new Error((data && data.error) || "bad response");
+                        }
+                        countEl.textContent = String(data.hammer != null ? data.hammer : 0);
+                        setupEl.classList.remove("visible");
+                    })
+                    .catch(function () {
+                        countEl.textContent = "—";
+                        setupEl.classList.add("visible");
+                        setStatus("Could not load global counter.", true);
+                    });
+            }
+
+            function playHammerAnim() {
+                playing = true;
+                hammerBtn.disabled = true;
+                if (revertTimer) {
+                    clearTimeout(revertTimer);
+                }
+                sprite.src = HAMMER_SRC + "?t=" + Date.now();
+                revertTimer = setTimeout(function () {
+                    sprite.src = IDLE_SRC + "?t=" + Date.now();
+                    playing = false;
+                    hammerBtn.disabled = false;
+                }, hammerAnimMs);
+            }
+
+            hammerBtn.addEventListener("click", function () {
+                if (playing) {
+                    return;
+                }
+                playHammerAnim();
+                setStatus("");
+
+                if (!apiUrl) {
+                    setStatus("Bonk! (Connect counter API to count globally.)", false);
+                    return;
+                }
+
+                apiCall({ action: "hammer" })
+                    .then(function (data) {
+                        if (!data || !data.ok) {
+                            throw new Error((data && data.error) || "failed");
+                        }
+                        countEl.textContent = String(data.hammer != null ? data.hammer : 0);
+                    })
+                    .catch(function () {
+                        setStatus("Bonk animation played, but counter did not update.", true);
+                    });
+            });
+
+            fetch("data/hammercookie-config.json?v=" + Date.now())
+                .then(function (r) {
+                    return r.json();
+                })
+                .then(function (cfg) {
+                    apiUrl = (cfg.counterApiUrl || "").trim();
+                    if (cfg.hammerAnimationMs) {
+                        hammerAnimMs = Number(cfg.hammerAnimationMs) || hammerAnimMs;
+                    }
+                    if (!apiUrl) {
+                        setupEl.classList.add("visible");
+                        countEl.textContent = "—";
+                        return;
+                    }
+                    return loadCount();
+                })
+                .catch(function () {
+                    setupEl.classList.add("visible");
+                    setStatus("Could not load config.", true);
+                });
+        });
+    </script>
+</body>
+</html>
