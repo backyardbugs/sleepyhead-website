@@ -70,7 +70,9 @@
         document.addEventListener("DOMContentLoaded", function () {
             var IDLE_SRC = "hammercookie/idle4.gif?v=2";
             var HAMMER_SRC = "hammercookie/hammer5.gif?v=2";
-            var HAMMER_MS = 3200;
+            // Note: <img> GIFs loop based on how the file was exported; the browser can't force "play once".
+            // We swap back to idle after one full hammer animation duration.
+            var HAMMER_MS = 1250;
 
             var sprite = document.getElementById("hc-sprite");
             var hammerBtn = document.getElementById("hc-hammer-btn");
