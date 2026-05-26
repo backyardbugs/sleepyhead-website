@@ -18,29 +18,18 @@
             margin-top: 1rem;
         }
         .hc-character {
-            position: relative;
             width: min(480px, 100%);
             aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: var(--bg-color);
         }
-        .hc-character img,
-        .hc-character video {
-            position: absolute;
-            inset: 0;
+        .hc-character img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             display: block;
-        }
-        .hc-character video {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .hc-character video.is-playing {
-            opacity: 1;
-        }
-        .hc-character img.is-hidden {
-            visibility: hidden;
         }
         .hc-hammer-btn {
             flex: 0 0 auto;
@@ -67,14 +56,10 @@
         <main>
             <div class="hc-stage">
                 <div class="hc-character">
-                    <img id="hc-idle" src="hammercookie/idle4.gif?v=3" alt="" width="640" height="640">
-                    <video id="hc-hammer" playsinline muted preload="auto">
-                        <source src="hammercookie/dream2.webm?v=1" type="video/webm">
-                        <source src="hammercookie/Dream%202.mov?v=1" type="video/quicktime">
-                    </video>
+                    <img id="hc-sprite" src="hammercookie/idle4.gif?v=4" alt="" width="640" height="640">
                 </div>
                 <button type="button" class="hc-hammer-btn" id="hc-hammer-btn" aria-label="Hammer">
-                    <img src="hammercookie/hammer.png?v=3" alt="">
+                    <img src="hammercookie/hammer.png?v=4" alt="">
                 </button>
             </div>
         </main>
@@ -83,24 +68,19 @@
     <script src="loader.js?v=4"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var IDLE_SRC = "hammercookie/idle4.gif?v=3";
+            var IDLE_SRC = "hammercookie/idle4.gif?v=4";
+            var HAMMER_SRC = "hammercookie/Dream%208.gif?v=4";
+            var HAMMER_MS = 1000;
 
-            var idleEl = document.getElementById("hc-idle");
-            var hammerVideo = document.getElementById("hc-hammer");
+            var sprite = document.getElementById("hc-sprite");
             var hammerBtn = document.getElementById("hc-hammer-btn");
             var playing = false;
+            var revertTimer = null;
 
-            hammerVideo.loop = false;
+            new Image().src = HAMMER_SRC;
 
-            function restartIdle() {
-                idleEl.src = IDLE_SRC + "&t=" + Date.now();
-            }
-
-            function finishHammer() {
-                hammerVideo.pause();
-                hammerVideo.classList.remove("is-playing");
-                idleEl.classList.remove("is-hidden");
-                restartIdle();
+            function returnToIdle() {
+                sprite.src = IDLE_SRC + "&t=" + Date.now();
                 playing = false;
                 hammerBtn.disabled = false;
             }
@@ -108,18 +88,12 @@
             function playHammerAnim() {
                 playing = true;
                 hammerBtn.disabled = true;
-                idleEl.classList.add("is-hidden");
-                hammerVideo.classList.add("is-playing");
-                hammerVideo.currentTime = 0;
-                var playPromise = hammerVideo.play();
-                if (playPromise && playPromise.catch) {
-                    playPromise.catch(function () {
-                        finishHammer();
-                    });
+                if (revertTimer) {
+                    clearTimeout(revertTimer);
                 }
+                sprite.src = HAMMER_SRC + "&t=" + Date.now();
+                revertTimer = setTimeout(returnToIdle, HAMMER_MS);
             }
-
-            hammerVideo.addEventListener("ended", finishHammer);
 
             hammerBtn.addEventListener("pointerdown", function (e) {
                 e.preventDefault();
