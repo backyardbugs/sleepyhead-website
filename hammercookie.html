@@ -18,18 +18,29 @@
             margin-top: 1rem;
         }
         .hc-character {
+            position: relative;
             width: min(480px, 100%);
             aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background: var(--bg-color);
         }
-        .hc-character img {
+        .hc-character img,
+        .hc-character video {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: contain;
             display: block;
+        }
+        .hc-character video {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .hc-character video.is-playing {
+            opacity: 1;
+        }
+        .hc-character img.is-hidden {
+            visibility: hidden;
         }
         .hc-hammer-btn {
             flex: 0 0 auto;
@@ -56,10 +67,14 @@
         <main>
             <div class="hc-stage">
                 <div class="hc-character">
-                    <img id="hc-sprite" src="hammercookie/idle4.gif?v=2" alt="" width="640" height="640">
+                    <img id="hc-idle" src="hammercookie/idle4.gif?v=3" alt="" width="640" height="640">
+                    <video id="hc-hammer" playsinline muted preload="auto">
+                        <source src="hammercookie/dream2.webm?v=1" type="video/webm">
+                        <source src="hammercookie/Dream%202.mov?v=1" type="video/quicktime">
+                    </video>
                 </div>
                 <button type="button" class="hc-hammer-btn" id="hc-hammer-btn" aria-label="Hammer">
-                    <img src="hammercookie/hammer.png?v=2" alt="">
+                    <img src="hammercookie/hammer.png?v=3" alt="">
                 </button>
             </div>
         </main>
@@ -68,37 +83,53 @@
     <script src="loader.js?v=4"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var IDLE_SRC = "hammercookie/idle4.gif?v=2";
-            var HAMMER_SRC = "hammercookie/hammer5.gif?v=2";
-            // Note: <img> GIFs loop based on how the file was exported; the browser can't force "play once".
-            // We swap back to idle after one full hammer animation duration.
-            var HAMMER_MS = 1250;
+            var IDLE_SRC = "hammercookie/idle4.gif?v=3";
 
-            var sprite = document.getElementById("hc-sprite");
+            var idleEl = document.getElementById("hc-idle");
+            var hammerVideo = document.getElementById("hc-hammer");
             var hammerBtn = document.getElementById("hc-hammer-btn");
             var playing = false;
-            var revertTimer = null;
 
-            new Image().src = HAMMER_SRC;
+            hammerVideo.loop = false;
+
+            function restartIdle() {
+                idleEl.src = IDLE_SRC + "&t=" + Date.now();
+            }
+
+            function finishHammer() {
+                hammerVideo.pause();
+                hammerVideo.classList.remove("is-playing");
+                idleEl.classList.remove("is-hidden");
+                restartIdle();
+                playing = false;
+                hammerBtn.disabled = false;
+            }
 
             function playHammerAnim() {
                 playing = true;
                 hammerBtn.disabled = true;
-                if (revertTimer) {
-                    clearTimeout(revertTimer);
+                idleEl.classList.add("is-hidden");
+                hammerVideo.classList.add("is-playing");
+                hammerVideo.currentTime = 0;
+                var playPromise = hammerVideo.play();
+                if (playPromise && playPromise.catch) {
+                    playPromise.catch(function () {
+                        finishHammer();
+                    });
                 }
-                sprite.src = HAMMER_SRC + "&t=" + Date.now();
-                revertTimer = setTimeout(function () {
-                    sprite.src = IDLE_SRC + "&t=" + Date.now();
-                    playing = false;
-                    hammerBtn.disabled = false;
-                }, HAMMER_MS);
             }
 
-            hammerBtn.addEventListener("click", function () {
+            hammerVideo.addEventListener("ended", finishHammer);
+
+            hammerBtn.addEventListener("pointerdown", function (e) {
+                e.preventDefault();
                 if (!playing) {
                     playHammerAnim();
                 }
+            });
+
+            hammerBtn.addEventListener("click", function (e) {
+                e.preventDefault();
             });
         });
     </script>
