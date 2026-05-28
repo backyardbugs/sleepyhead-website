@@ -1,6 +1,7 @@
 /* --- blog.js --- */
 var posts = [
     // Format: ["File Name", "Title", "Date", ["Tag1", "Tag2"]]
+    ["update-2026-05-28", "Update — May 2026", "2026-05-28", ["journal", "music", "health", "dev"]],
     ["strongt", "Strong T", "2026-03-22", ["journal", "health", "music", "reading"]],
     ["auditingmyderegulatedlife", "Auditing my deregulated life", "2026-01-21", ["journal", "music", "health", "productivity"]],
     ["2025yearly", "2025 Yearly Review", "2026-01-01", ["journal", "writing", "yearly", "health"]],
