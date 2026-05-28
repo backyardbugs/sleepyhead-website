@@ -99,7 +99,7 @@ function fetchUplink(year, dataVar) {
             }
 
             return [dateStr, words, gym, finalNote];
-        });
+        }).filter(entry => !isExcludedLogNote(entry[3]));
 
         // Merge & Update
         if (window[dataVar]) {
@@ -126,6 +126,18 @@ function fetchUplink(year, dataVar) {
 
 /* --- MICROBLOG HELPERS (sidebar + archive; matches Captain's Log dog-ear rules) --- */
 
+// Notes removed from microblog but may still exist in Cloud Uplink until cleared in the Sheet.
+const EXCLUDED_LOG_NOTES = [
+    /^start of 2026\.?$/i,
+    /^i spent way too much time working on the website today\.?$/i
+];
+
+function isExcludedLogNote(text) {
+    const n = (text || "").trim();
+    if (!n) return false;
+    return EXCLUDED_LOG_NOTES.some((rx) => rx.test(n));
+}
+
 function isGymOnlyNote(text) {
     const t = (text || "").trim();
     if (!t) return false;
@@ -135,6 +147,7 @@ function isGymOnlyNote(text) {
 function isMicroblogEntry(entry) {
     const note = (entry[3] || "").trim();
     if (!note || note.length <= 3) return false;
+    if (isExcludedLogNote(note)) return false;
     if (entry[2] && isGymOnlyNote(note)) return false;
     return true;
 }

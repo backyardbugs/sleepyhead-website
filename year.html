@@ -399,6 +399,13 @@
                 return /^Gym(\s*\([^)]+\))?\.?$/i.test(t);
             }
 
+            function isExcludedLogNote(text) {
+                const n = (text || "").trim();
+                if (!n) return false;
+                return /^start of 2026\.?$/i.test(n)
+                    || /^i spent way too much time working on the website today\.?$/i.test(n);
+            }
+
             activeHistory.forEach(entry => {
                 const date = entry[0];
                 const words = entry[1];
@@ -414,7 +421,7 @@
                 
                 dayMap[date].words += words;
                 if (gym) dayMap[date].gym = true;
-                if (note && !(gym && isGymOnlyNote(note))) {
+                if (note && !isExcludedLogNote(note) && !(gym && isGymOnlyNote(note))) {
                     dayMap[date].notes.push(note);
                 }
             });
