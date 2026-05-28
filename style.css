@@ -118,7 +118,7 @@ img {
     --accent-color: #7DB87D;   /* Muted sage green */
     --border-color: #333333;   /* Dark Grey for lines */
     --font-head: 'DM Sans', system-ui, sans-serif;
-    --font-body: 'Fraunces', Georgia, serif;
+    --font-body: 'Libre Baskerville', Georgia, serif;
 }
 
 body {
