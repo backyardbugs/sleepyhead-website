@@ -7,12 +7,111 @@ img {
     display: block; /* Removes weird gaps below images */
 }
 
-article video {
-    max-width: 100%;
+/* Blog post media (sized figures, carousel, video) */
+.blog-media {
+    margin: 1.5em 0;
+}
+
+.blog-media img {
+    width: 100%;
     height: auto;
     display: block;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.blog-media--portrait {
+    max-width: 380px;
+}
+
+.blog-carousel {
+    position: relative;
+    max-width: 520px;
+    margin: 1.5em 0;
+    font-family: var(--font-head);
+}
+
+.blog-carousel-viewport {
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: #1a1a1a;
+}
+
+.blog-carousel-track {
+    display: flex;
+    transition: transform 0.35s ease;
+}
+
+.blog-carousel-slide {
+    flex: 0 0 100%;
+    min-width: 100%;
+}
+
+.blog-carousel-slide img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.blog-carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.75);
+    color: var(--accent-color);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.blog-carousel-btn:hover {
+    border-color: var(--accent-color);
+    color: #fff;
+}
+
+.blog-carousel-prev { left: 8px; }
+.blog-carousel-next { right: 8px; }
+
+.blog-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.blog-carousel-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #444;
+    cursor: pointer;
+}
+
+.blog-carousel-dot.is-active {
+    background: var(--accent-color);
+}
+
+.blog-video,
+article video.blog-video {
+    display: block;
+    width: min(100%, 720px);
+    max-width: 720px;
+    height: auto;
     margin: 1.5em 0;
     border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background: #000;
 }
 
 /* 2. THE BASICS (The Palette) */

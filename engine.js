@@ -149,11 +149,62 @@ function fetchPostContent(filename, isFeedView) {
                 }
             }
 
-            document.getElementById(targetId).innerHTML = finalHTML;
+            var contentEl = document.getElementById(targetId);
+            contentEl.innerHTML = finalHTML;
+            enhanceBlogMedia(contentEl);
         })
         .catch(error => {
             document.getElementById(targetId).innerHTML = "<p style='color:red'>Error loading " + filename + ".md</p>";
         });
+}
+
+function enhanceBlogMedia(container) {
+    if (!container) return;
+    container.querySelectorAll("[data-blog-carousel]").forEach(initBlogCarousel);
+}
+
+function initBlogCarousel(root) {
+    var track = root.querySelector(".blog-carousel-track");
+    var slides = root.querySelectorAll(".blog-carousel-slide");
+    var prevBtn = root.querySelector(".blog-carousel-prev");
+    var nextBtn = root.querySelector(".blog-carousel-next");
+    var dotsHost = root.querySelector(".blog-carousel-dots");
+    if (!track || !slides.length || !dotsHost) return;
+
+    var index = 0;
+
+    slides.forEach(function(_, i) {
+        var dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "blog-carousel-dot" + (i === 0 ? " is-active" : "");
+        dot.setAttribute("role", "tab");
+        dot.setAttribute("aria-label", "Screenshot " + (i + 1));
+        dot.addEventListener("click", function() {
+            goTo(i);
+        });
+        dotsHost.appendChild(dot);
+    });
+
+    var dots = dotsHost.querySelectorAll(".blog-carousel-dot");
+
+    function goTo(i) {
+        index = (i + slides.length) % slides.length;
+        track.style.transform = "translateX(-" + (index * 100) + "%)";
+        dots.forEach(function(dot, j) {
+            dot.classList.toggle("is-active", j === index);
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", function() {
+            goTo(index - 1);
+        });
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener("click", function() {
+            goTo(index + 1);
+        });
+    }
 }
 
 // HELPER: Injects anonymous comments dynamically
