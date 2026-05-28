@@ -193,34 +193,16 @@ function buildMicroblogItemHTML(item, options) {
 }
 
 function renderStatusBox(historyData) {
-    if (!historyData || historyData.length === 0) return;
-
-    const updates = getMicroblogUpdates(historyData);
-    const recent = updates.slice(-3).reverse();
-
-    if (updates.length === 0) return;
-
-    let html = "";
-    recent.forEach(item => {
-        html += buildMicroblogItemHTML(item, { includeYear: false, large: false });
-    });
-
-    html += `
-        <p class="microblog-view-all">
-            <a href="microblog.html">View all →</a>
-        </p>
-    `;
-
-    const box = document.getElementById('status-box');
-    if (box) {
-        box.innerHTML = `<div class="microblog-sidebar">${html}</div>`;
-        box.style.display = "block";
-    }
+    // Microblog hidden for now (re-enable by restoring the previous body)
+    var box = document.getElementById('status-box');
+    if (box) box.style.display = 'none';
 }
 
 function renderMicroblogArchive(year) {
     const archive = document.getElementById("microblog-archive");
     if (!archive) return;
+    archive.style.display = "none";
+    return;
 
     const dataVar = "history" + year;
     const historyData = window[dataVar];
