@@ -930,3 +930,74 @@ pre.poem {
     opacity: 1;
     transform: translateY(0) scale(1);
 }
+
+/* --- MICROBLOG (sidebar + archive) --- */
+.microblog-sidebar {
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.microblog-item {
+    margin-bottom: 12px;
+    font-family: var(--font-head);
+}
+
+.microblog-meta {
+    margin-bottom: 2px;
+}
+
+.microblog-chevron {
+    color: var(--accent-color);
+    font-size: 0.7rem;
+    opacity: 0.6;
+    margin-right: 2px;
+}
+
+.microblog-date {
+    color: #444;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.microblog-body {
+    color: #777;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    padding-left: 12px;
+    border-left: 1px solid #222;
+    white-space: pre-wrap;
+}
+
+.microblog-body--large {
+    font-size: 0.95rem;
+    color: #999;
+    line-height: 1.55;
+    margin-bottom: 0;
+}
+
+#microblog-archive .microblog-item {
+    margin-bottom: 28px;
+}
+
+.microblog-view-all {
+    margin-top: 12px;
+    margin-bottom: 0;
+    font-family: var(--font-head);
+    font-size: 0.75rem;
+}
+
+.microblog-view-all a {
+    color: #444;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.microblog-view-all a:hover {
+    color: var(--accent-color);
+}
+
+.microblog-empty {
+    color: #666;
+    font-family: var(--font-head);
+}

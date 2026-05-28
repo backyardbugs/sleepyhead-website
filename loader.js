@@ -107,6 +107,10 @@ function fetchUplink(year, dataVar) {
             window[dataVar].sort((a, b) => new Date(a[0]) - new Date(b[0]));
             renderStatusBox(window[dataVar]); // Re-render sidebar
             if (typeof generateGrid === 'function') generateGrid(); // Re-render grid
+            const uplinkYear = parseInt(String(dataVar).replace('history', ''), 10);
+            if (typeof renderMicroblogArchive === 'function' && !isNaN(uplinkYear)) {
+                renderMicroblogArchive(uplinkYear);
+            }
         }
     };
 
@@ -120,66 +124,112 @@ function fetchUplink(year, dataVar) {
     document.body.appendChild(script);
 }
 
+/* --- MICROBLOG HELPERS (sidebar + archive; matches Captain's Log dog-ear rules) --- */
+
+function isGymOnlyNote(text) {
+    const t = (text || "").trim();
+    if (!t) return false;
+    return /^Gym(\s*\([^)]+\))?\.?$/i.test(t);
+}
+
+function isMicroblogEntry(entry) {
+    const note = (entry[3] || "").trim();
+    if (!note || note.length <= 3) return false;
+    if (entry[2] && isGymOnlyNote(note)) return false;
+    return true;
+}
+
+function getMicroblogUpdates(historyData) {
+    if (!historyData) return [];
+    return historyData.filter(isMicroblogEntry);
+}
+
+function escapeHtml(text) {
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
+function formatMicroblogDate(isoDate, includeYear) {
+    const parts = isoDate.split("-");
+    const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const monthIndex = parseInt(parts[1], 10) - 1;
+    const day = parts[2];
+    const label = `${day} ${monthNames[monthIndex]}`;
+    return includeYear ? `${label} ${parts[0]}` : label;
+}
+
+function buildMicroblogItemHTML(item, options) {
+    const opts = options || {};
+    const dateStr = item[0];
+    const note = item[3];
+    const niceDate = formatMicroblogDate(dateStr, !!opts.includeYear);
+    const bodyClass = opts.large ? "microblog-body microblog-body--large" : "microblog-body";
+
+    return `
+        <article class="microblog-item">
+            <div class="microblog-meta">
+                <span class="microblog-chevron">&gt;</span>
+                <span class="microblog-date">${niceDate}</span>
+            </div>
+            <div class="${bodyClass}">${escapeHtml(note)}</div>
+        </article>
+    `;
+}
+
 function renderStatusBox(historyData) {
     if (!historyData || historyData.length === 0) return;
 
-    // Filter for entries that have a "Note" (index 3)
-    // AND filter out boring generic logs like just "Gym" (length <= 3)
-    var updates = historyData.filter(entry => {
-        var note = entry[3];
-        return note && note.length > 3; 
+    const updates = getMicroblogUpdates(historyData);
+    const recent = updates.slice(-3).reverse();
+
+    if (updates.length === 0) return;
+
+    let html = "";
+    recent.forEach(item => {
+        html += buildMicroblogItemHTML(item, { includeYear: false, large: false });
     });
 
-    // Get the last 3 interesting updates
-    var recent = updates.slice(-3).reverse();
+    html += `
+        <p class="microblog-view-all">
+            <a href="microblog.html">View all →</a>
+        </p>
+    `;
 
-    if (recent.length > 0) {
-        var html = "";
-        
-        recent.forEach(item => {
-            var dateStr = item[0]; // "2026-02-06"
-            var note = item[3];
-
-            // Fix Date Parsing (handle timezones safely by splitting string)
-            // "2026-02-06" -> Parts [2026, 02, 06]
-            var parts = dateStr.split("-");
-            var monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-            var monthIndex = parseInt(parts[1]) - 1;
-            var day = parts[2];
-            var niceDate = `${day} ${monthNames[monthIndex]}`;
-
-            html += `
-                <div style="margin-bottom: 12px; font-family: var(--font-head);">
-                    
-                    <div style="margin-bottom: 2px;">
-                        <span style="color: var(--accent-color); font-size: 0.7rem; opacity: 0.6;">></span>
-                        <span style="
-                            color: #444; /* Very dark grey - recedes into background */
-                            font-size: 0.65rem; 
-                            text-transform: uppercase; 
-                            letter-spacing: 1px;
-                        ">${niceDate}</span>
-                    </div>
-
-                    <div style="
-                        color: #777; /* The Hierarchy Fix: Dark Grey Text */
-                        font-size: 0.75rem; 
-                        line-height: 1.3;
-                        padding-left: 12px; 
-                        border-left: 1px solid #222; /* Almost invisible guide line */
-                    ">
-                        ${note}
-                    </div>
-                </div>
-            `;
-        });
-        
-        var box = document.getElementById('status-box');
-        if (box) {
-            box.innerHTML = `<div style="margin-top: 30px; margin-bottom: 40px;">${html}</div>`;
-            box.style.display = "block";
-        }
+    const box = document.getElementById('status-box');
+    if (box) {
+        box.innerHTML = `<div class="microblog-sidebar">${html}</div>`;
+        box.style.display = "block";
     }
+}
+
+function renderMicroblogArchive(year) {
+    const archive = document.getElementById("microblog-archive");
+    if (!archive) return;
+
+    const dataVar = "history" + year;
+    const historyData = window[dataVar];
+    if (!historyData) {
+        archive.innerHTML = "<p class=\"microblog-empty\">No log data for this year.</p>";
+        return;
+    }
+
+    const updates = getMicroblogUpdates(historyData)
+        .slice()
+        .sort((a, b) => b[0].localeCompare(a[0]));
+
+    if (updates.length === 0) {
+        archive.innerHTML = "<p class=\"microblog-empty\">No microblog entries for this year yet.</p>";
+        return;
+    }
+
+    let html = "";
+    updates.forEach(item => {
+        html += buildMicroblogItemHTML(item, { includeYear: true, large: true });
+    });
+    archive.innerHTML = html;
 }
 
 function loadNowPlaying() {

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microblog - Sleepyhead</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css?v=4">
+
+    <style>
+        .microblog-intro {
+            color: #666;
+            font-family: var(--font-head);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            max-width: 42rem;
+        }
+
+        .year-picker {
+            font-family: var(--font-head);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .year-picker a {
+            margin-right: 10px;
+        }
+
+        #microblog-archive {
+            max-width: 42rem;
+        }
+
+        #microblog-archive .microblog-meta {
+            margin-bottom: 6px;
+        }
+
+        #microblog-archive .microblog-date {
+            color: #555;
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <aside id="sidebar-container"></aside>
+
+        <main>
+            <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">
+                Microblog
+            </h1>
+
+            <p class="microblog-intro">
+                Short status notes from the Captain's Log — not workout-only labels.
+            </p>
+
+            <div class="year-picker">
+                <span style="color:#666; margin-right:10px;">YEAR:</span>
+                <a href="?y=2025" id="year-link-2025">[ 2025 ]</a>
+                <a href="?y=2026" id="year-link-2026">[ 2026 ]</a>
+            </div>
+
+            <div id="microblog-archive">
+                <p class="microblog-empty">Loading…</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        const currentYear = parseInt(params.get('y'), 10) || new Date().getFullYear();
+        const stamp = Date.now();
+        const scripts = ["data/2025.js", "data/2026.js", "loader.js"];
+        let loaded = 0;
+
+        document.title = `Microblog ${currentYear} - Sleepyhead`;
+
+        [2025, 2026].forEach(function(y) {
+            const link = document.getElementById("year-link-" + y);
+            if (link && y === currentYear) {
+                link.style.color = "var(--accent-color)";
+            }
+        });
+
+        function initMicroblogPage() {
+            const dataVar = "history" + currentYear;
+            if (window[dataVar]) {
+                fetchUplink(currentYear, dataVar);
+                renderMicroblogArchive(currentYear);
+            } else {
+                const archive = document.getElementById("microblog-archive");
+                if (archive) {
+                    archive.innerHTML = "<p class=\"microblog-empty\">No log data for " + currentYear + ".</p>";
+                }
+            }
+        }
+
+        scripts.forEach(function(src) {
+            const s = document.createElement("script");
+            s.src = src + "?v=" + stamp;
+            s.onload = function() {
+                loaded++;
+                if (loaded === scripts.length) {
+                    initMicroblogPage();
+                }
+            };
+            document.body.appendChild(s);
+        });
+    })();
+    </script>
+</body>
+</html>
