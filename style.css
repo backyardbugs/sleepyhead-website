@@ -115,10 +115,10 @@ img {
 :root {
     --bg-color: #111111;       /* Deep Black/Charcoal */
     --text-color: #e0e0e0;     /* Off-White/Silver */
-    --accent-color: #C5A059;   /* Muted Gold */
+    --accent-color: #7DB87D;   /* Muted sage green */
     --border-color: #333333;   /* Dark Grey for lines */
-    --font-head: 'Courier Prime', monospace;
-    --font-body: 'Lora', serif;
+    --font-head: 'DM Sans', system-ui, sans-serif;
+    --font-body: 'Fraunces', Georgia, serif;
 }
 
 body {
@@ -165,9 +165,10 @@ aside {
 
 aside h1 {
     font-family: var(--font-head);
-    font-size: 1.2rem;
+    font-size: 1.15rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.06em;
     margin-bottom: 0.5rem;
     color: #fff;
 }
@@ -563,7 +564,7 @@ a.read-more-btn:hover {
 /* The Preformatted Poem Fix */
 pre.poem {
     /* 1. RESET THE DEFAULTS */
-    font-family: var(--font-body); /* Forces Lora font */
+    font-family: var(--font-body);
     font-size: 1rem;               /* Matches your body text size */
     white-space: pre-wrap;         /* Wraps text if it hits the edge of the screen */
     
@@ -851,14 +852,14 @@ pre.poem {
 }
 
 .gear-type {
-    font-family: 'Lora', serif; 
+    font-family: var(--font-body);
     font-size: 0.75rem;
     color: #888;
     display: block;
 }
 
 .gear-caption {
-    font-family: 'Lora', serif;
+    font-family: var(--font-body);
     font-size: 0.75rem;
     color: #aaa;
     margin-top: 10px;
@@ -896,7 +897,7 @@ pre.poem {
 /* Hover Effect: Lift up, straighten slightly, glow */
 .tape-item:hover {
     transform: scale(1.05) rotate(0deg) !important; /* Override the random rotation */
-    box-shadow: 0 10px 25px rgba(197, 160, 89, 0.15);
+    box-shadow: 0 10px 25px rgba(125, 184, 125, 0.15);
     border-color: #555;
     z-index: 10;
 }
@@ -914,7 +915,7 @@ pre.poem {
     align-items: center;
     text-align: center;
     padding: 5px;
-    font-family: 'Courier Prime', monospace; 
+    font-family: var(--font-head);
     box-shadow: inset 0 0 5px rgba(0,0,0,0.1); /* Inner paper shadow */
     position: relative;
     overflow: hidden;
