@@ -29,7 +29,7 @@ var history2026 = [
     ["2026-02-14", 0, true, "Gym"],
     ["2026-02-14", 0, true, "Gym (2nd)"],
     ["2026-02-16", 0, true, "Gym"],
-    ["2026-02-17", 188, true, "Not much, but something."],
+    ["2026-02-17", 188, true, "Not much writing, but something."],
     ["2026-02-17", 0, true, "Gym (2nd)"],
     ["2026-02-19", 0, true, "Gym"],
     ["2026-02-21", 0, true, "Gym"],
@@ -74,6 +74,12 @@ var history2026 = [
     ["2026-05-08", 0, true, "Gym"],
     ["2026-05-10", 1811, false, ""],
     ["2026-05-12", 641, false, ""],
+    ["2026-05-15", 0, true, "Gym"],
+    ["2026-05-17", 0, true, "Gym"],
+    ["2026-05-18", 0, true, "Gym"],
+    ["2026-05-19", 0, true, "Gym"],
+    ["2026-05-23", 0, true, "Gym"],
+    ["2026-05-25", 400, true, "Gym"],
 ];
 
 const books2026 = [
