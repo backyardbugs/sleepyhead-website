@@ -1138,23 +1138,3 @@ html.muji-grid aside,
 html.muji-grid main {
     background: transparent;
 }
-
-html.muji-grid::after {
-    content: 'MUJI GRID PREVIEW — muji-init.js MUJI_GRID_ENABLED = false to revert';
-    position: fixed;
-    bottom: 12px;
-    right: 12px;
-    z-index: 10000;
-    font-family: var(--font-head);
-    font-size: 0.65rem;
-    letter-spacing: 0.03em;
-    color: #888;
-    background: rgba(17, 17, 17, 0.92);
-    border: 1px solid #333;
-    padding: 6px 10px;
-    border-radius: 3px;
-    pointer-events: none;
-    max-width: 220px;
-    line-height: 1.35;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-}
