@@ -1119,22 +1119,14 @@ pre.poem {
 
 html.muji-grid {
     --muji-cell: 20px;
-    --muji-block: calc(var(--muji-cell) * 5);
     --muji-line: rgba(255, 255, 255, 0.1);
-    --muji-line-major: rgba(255, 255, 255, 0.22);
 
     min-height: 100%;
     background-color: #111111;
     background-image:
-        linear-gradient(var(--muji-line-major) 2px, transparent 2px),
-        linear-gradient(90deg, var(--muji-line-major) 2px, transparent 2px),
         linear-gradient(var(--muji-line) 1px, transparent 1px),
         linear-gradient(90deg, var(--muji-line) 1px, transparent 1px);
-    background-size:
-        var(--muji-block) var(--muji-block),
-        var(--muji-block) var(--muji-block),
-        var(--muji-cell) var(--muji-cell),
-        var(--muji-cell) var(--muji-cell);
+    background-size: var(--muji-cell) var(--muji-cell);
     background-attachment: fixed;
 }
 
