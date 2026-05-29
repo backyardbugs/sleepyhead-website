@@ -1118,7 +1118,7 @@ pre.poem {
    ============================================================ */
 
 html.muji-grid {
-    --muji-cell: 56px;
+    --muji-cell: 20px;
     --muji-block: calc(var(--muji-cell) * 5);
     --muji-line: rgba(255, 255, 255, 0.1);
     --muji-line-major: rgba(255, 255, 255, 0.22);
