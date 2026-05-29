@@ -1113,19 +1113,18 @@ pre.poem {
 }
 
 /* ============================================================
-   MUJI GRID PAPER PREVIEW — delete this block to revert fully
+   MUJI GRID PREVIEW — white grid on dark theme (no palette swap)
    Toggle off: muji-init.js → MUJI_GRID_ENABLED = false
    ============================================================ */
 
 html.muji-grid {
     --muji-cell: 56px;
     --muji-block: calc(var(--muji-cell) * 5);
-    --muji-paper: #f4f1e8;
-    --muji-line: rgba(42, 39, 36, 0.42);
-    --muji-line-major: rgba(42, 39, 36, 0.68);
+    --muji-line: rgba(255, 255, 255, 0.1);
+    --muji-line-major: rgba(255, 255, 255, 0.22);
 
     min-height: 100%;
-    background-color: var(--muji-paper);
+    background-color: #111111;
     background-image:
         linear-gradient(var(--muji-line-major) 2px, transparent 2px),
         linear-gradient(90deg, var(--muji-line-major) 2px, transparent 2px),
@@ -1140,127 +1139,12 @@ html.muji-grid {
 }
 
 html.muji-grid body {
-    --bg-color: transparent;
-    --text-color: #2a2724;
-    --border-color: #b8b4aa;
-    --accent-color: #4a7d4e;
-    color: var(--text-color);
     background: transparent;
 }
 
-html.muji-grid aside {
-    background: transparent;
-    border-right-color: var(--border-color);
-}
-
-html.muji-grid aside h1,
-html.muji-grid h1,
-html.muji-grid h2,
-html.muji-grid .post-title,
-html.muji-grid h2.post-title {
-    color: #1a1816;
-    border-bottom-color: var(--border-color);
-}
-
-html.muji-grid .bio {
-    color: #5c5a56;
-}
-
-html.muji-grid nav a.nav-active {
-    color: var(--accent-color) !important;
-    border-bottom-color: var(--accent-color) !important;
-}
-
-html.muji-grid nav a {
-    color: #5c5a56;
-}
-
-html.muji-grid nav a:hover {
-    color: var(--accent-color);
-}
-
+html.muji-grid aside,
 html.muji-grid main {
     background: transparent;
-}
-
-html.muji-grid article {
-    border-bottom-color: var(--border-color);
-}
-
-html.muji-grid a {
-    color: var(--accent-color);
-}
-
-html.muji-grid a:hover {
-    color: #2d5a30;
-    border-bottom-color: #2d5a30;
-}
-
-html.muji-grid .post-meta,
-html.muji-grid #status-container,
-html.muji-grid blockquote {
-    color: #6a6762;
-}
-
-html.muji-grid blockquote {
-    border-left-color: var(--accent-color);
-}
-
-html.muji-grid .music-nav-item {
-    background: rgba(255, 255, 255, 0.5);
-    border-color: var(--border-color);
-}
-
-html.muji-grid .music-nav-overlay {
-    background: linear-gradient(
-        to top,
-        rgba(244, 241, 232, 0.95) 0%,
-        rgba(244, 241, 232, 0.55) 55%,
-        transparent 75%
-    );
-}
-
-html.muji-grid .music-nav-title {
-    color: #1a1816;
-}
-
-html.muji-grid .music-nav-desc {
-    color: #4a4743;
-}
-
-html.muji-grid .hud-box,
-html.muji-grid .day-cell {
-    background-color: rgba(255, 253, 248, 0.45);
-}
-
-html.muji-grid .weekday-label {
-    color: #8a8780;
-}
-
-html.muji-grid .eng-card,
-html.muji-grid .gear-item,
-html.muji-grid .tape-item {
-    background: rgba(255, 253, 248, 0.5);
-    border-color: var(--border-color);
-}
-
-html.muji-grid .paper,
-html.muji-grid #text-overlay {
-    background: rgba(255, 253, 248, 0.97);
-}
-
-html.muji-grid .show-list li {
-    border-bottom-color: var(--border-color);
-}
-
-html.muji-grid #toggle-history-btn {
-    background: rgba(255, 255, 255, 0.6);
-    border-color: var(--border-color);
-    color: #5c5a56;
-}
-
-html.muji-grid .microblog-view-all a {
-    color: #6a6762;
 }
 
 html.muji-grid::after {
@@ -1272,13 +1156,13 @@ html.muji-grid::after {
     font-family: var(--font-head);
     font-size: 0.65rem;
     letter-spacing: 0.03em;
-    color: #6a6762;
-    background: rgba(255, 253, 248, 0.92);
-    border: 1px solid #b8b4aa;
+    color: #888;
+    background: rgba(17, 17, 17, 0.92);
+    border: 1px solid #333;
     padding: 6px 10px;
     border-radius: 3px;
     pointer-events: none;
     max-width: 220px;
     line-height: 1.35;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
