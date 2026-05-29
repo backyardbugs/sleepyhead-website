@@ -12,35 +12,54 @@
     <style>
         .music-nav-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
             margin-bottom: 60px;
         }
         .music-nav-item {
             border: 1px solid #333;
-            padding: 40px 20px;
-            text-align: center;
+            padding: 0;
+            text-align: left;
             background: #1a1a1a;
-            transition: all 0.2s;
+            transition: border-color 0.2s, transform 0.2s;
             text-decoration: none;
             display: block;
+            overflow: hidden;
+            border-radius: 4px;
         }
         .music-nav-item:hover {
             border-color: var(--accent-color);
-            background: #222;
+            transform: translateY(-2px);
+        }
+        .music-nav-item img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid #333;
+        }
+        .music-nav-body {
+            padding: 16px 18px 18px;
         }
         .music-nav-title {
             font-family: var(--font-head);
-            font-size: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
             color: #fff;
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
+            border-bottom: none;
+        }
+        .music-nav-item:hover .music-nav-title {
+            color: var(--accent-color);
         }
         .music-nav-desc {
             font-family: var(--font-body);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #888;
             font-style: italic;
+            line-height: 1.4;
         }
     </style>
 </head>
@@ -52,17 +71,29 @@
             
             <div class="music-nav-grid">
                 <a href="julep.html" class="music-nav-item">
-                    <span class="music-nav-title">JULEP</span>
+                    <img src="img/music/julep.jpg" alt="Julep">
+                    <div class="music-nav-body">
+                        <span class="music-nav-title">JULEP</span>
+                    </div>
                 </a>
                 <a href="highpress.html" class="music-nav-item">
-                    <span class="music-nav-title">HIGH PRESS</span>
+                    <img src="img/music/highpress.jpg" alt="High Press">
+                    <div class="music-nav-body">
+                        <span class="music-nav-title">HIGH PRESS</span>
+                    </div>
                 </a>
                 <a href="demos.html" class="music-nav-item">
-                    <span class="music-nav-title">THE DEMO CRATE</span>
+                    <img src="img/music/democrate.jpg" alt="The Demo Crate">
+                    <div class="music-nav-body">
+                        <span class="music-nav-title">THE DEMO CRATE</span>
+                    </div>
                 </a>
                 <a href="engineering.html" class="music-nav-item">
-                    <span class="music-nav-title">AUDIO ENGINEERING</span>
-                    <span class="music-nav-desc">Mix · master · production</span>
+                    <img src="img/music/audioengineering.jpg" alt="Audio engineering">
+                    <div class="music-nav-body">
+                        <span class="music-nav-title">AUDIO ENGINEERING</span>
+                        <span class="music-nav-desc">Mix · master · production</span>
+                    </div>
                 </a>
             </div>
 
@@ -85,7 +116,7 @@
         </main>
     </div>
 
-    <script src="loader.js?v=4"></script>
+    <script src="loader.js?v=6"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Load only upcoming initially
