@@ -15,10 +15,10 @@ function highlightCurrentPage() {
     
     var links = document.querySelectorAll('nav a');
     links.forEach(link => {
+        link.classList.remove('nav-active');
         var href = link.getAttribute('href');
         if (href === current) {
-            link.style.color = "white";
-            link.style.borderBottom = "1px solid white";
+            link.classList.add('nav-active');
         }
     });
 }
