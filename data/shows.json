@@ -15,6 +15,27 @@
     },
     {
         "band": "HIGH PRESS",
+        "date": "2026-05-23",
+        "venue": "CROWBAR",
+        "location": "TAMPA, FL",
+        "upcoming": false
+    },
+    {
+        "band": "JULEP",
+        "date": "2026-06-20",
+        "venue": "NEW WORLD TAMPA",
+        "location": "TAMPA, FL",
+        "upcoming": true
+    },
+    {
+        "band": "HIGH PRESS",
+        "date": "2026-07-17",
+        "venue": "CROWBAR",
+        "location": "TAMPA, FL",
+        "upcoming": true
+    },
+    {
+        "band": "HIGH PRESS",
         "date": "2025-12-18",
         "venue": "CROWBAR",
         "location": "TAMPA, FL",
