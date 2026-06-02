@@ -355,6 +355,14 @@
     // Expose initDashboard globally so loader.js can call it
     window.generateGrid = initDashboard;
 
+    function toLocalISODate(date) {
+        const d = date || new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + day;
+    }
+
     function initDashboard() {
             
             // 0. YEAR SELECTION
@@ -699,8 +707,8 @@
                     
                     /* --- END NEW VISUAL LOGIC --- */
 
-                    // Current Day Indicator
-                    const todayStr = new Date().toISOString().split('T')[0];
+                    // Current Day Indicator (local calendar date, not UTC)
+                    const todayStr = toLocalISODate();
                     if (isoDate === todayStr) {
                         // Use inline style for dynamic color
                         let borderColor = '#fff'; // Fallback

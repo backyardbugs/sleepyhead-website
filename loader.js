@@ -1,5 +1,15 @@
 /* LOADER.JS - Injects the shared sidebar & Micro-blog */
 
+function toLocalISODate(date) {
+    var d = date || new Date();
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1);
+    if (m.length < 2) m = '0' + m;
+    var day = String(d.getDate());
+    if (day.length < 2) day = '0' + day;
+    return y + '-' + m + '-' + day;
+}
+
 var SIDEBAR_BIO = 'Fiction MFA. Musician. Dweeb. Based in FL.';
 var SIDEBAR_VERSION = 'bio-fl-2026';
 
@@ -307,7 +317,7 @@ function loadShows(containerId, filterBand, showPast = true) {
 
             // Split into Upcoming and Past
             // We calculate based on today
-            const today = new Date().toISOString().split('T')[0];
+            const today = toLocalISODate();
             
             const upcoming = [];
             const past = [];
