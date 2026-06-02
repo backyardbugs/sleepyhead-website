@@ -140,14 +140,15 @@ body {
     font-size: 18px;
 }
 
-a {
+/* Main/content links follow the active page accent — not sidebar nav */
+a:not(aside nav a) {
     color: var(--accent-color);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color 0.2s, border-color 0.2s;
     border-bottom: 1px dotted var(--accent-color);
 }
 
-a:hover {
+a:not(aside nav a):hover {
     color: #fff;
     border-bottom: 1px solid #fff;
 }
@@ -199,36 +200,44 @@ nav li {
     font-family: var(--font-head);
 }
 
-nav a {
+/* Sidebar nav: each link keeps its rainbow color (never the page accent) */
+aside nav a {
     border-bottom: 1px solid transparent;
     text-decoration: none;
     transition: color 0.2s, border-color 0.2s;
 }
 
-nav a[data-accent="red"] { color: var(--rainbow-red); }
-nav a[data-accent="orange"] { color: var(--rainbow-orange); }
-nav a[data-accent="yellow"] { color: var(--rainbow-yellow); }
-nav a[data-accent="green"] { color: var(--rainbow-green); }
-nav a[data-accent="blue"] { color: var(--rainbow-blue); }
-nav a[data-accent="indigo"] { color: var(--rainbow-indigo); }
-nav a[data-accent="violet"] { color: var(--rainbow-violet); }
+aside nav a[data-accent="red"],
+aside nav a[data-accent="red"]:visited { color: var(--rainbow-red); }
+aside nav a[data-accent="orange"],
+aside nav a[data-accent="orange"]:visited { color: var(--rainbow-orange); }
+aside nav a[data-accent="yellow"],
+aside nav a[data-accent="yellow"]:visited { color: var(--rainbow-yellow); }
+aside nav a[data-accent="green"],
+aside nav a[data-accent="green"]:visited { color: var(--rainbow-green); }
+aside nav a[data-accent="blue"],
+aside nav a[data-accent="blue"]:visited { color: var(--rainbow-blue); }
+aside nav a[data-accent="indigo"],
+aside nav a[data-accent="indigo"]:visited { color: var(--rainbow-indigo); }
+aside nav a[data-accent="violet"],
+aside nav a[data-accent="violet"]:visited { color: var(--rainbow-violet); }
 
-nav a[data-accent="red"]:hover,
-nav a[data-accent="red"].nav-active { color: var(--rainbow-red); border-bottom-color: var(--rainbow-red); }
-nav a[data-accent="orange"]:hover,
-nav a[data-accent="orange"].nav-active { color: var(--rainbow-orange); border-bottom-color: var(--rainbow-orange); }
-nav a[data-accent="yellow"]:hover,
-nav a[data-accent="yellow"].nav-active { color: var(--rainbow-yellow); border-bottom-color: var(--rainbow-yellow); }
-nav a[data-accent="green"]:hover,
-nav a[data-accent="green"].nav-active { color: var(--rainbow-green); border-bottom-color: var(--rainbow-green); }
-nav a[data-accent="blue"]:hover,
-nav a[data-accent="blue"].nav-active { color: var(--rainbow-blue); border-bottom-color: var(--rainbow-blue); }
-nav a[data-accent="indigo"]:hover,
-nav a[data-accent="indigo"].nav-active { color: var(--rainbow-indigo); border-bottom-color: var(--rainbow-indigo); }
-nav a[data-accent="violet"]:hover,
-nav a[data-accent="violet"].nav-active { color: var(--rainbow-violet); border-bottom-color: var(--rainbow-violet); }
+aside nav a[data-accent="red"]:hover,
+aside nav a[data-accent="red"].nav-active { color: var(--rainbow-red); border-bottom-color: var(--rainbow-red); }
+aside nav a[data-accent="orange"]:hover,
+aside nav a[data-accent="orange"].nav-active { color: var(--rainbow-orange); border-bottom-color: var(--rainbow-orange); }
+aside nav a[data-accent="yellow"]:hover,
+aside nav a[data-accent="yellow"].nav-active { color: var(--rainbow-yellow); border-bottom-color: var(--rainbow-yellow); }
+aside nav a[data-accent="green"]:hover,
+aside nav a[data-accent="green"].nav-active { color: var(--rainbow-green); border-bottom-color: var(--rainbow-green); }
+aside nav a[data-accent="blue"]:hover,
+aside nav a[data-accent="blue"].nav-active { color: var(--rainbow-blue); border-bottom-color: var(--rainbow-blue); }
+aside nav a[data-accent="indigo"]:hover,
+aside nav a[data-accent="indigo"].nav-active { color: var(--rainbow-indigo); border-bottom-color: var(--rainbow-indigo); }
+aside nav a[data-accent="violet"]:hover,
+aside nav a[data-accent="violet"].nav-active { color: var(--rainbow-violet); border-bottom-color: var(--rainbow-violet); }
 
-nav a.nav-active {
+aside nav a.nav-active {
     font-weight: 600;
 }
 

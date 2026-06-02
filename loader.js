@@ -5,6 +5,7 @@ fetch('sidebar.html?v=' + Date.now())
 .then(data => {
     document.getElementById('sidebar-container').innerHTML = data;
     highlightCurrentPage();
+    if (typeof window.applyPageAccent === 'function') window.applyPageAccent();
     loadStatus(); 
     loadNowPlaying(); // New function for the Status Box
 });

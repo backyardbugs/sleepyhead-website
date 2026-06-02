@@ -7,9 +7,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=12">
+    <link rel="stylesheet" href="style.css?v=13">
     <script src="muji-init.js"></script>
-    <script src="accent-init.js"></script>
+    <script src="accent-init.js?v=2"></script>
     <style>
         .eng-inquiry-page-title {
             font-family: var(--font-head);
@@ -139,7 +139,7 @@
             display: none;
         }
         .eng-form-msg.visible { display: block; }
-        .eng-form-msg.ok { color: #8fbc8f; }
+        .eng-form-msg.ok { color: var(--accent-color); }
         .eng-form-msg.err { color: #ff6b6b; }
         .eng-form-msg.info { color: #aaa; }
         .eng-privacy {
@@ -188,7 +188,7 @@
             <div id="eng-config-banner" class="eng-config-banner" role="status"></div>
 
             <div id="eng-inquiry-done" role="status">
-                <p style="color:#9cbc9c; margin:0 0 12px 0; font-size:1rem;">
+                <p style="color:var(--accent-color); margin:0 0 12px 0; font-size:1rem;">
                     Thanks — I got your message and will get back to you by email.
                 </p>
                 <p style="color:#888; font-size:0.9rem; margin:0;">
