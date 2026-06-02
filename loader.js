@@ -1,9 +1,14 @@
 /* LOADER.JS - Injects the shared sidebar & Micro-blog */
 
-fetch('sidebar.html?v=' + Date.now())
+var SIDEBAR_BIO = 'Fiction MFA. Musician. Dweeb. Based in FL.';
+var SIDEBAR_VERSION = 'bio-fl-2026';
+
+fetch('sidebar.html?v=' + SIDEBAR_VERSION)
 .then(response => response.text())
 .then(data => {
     document.getElementById('sidebar-container').innerHTML = data;
+    var bioEl = document.querySelector('#sidebar-container .bio');
+    if (bioEl) bioEl.textContent = SIDEBAR_BIO;
     highlightCurrentPage();
     if (typeof window.applyPageAccent === 'function') window.applyPageAccent();
     if (typeof window.paintSidebarNav === 'function') window.paintSidebarNav();
