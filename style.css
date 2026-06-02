@@ -130,6 +130,14 @@ img {
     --rainbow-violet: #A884BF;
 }
 
+html.accent-red { --accent-color: var(--rainbow-red); }
+html.accent-orange { --accent-color: var(--rainbow-orange); }
+html.accent-yellow { --accent-color: var(--rainbow-yellow); }
+html.accent-green { --accent-color: var(--rainbow-green); }
+html.accent-blue { --accent-color: var(--rainbow-blue); }
+html.accent-indigo { --accent-color: var(--rainbow-indigo); }
+html.accent-violet { --accent-color: var(--rainbow-violet); }
+
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -223,19 +231,19 @@ aside nav a[data-accent="violet"],
 aside nav a[data-accent="violet"]:visited { color: var(--rainbow-violet); }
 
 aside nav a[data-accent="red"]:hover,
-aside nav a[data-accent="red"].nav-active { color: var(--rainbow-red); border-bottom-color: var(--rainbow-red); }
+aside nav a[data-accent="red"].nav-active { color: var(--rainbow-red) !important; border-bottom-color: var(--rainbow-red) !important; }
 aside nav a[data-accent="orange"]:hover,
-aside nav a[data-accent="orange"].nav-active { color: var(--rainbow-orange); border-bottom-color: var(--rainbow-orange); }
+aside nav a[data-accent="orange"].nav-active { color: var(--rainbow-orange) !important; border-bottom-color: var(--rainbow-orange) !important; }
 aside nav a[data-accent="yellow"]:hover,
-aside nav a[data-accent="yellow"].nav-active { color: var(--rainbow-yellow); border-bottom-color: var(--rainbow-yellow); }
+aside nav a[data-accent="yellow"].nav-active { color: var(--rainbow-yellow) !important; border-bottom-color: var(--rainbow-yellow) !important; }
 aside nav a[data-accent="green"]:hover,
-aside nav a[data-accent="green"].nav-active { color: var(--rainbow-green); border-bottom-color: var(--rainbow-green); }
+aside nav a[data-accent="green"].nav-active { color: var(--rainbow-green) !important; border-bottom-color: var(--rainbow-green) !important; }
 aside nav a[data-accent="blue"]:hover,
-aside nav a[data-accent="blue"].nav-active { color: var(--rainbow-blue); border-bottom-color: var(--rainbow-blue); }
+aside nav a[data-accent="blue"].nav-active { color: var(--rainbow-blue) !important; border-bottom-color: var(--rainbow-blue) !important; }
 aside nav a[data-accent="indigo"]:hover,
-aside nav a[data-accent="indigo"].nav-active { color: var(--rainbow-indigo); border-bottom-color: var(--rainbow-indigo); }
+aside nav a[data-accent="indigo"].nav-active { color: var(--rainbow-indigo) !important; border-bottom-color: var(--rainbow-indigo) !important; }
 aside nav a[data-accent="violet"]:hover,
-aside nav a[data-accent="violet"].nav-active { color: var(--rainbow-violet); border-bottom-color: var(--rainbow-violet); }
+aside nav a[data-accent="violet"].nav-active { color: var(--rainbow-violet) !important; border-bottom-color: var(--rainbow-violet) !important; }
 
 aside nav a.nav-active {
     font-weight: 600;

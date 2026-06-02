@@ -6,20 +6,30 @@ fetch('sidebar.html?v=' + Date.now())
     document.getElementById('sidebar-container').innerHTML = data;
     highlightCurrentPage();
     if (typeof window.applyPageAccent === 'function') window.applyPageAccent();
+    if (typeof window.paintSidebarNav === 'function') window.paintSidebarNav();
     loadStatus(); 
     loadNowPlaying(); // New function for the Status Box
 });
 
 function highlightCurrentPage() {
-    var current = window.location.pathname.split("/").pop();
-    if (current === "") current = "index.html";
-    
-    var links = document.querySelectorAll('nav a');
-    links.forEach(link => {
+    var current = typeof window.getCurrentPage === 'function'
+        ? window.getCurrentPage()
+        : (window.location.pathname.split('/').pop() || 'index.html');
+
+    var root = document.getElementById('sidebar-container') || document.querySelector('aside');
+    if (!root) return;
+
+    root.querySelectorAll('nav a').forEach(function (link) {
         link.classList.remove('nav-active');
-        var href = link.getAttribute('href');
+        var href = (link.getAttribute('href') || '').split('?')[0].split('#')[0];
         if (href === current) {
             link.classList.add('nav-active');
+            var key = link.getAttribute('data-accent');
+            if (key && window.RAINBOW_ACCENTS && window.RAINBOW_ACCENTS[key]) {
+                link.style.setProperty('border-bottom-color', window.RAINBOW_ACCENTS[key], 'important');
+            }
+        } else {
+            link.style.borderBottomColor = 'transparent';
         }
     });
 }
