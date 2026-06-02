@@ -115,10 +115,19 @@ img {
 :root {
     --bg-color: #111111;       /* Deep Black/Charcoal */
     --text-color: #e0e0e0;     /* Off-White/Silver */
-    --accent-color: #7DB87D;   /* Muted sage green */
+    --accent-color: #7DB87D;   /* Default; overridden per page by accent-init.js */
     --border-color: #333333;   /* Dark Grey for lines */
     --font-head: 'DM Sans', system-ui, sans-serif;
     --font-body: 'Libre Baskerville', Georgia, serif;
+
+    /* Muted rainbow — same saturation/lightness as the original sage green */
+    --rainbow-red: #BF8484;
+    --rainbow-orange: #BF9684;
+    --rainbow-yellow: #BFAF84;
+    --rainbow-green: #7DB87D;
+    --rainbow-blue: #849ABF;
+    --rainbow-indigo: #9084BF;
+    --rainbow-violet: #A884BF;
 }
 
 body {
@@ -190,9 +199,41 @@ nav li {
     font-family: var(--font-head);
 }
 
+nav a {
+    border-bottom: 1px solid transparent;
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+nav a[data-accent="red"] { color: var(--rainbow-red); }
+nav a[data-accent="orange"] { color: var(--rainbow-orange); }
+nav a[data-accent="yellow"] { color: var(--rainbow-yellow); }
+nav a[data-accent="green"] { color: var(--rainbow-green); }
+nav a[data-accent="blue"] { color: var(--rainbow-blue); }
+nav a[data-accent="indigo"] { color: var(--rainbow-indigo); }
+nav a[data-accent="violet"] { color: var(--rainbow-violet); }
+
+nav a[data-accent="red"]:hover,
+nav a[data-accent="red"].nav-active { color: var(--rainbow-red); border-bottom-color: var(--rainbow-red); }
+nav a[data-accent="orange"]:hover,
+nav a[data-accent="orange"].nav-active { color: var(--rainbow-orange); border-bottom-color: var(--rainbow-orange); }
+nav a[data-accent="yellow"]:hover,
+nav a[data-accent="yellow"].nav-active { color: var(--rainbow-yellow); border-bottom-color: var(--rainbow-yellow); }
+nav a[data-accent="green"]:hover,
+nav a[data-accent="green"].nav-active { color: var(--rainbow-green); border-bottom-color: var(--rainbow-green); }
+nav a[data-accent="blue"]:hover,
+nav a[data-accent="blue"].nav-active { color: var(--rainbow-blue); border-bottom-color: var(--rainbow-blue); }
+nav a[data-accent="indigo"]:hover,
+nav a[data-accent="indigo"].nav-active { color: var(--rainbow-indigo); border-bottom-color: var(--rainbow-indigo); }
+nav a[data-accent="violet"]:hover,
+nav a[data-accent="violet"].nav-active { color: var(--rainbow-violet); border-bottom-color: var(--rainbow-violet); }
+
 nav a.nav-active {
-    color: #fff;
-    border-bottom: 1px solid #fff;
+    font-weight: 600;
+}
+
+html[data-accent] aside {
+    border-right-color: color-mix(in srgb, var(--accent-color) 30%, var(--border-color));
 }
 
 /* 5. THE MAIN CONTENT */
