@@ -86,20 +86,24 @@
         }
 
         var REDIRECT_MS = 4200;
-        var FADE_MS = 700;
+        var FADE_MS = 650;
+        var leaving = false;
+        var fadeTimer = null;
+        var autoTimer = setTimeout(goHome, REDIRECT_MS);
 
         function goHome() {
+            if (leaving) return;
+            leaving = true;
+            clearTimeout(autoTimer);
+            if (fadeTimer) clearTimeout(fadeTimer);
+
             document.body.classList.add('splash-out');
-            setTimeout(function () {
-                window.location.href = 'home.html';
+            fadeTimer = setTimeout(function () {
+                window.location.replace('home.html');
             }, FADE_MS);
         }
 
-        setTimeout(goHome, REDIRECT_MS);
-
-        document.body.addEventListener('click', function () {
-            goHome();
-        }, { once: true });
+        document.body.addEventListener('click', goHome, { once: true });
     })();
     </script>
 </body>
