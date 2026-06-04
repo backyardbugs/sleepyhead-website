@@ -11,7 +11,7 @@ window.RAINBOW_ACCENTS = {
 
 /** Sidebar href → accent key (each link keeps its own color) */
 window.NAV_ACCENT_BY_HREF = {
-    'index.html': 'red',
+    'home.html': 'red',
     'year.html': 'orange',
     'music.html': 'yellow',
     'library.html': 'green',
@@ -21,6 +21,7 @@ window.NAV_ACCENT_BY_HREF = {
 };
 
 window.PAGE_ACCENT_MAP = {
+    'home.html': 'red',
     'index.html': 'red',
     'year.html': 'orange',
     'microblog.html': 'orange',
@@ -49,6 +50,7 @@ window.getCurrentPage = function getCurrentPage() {
     if (!page) return 'index.html';
 
     page = decodeURIComponent(page).toLowerCase();
+    if (page === 'home' || page === 'home.html') return 'home.html';
     if (page === 'index' || page === 'index.html') return 'index.html';
     if (page.indexOf('.') === -1) page += '.html';
 

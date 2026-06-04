@@ -131,7 +131,7 @@ function respond_(callback, payload) {
 function notifyAdmin_(id, post, name, comment, status, createdAt) {
   if (!ADMIN_EMAIL) return;
 
-  const postUrl = `https://sleepyhead.neocities.org/index.html?post=${encodeURIComponent(post)}`;
+  const postUrl = `https://sleepyhead.neocities.org/home.html?post=${encodeURIComponent(post)}`;
   const subject = `[Sleepyhead] New comment on ${post}`;
   const body = [
     "A new comment was received.",

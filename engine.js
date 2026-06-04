@@ -27,7 +27,7 @@ function loadBlogFeed() {
             // Add a "Back to Home" button
             var backBtn = document.createElement("a");
             backBtn.innerHTML = "← Back to Home";
-            backBtn.href = "index.html";
+            backBtn.href = "home.html";
             backBtn.style.display = "block";
             backBtn.style.marginTop = "40px";
             backBtn.style.marginBottom = "60px"; // Extra space for comments
@@ -37,7 +37,7 @@ function loadBlogFeed() {
             injectComments(targetPost[0]); 
 
         } else {
-            container.innerHTML = "<h2>404: Post not found.</h2><p><a href='index.html'>Go Home</a></p>";
+            container.innerHTML = "<h2>404: Post not found.</h2><p><a href='home.html'>Go Home</a></p>";
         }
 
     } else {
