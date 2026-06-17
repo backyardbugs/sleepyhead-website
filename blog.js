@@ -1,6 +1,7 @@
 /* --- blog.js --- */
 var posts = [
     // Format: ["File Name", "Title", "Date", ["Tag1", "Tag2"]]
+    ["the-death-of-taste", "The Death of Taste", "2026-06-17", ["journal", "culture", "writing"]],
     ["2026-summer-would-be-cool", "2026 Summer \"Would Be Cool If These Happened\"s", "2026-06-01", ["journal", "music", "reading", "games"]],
     ["2026-summer-reading-list", "Summer Reading List", "2026-06-01", ["reading", "journal", "list"]],
     ["update-2026-05-28", "Update — May 2026", "2026-05-28", ["journal", "music", "health", "dev"]],
