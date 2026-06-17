@@ -211,6 +211,34 @@ aside h1 {
     font-style: italic;
 }
 
+.sidebar-follow {
+    margin-top: 1.5rem;
+    font-family: var(--font-head);
+    font-size: 0.8rem;
+}
+
+.sidebar-follow-label {
+    color: #666;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 0.5rem;
+}
+
+.sidebar-follow p {
+    margin: 0 0 0.35rem;
+}
+
+.sidebar-follow a {
+    color: #888;
+    border-bottom: 1px solid transparent;
+}
+
+.sidebar-follow a:hover {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+
 nav ul {
     list-style: none;
     padding: 0;
