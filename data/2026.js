@@ -79,17 +79,31 @@ var history2026 = [
     ["2026-05-17", 0, true, "Gym"],
     ["2026-05-18", 0, true, "Gym"],
     ["2026-05-19", 0, true, "Gym"],
+    ["2026-05-20", 0, true, "Gym"],
     ["2026-05-23", 0, true, "Gym"],
     ["2026-05-25", 400, true, "Gym"],
     /* --- JUNE --- */
     ["2026-06-01", 0, true, "Gym"],
+    ["2026-06-02", 0, true, "Gym"],
+    ["2026-06-03", 0, true, "Gym"],
+    ["2026-06-06", 764, true, ""],
+    ["2026-06-08", 905, true, ""],
+    ["2026-06-09", 0, true, "Gym"],
+    ["2026-06-10", 510, false, ""],
+    ["2026-06-12", 0, true, "Gym"],
+    ["2026-06-14", 379, true, ""],
+    ["2026-06-15", 895, true, ""],
 ];
 
 const books2026 = [
     { title: "Red Rising", author: "Pierce Brown", rating: 5, review: "" },
     { title: "For We Are Many", author: "Dennis E. Taylor", rating: 5, review: "Bobiverse #2" },
     { title: "The Way of Kings", author: "Brandon Sanderson", rating: 5, review: "" },
-    { title: "Thousand Cranes", author: "Yasunari Kawabata", rating: 5, review: "" }
+    { title: "Thousand Cranes", author: "Yasunari Kawabata", rating: 5, review: "" },
+    { title: "Words of Radiance", author: "Brandon Sanderson", rating: 5, review: "" },
+    { title: "Harry Potter and the Sorcerer's Stone", author: "J.K. Rowling", rating: 5, review: "" },
+    { title: "Harry Potter and the Chamber of Secrets", author: "J.K. Rowling", rating: 5, review: "" },
+    { title: "Harry Potter and the Prisoner of Azkaban", author: "J.K. Rowling", rating: 5, review: "" }
 ];
 
 const shows2026 = [
