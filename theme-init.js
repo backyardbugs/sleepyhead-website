@@ -1,12 +1,13 @@
 /** Early theme apply — load in <head> before paint when possible */
 (function () {
     var KEY = 'theme';
+    var DEFAULT_THEME = 'light';
 
     function current() {
         try {
-            return localStorage.getItem(KEY) || 'dark';
+            return localStorage.getItem(KEY) || DEFAULT_THEME;
         } catch (e) {
-            return 'dark';
+            return DEFAULT_THEME;
         }
     }
 
