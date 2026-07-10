@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css?v=18">
+    <link rel="stylesheet" href="style.css?v=19">
     <script src="muji-init.js"></script>
     <script src="theme-init.js"></script>
     <script src="accent-init.js?v=4"></script>
@@ -19,68 +19,58 @@
         .bookshelf-container {
             margin-top: 20px;
             padding-bottom: 20px;
-            overflow-x: auto; /* Allows scrolling sideways on mobile */
+            overflow-x: auto;
             white-space: nowrap;
-            /* Hide Scrollbar but keep functionality */
             scrollbar-width: thin;
-            scrollbar-color: #333 #111;
+            scrollbar-color: var(--border-color) var(--bg-color);
         }
 
         .shelf-row {
-            border-bottom: 15px solid #222; /* The Wood Plank */
+            border-bottom: 15px solid var(--border-strong);
             display: flex;
-            align-items: flex-end; /* Align books to bottom */
+            align-items: flex-end;
             padding: 0 20px;
             min-height: 280px; 
-            gap: 6px; /* Space between books */
+            gap: 6px;
         }
 
-        /* --- THE BOOKS --- */
         .book {
             width: 45px;
-            border: 1px solid #444;
-            background-color: #161616;
+            border: 1px solid var(--border-strong);
+            background-color: var(--bg-muted);
             cursor: pointer;
             transition: transform 0.2s ease, background-color 0.2s;
             position: relative;
-            
-            /* Vertical Text Logic */
             writing-mode: vertical-rl;
             text-orientation: mixed;
-            transform: rotate(180deg); /* Flips text to read bottom-up */
-            
+            transform: rotate(180deg);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 10px 0;
-            
-            /* Typography */
             font-family: var(--font-head);
             font-size: 0.8rem;
-            color: #888;
+            color: var(--text-soft);
             letter-spacing: 1px;
             text-transform: uppercase;
-            box-shadow: 2px 2px 5px #000; /* Depth */
-            
-            overflow: hidden;        /* Cuts off text that is too long */
-            text-overflow: ellipsis; /* Adds "..." if it cuts off */
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .book:hover {
-            transform: rotate(180deg) translateY(-15px); /* Pull out effect */
-            background-color: #222;
+            transform: rotate(180deg) translateY(-15px);
+            background-color: var(--bg-elevated);
             color: var(--accent-color);
             border-color: var(--accent-color);
             z-index: 10;
         }
 
-        /* Random Heights for Realism */
         .h-1 { height: 250px; }
         .h-2 { height: 230px; }
         .h-3 { height: 260px; }
         .h-4 { height: 210px; }
         
-        /* Spine Markers */
         .spine-mark {
             position: absolute;
             bottom: 10px; 
@@ -90,31 +80,29 @@
             height: 30px;
         }
         
-        .type-poem .spine-mark { background: var(--accent-color); } /* Gold for Poems */
-        .type-story .spine-mark { background: #555; } /* Grey for Stories */
+        .type-poem .spine-mark { background: var(--accent-color); }
+        .type-story .spine-mark { background: var(--border-strong); }
 
-
-        /* --- THE READING OVERLAY --- */
         #text-overlay {
-            display: none; /* Hidden by default */
+            display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.95);
+            background: var(--overlay-bg);
             z-index: 5000;
             overflow-y: auto;
             justify-content: center;
         }
 
         .paper {
-            background: #111;
+            background: var(--bg-elevated);
             max-width: 700px;
             width: 90%;
             margin: 60px auto;
             padding: 60px;
-            border: 1px solid #333;
+            border: 1px solid var(--border-color);
             border-top: 4px solid var(--accent-color);
-            box-shadow: 0 0 50px #000;
+            box-shadow: var(--shadow);
             position: relative;
             min-height: 80vh;
         }
@@ -124,17 +112,16 @@
             top: 20px; right: 30px;
             font-size: 2rem;
             cursor: pointer;
-            color: #666;
+            color: var(--text-faint);
             font-family: var(--font-head);
             line-height: 1;
         }
         .close-reader:hover { color: var(--accent-color); }
 
-        /* --- READER TYPOGRAPHY --- */
         .reader-title { 
             font-family: var(--font-head); 
-            color: #fff; 
-            border-bottom: 1px solid #333; 
+            color: var(--text-strong); 
+            border-bottom: 1px solid var(--border-color); 
             padding-bottom: 20px; 
             margin-bottom: 40px; 
             margin-top: 0;
@@ -143,22 +130,18 @@
         .reader-content { 
             font-family: var(--font-body); 
             font-size: 1.1rem; 
-            color: #ccc; 
+            color: var(--text-color); 
             line-height: 1.6;
         }
 
-        /* --- NOVEL FORMATTING (Indents, No Gaps) --- */
         .reader-content p { 
-            margin-bottom: 0;      /* Remove gap between paragraphs */
-            text-indent: 2em;      /* Add indentation */
+            margin-bottom: 0;
+            text-indent: 2em;
         }
-        /* Keep the first paragraph flat (Standard typesetting rule) */
         .reader-content p:first-of-type {
             text-indent: 0;
         }
 
-        /* --- THE POETRY HACK --- */
-        /* Turns Markdown Code Blocks into Poetry Layouts */
         .reader-content pre {
             background: transparent;
             border: none;
@@ -168,10 +151,10 @@
         }
 
         .reader-content code {
-            font-family: var(--font-body); /* Use the book font, not code font */
+            font-family: var(--font-body);
             font-size: 1.1rem;
-            color: #ccc;
-            white-space: pre-wrap; /* Preserves exact spaces */
+            color: var(--text-color);
+            white-space: pre-wrap;
             display: block;
         }
 
@@ -184,12 +167,12 @@
         <aside id="sidebar-container"></aside>
 
         <main>
-            <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">The Library</h1>
-            <p style="color: #666; font-style: italic;">
+            <h1 class="page-heading">The Library</h1>
+            <p style="color: var(--text-faint); font-style: italic;">
                 some things i wrote.
             </p>
             
-            <h2 style="font-family: var(--font-head); margin-top: 50px; font-size: 1rem; color: #666;">FICTION</h2>
+            <h2 style="font-family: var(--font-head); margin-top: 50px; font-size: 1rem; color: var(--text-faint);">FICTION</h2>
             <div class="bookshelf-container">
                 <div class="shelf-row" id="shelf-fiction">
                     </div>
@@ -301,7 +284,7 @@
 
         function openReader(item) {
             overlay.style.display = 'flex';
-            readerBody.innerHTML = "<p style='color:#666; font-family:var(--font-head); text-align:center; margin-top:100px;'>Opening book...</p>";
+            readerBody.innerHTML = "<p style='color:var(--text-faint); font-family:var(--font-head); text-align:center; margin-top:100px;'>Opening book...</p>";
 
             // Force .md extension
             var filePath = "library/" + item.file + ".md";

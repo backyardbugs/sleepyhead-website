@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=18">
+    <link rel="stylesheet" href="style.css?v=19">
     <script src="muji-init.js"></script>
     <script src="theme-init.js"></script>
     <script src="accent-init.js?v=4"></script>
@@ -22,9 +22,9 @@
         .music-nav-item {
             position: relative;
             aspect-ratio: 4 / 3;
-            border: 1px solid #333;
+            border: 1px solid var(--border-color);
             text-align: left;
-            background: #1a1a1a;
+            background: var(--bg-elevated);
             transition: border-color 0.2s, transform 0.2s;
             text-decoration: none;
             display: block;
@@ -78,13 +78,28 @@
             font-style: italic;
             line-height: 1.35;
         }
+        #toggle-history-btn {
+            background: transparent;
+            border: 1px solid var(--border-strong);
+            color: var(--text-soft);
+            font-family: var(--font-head);
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+        }
+        #toggle-history-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
     </style>
 </head>
 <body>
     <div class="container">
        <aside id="sidebar-container"></aside>
         <main>
-            <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">Music</h1>
+            <h1 class="page-heading">Music</h1>
             
             <div class="music-nav-grid">
                 <a href="julep.html" class="music-nav-item">
@@ -118,17 +133,7 @@
             <h2 style="font-family: var(--font-head);">Show Dates</h2>
             <div id="shows-container"></div>
             
-            <button id="toggle-history-btn" style="
-                background: transparent;
-                border: 1px solid #444;
-                color: #888;
-                font-family: var(--font-head);
-                padding: 10px 20px;
-                cursor: pointer;
-                margin-top: 20px;
-                display: block;
-                width: 100%;
-            ">View Past Shows</button>
+            <button id="toggle-history-btn" type="button">View Past Shows</button>
 
         </main>
     </div>

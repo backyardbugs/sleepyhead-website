@@ -7,20 +7,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=18">
+    <link rel="stylesheet" href="style.css?v=19">
     <script src="muji-init.js"></script>
     <script src="theme-init.js"></script>
     <script src="accent-init.js?v=4"></script>
     <style>
         .eng-lead {
-            color: #aaa;
+            color: var(--text-muted);
             font-style: italic;
             max-width: 42em;
             margin-bottom: 2.5rem;
         }
         .eng-section-title {
             font-family: var(--font-head);
-            border-bottom: 2px solid #fff;
+            border-bottom: 2px solid var(--text-strong);
             padding-bottom: 8px;
             margin-top: 2.5rem;
             margin-bottom: 1.25rem;
@@ -32,7 +32,7 @@
         }
         .eng-card {
             border: 1px solid var(--border-color);
-            background: #1a1a1a;
+            background: var(--bg-elevated);
             padding: 0;
             overflow: hidden;
             display: flex;
@@ -47,12 +47,12 @@
         .eng-card-title {
             font-family: var(--font-head);
             font-size: 1.05rem;
-            color: #fff;
+            color: var(--text-strong);
             margin: 0 0 6px 0;
         }
         .eng-card-meta {
             font-size: 0.85rem;
-            color: #888;
+            color: var(--text-soft);
             margin-bottom: 10px;
         }
         .eng-card-role {
@@ -65,12 +65,12 @@
         }
         .eng-card-notes {
             font-size: 0.85rem;
-            color: #777;
+            color: var(--text-faint);
             margin-top: auto;
             padding-top: 10px;
         }
         .eng-embed-wrap {
-            background: #222;
+            background: var(--bg-muted);
             border-bottom: 1px solid var(--border-color);
             line-height: 0;
         }
@@ -81,7 +81,7 @@
         }
         .eng-audio-wrap {
             padding: 14px 16px;
-            background: #222;
+            background: var(--bg-muted);
             border-bottom: 1px solid var(--border-color);
         }
         .eng-audio-wrap audio {
@@ -95,7 +95,7 @@
         }
         .eng-services-list li {
             border: 1px solid var(--border-color);
-            background: #1a1a1a;
+            background: var(--bg-elevated);
             padding: 18px 20px;
             margin-bottom: 14px;
         }
@@ -103,11 +103,11 @@
             font-family: var(--font-head);
             font-size: 1rem;
             margin: 0 0 8px 0;
-            color: #fff;
+            color: var(--text-strong);
         }
         .eng-services-list p {
             margin: 0 0 8px 0;
-            color: #ccc;
+            color: var(--text-muted);
             font-size: 0.95rem;
         }
         .eng-services-pricing {
@@ -121,12 +121,7 @@
             max-width: 640px;
             border: 2px solid var(--accent-color);
             border-radius: 2px;
-            background: linear-gradient(
-                165deg,
-                rgba(197, 160, 89, 0.14) 0%,
-                rgba(26, 22, 14, 0.95) 38%,
-                #0d0d0d 100%
-            );
+            background: color-mix(in srgb, var(--accent-color) 12%, var(--bg-elevated));
             box-shadow:
                 0 0 0 1px rgba(197, 160, 89, 0.2),
                 0 10px 36px rgba(0, 0, 0, 0.55),
@@ -144,7 +139,7 @@
             font-family: var(--font-head);
             font-size: 1.35rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-strong);
             margin: 0 0 14px 0;
             letter-spacing: 0.02em;
             line-height: 1.2;
@@ -197,7 +192,7 @@
                 <a href="music.html" style="font-family: var(--font-head); font-size: 0.9em;">&larr; Back to Music</a>
             </div>
 
-            <h1 style="font-family: var(--font-head); border-bottom: 2px solid #fff; padding-bottom: 10px;">Audio Engineering</h1>
+            <h1 class="page-heading">Audio Engineering</h1>
             <p class="eng-lead">
                 Hey I'm Tyler! Remote-friendly mixing, mastering, and production help for bands and solo artists.
                 Florida-based. If you're local I can connect you with a homie's studio for tracking.

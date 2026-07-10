@@ -1381,12 +1381,10 @@ html.muji-grid main {
     color: var(--text-faint);
 }
 
-/* Black-backed doodles / wordmark read as stickers on light paper */
-html.theme-light img.post-doodle,
-html.theme-light .sidebar-wordmark {
-    background: #111;
-    border-radius: 4px;
-    box-shadow: var(--shadow);
+.page-heading {
+    font-family: var(--font-head);
+    border-bottom: 2px solid var(--text-strong);
+    padding-bottom: 10px;
 }
 
 html.theme-light .blog-carousel-btn {
