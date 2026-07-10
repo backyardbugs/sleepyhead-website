@@ -11,7 +11,7 @@ function toLocalISODate(date) {
 }
 
 var SIDEBAR_BIO = 'Fiction MFA. Musician. Dweeb. Based in FL.';
-var SIDEBAR_VERSION = 'wordmark2-2026-07';
+var SIDEBAR_VERSION = 'theme-toggle-2026-07';
 
 fetch('sidebar.html?v=' + SIDEBAR_VERSION)
 .then(response => response.text())
@@ -22,9 +22,20 @@ fetch('sidebar.html?v=' + SIDEBAR_VERSION)
     highlightCurrentPage();
     if (typeof window.applyPageAccent === 'function') window.applyPageAccent();
     if (typeof window.paintSidebarNav === 'function') window.paintSidebarNav();
+    wireThemeToggle();
     loadStatus(); 
     loadNowPlaying(); // New function for the Status Box
 });
+
+function wireThemeToggle() {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    if (typeof window.syncThemeToggle === 'function') window.syncThemeToggle();
+    btn.addEventListener('click', function () {
+        if (typeof window.toggleTheme === 'function') window.toggleTheme();
+        highlightCurrentPage();
+    });
+}
 
 function highlightCurrentPage() {
     var current = typeof window.getCurrentPage === 'function'

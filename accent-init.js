@@ -1,5 +1,5 @@
-/** Per-page muted rainbow accents */
-window.RAINBOW_ACCENTS = {
+/** Per-page muted rainbow accents (dark + light) */
+window.RAINBOW_ACCENTS_DARK = {
     red: '#BF8484',
     orange: '#BF9684',
     yellow: '#BFAF84',
@@ -8,6 +8,29 @@ window.RAINBOW_ACCENTS = {
     indigo: '#9084BF',
     violet: '#A884BF'
 };
+
+/** Darker / richer — readable on light paper backgrounds */
+window.RAINBOW_ACCENTS_LIGHT = {
+    red: '#9A4F4F',
+    orange: '#9A5F3A',
+    yellow: '#8A6B18',
+    green: '#3D7A45',
+    blue: '#3D5A8A',
+    indigo: '#5A4A8A',
+    violet: '#7A4A8A'
+};
+
+window.getRainbowAccents = function getRainbowAccents() {
+    var light = document.documentElement.classList.contains('theme-light');
+    return light ? window.RAINBOW_ACCENTS_LIGHT : window.RAINBOW_ACCENTS_DARK;
+};
+
+/** @deprecated use getRainbowAccents() — kept for older callers */
+Object.defineProperty(window, 'RAINBOW_ACCENTS', {
+    get: function () {
+        return window.getRainbowAccents();
+    }
+});
 
 /** Sidebar href → accent key (each link keeps its own color) */
 window.NAV_ACCENT_BY_HREF = {
@@ -78,12 +101,14 @@ window.paintSidebarNav = function paintSidebarNav() {
     var root = document.getElementById('sidebar-container') || document.querySelector('aside');
     if (!root) return;
 
+    var accents = window.getRainbowAccents();
+
     root.querySelectorAll('nav a').forEach(function (link) {
         var href = (link.getAttribute('href') || '').split('?')[0].split('#')[0];
         var key = window.NAV_ACCENT_BY_HREF[href];
         if (!key) return;
 
-        var color = window.RAINBOW_ACCENTS[key];
+        var color = accents[key];
         link.setAttribute('data-accent', key);
         link.style.setProperty('color', color, 'important');
         link.style.borderBottomColor = 'transparent';
@@ -93,12 +118,12 @@ window.paintSidebarNav = function paintSidebarNav() {
 window.applyPageAccent = function applyPageAccent() {
     var page = window.getCurrentPage();
     var key = window.resolvePageAccentKey(page) || 'green';
-    var color = window.RAINBOW_ACCENTS[key];
+    var color = window.getRainbowAccents()[key];
 
     var html = document.documentElement;
     var prefix = window.ACCENT_CLASS_PREFIX;
 
-    Object.keys(window.RAINBOW_ACCENTS).forEach(function (name) {
+    Object.keys(window.RAINBOW_ACCENTS_DARK).forEach(function (name) {
         html.classList.remove(prefix + name);
     });
 
