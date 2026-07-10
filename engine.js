@@ -4,6 +4,43 @@ var postFolder = "./posts/";
 var COMMENTS_API_URL = window.COMMENTS_API_URL || "https://script.google.com/macros/s/AKfycbxDwBHAPGdZa6yYapHIqOu_uJSM4EYHZ6Qp4Cf4kD3diM08sUCa1r4XspRfM8KiYfH8Mg/exec";
 var COMMENTS_FALLBACK_INJECTED = false;
 
+/* Lead doodles: journal (default), update, making, music, reading */
+var POST_DOODLES = {
+    journal: { src: "img/doodles/sleepyhead.png", alt: "Sleepyhead" },
+    update: { src: "img/doodles/sleepybug.png", alt: "Sleepybug" },
+    making: { src: "img/doodles/cigfrogwizard.png", alt: "Cig frog wizard" },
+    music: { src: "img/doodles/cigs.png", alt: "Cigs" },
+    reading: { src: "img/doodles/zonkedfullTyler.png", alt: "Zonked Tyler" }
+};
+
+var DOODLE_MAKING_TAGS = { writing: true, design: true, dev: true, games: true };
+var DOODLE_UPDATE_TAGS = { health: true, productivity: true };
+
+function resolveDoodleKey(postData) {
+    var explicit = postData[4];
+    if (explicit && POST_DOODLES[explicit]) return explicit;
+
+    var tags = postData[3] || [];
+    if (tags.indexOf("reading") !== -1) return "reading";
+    if (tags.indexOf("music") !== -1) return "music";
+    for (var i = 0; i < tags.length; i++) {
+        if (DOODLE_MAKING_TAGS[tags[i]]) return "making";
+    }
+    for (var j = 0; j < tags.length; j++) {
+        if (DOODLE_UPDATE_TAGS[tags[j]]) return "update";
+    }
+
+    var slug = postData[0] || "";
+    if (/^update-|yearly/.test(slug)) return "update";
+    return "journal";
+}
+
+function doodleHTML(postData) {
+    var key = resolveDoodleKey(postData);
+    var doodle = POST_DOODLES[key] || POST_DOODLES.journal;
+    return `<img class="post-doodle" src="${doodle.src}" alt="${doodle.alt}" loading="lazy" width="120" height="120">`;
+}
+
 function loadBlogFeed() {
     var container = document.getElementById("blog-feed");
     var html = "";
@@ -75,7 +112,8 @@ function buildPostHTML(postData, isSinglePage) {
         : `<a href="?post=${filename}" class="permalink">${title}</a>`;
 
     return `
-    <article>
+    <article class="post clearfix">
+        ${doodleHTML(postData)}
         <h2 class="post-title">${titleHTML}</h2>
         <div class="post-meta">
             ${date} &nbsp;

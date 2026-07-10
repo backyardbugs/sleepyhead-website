@@ -115,6 +115,48 @@ img {
     max-width: 640px;
 }
 
+/* Float doodles / inline images (worm-blossom style) */
+img.float-l {
+    float: left;
+    margin: 0 1rem 0.6rem 0;
+}
+
+img.float-r {
+    float: right;
+    margin: 0 0 0.6rem 1rem;
+}
+
+img.w-45 { width: 45%; }
+img.w-30 { width: 30%; }
+img.w-25 { width: 25%; }
+img.w-20 { width: 20%; }
+img.w-15 { width: 15%; }
+
+img.post-doodle {
+    float: left;
+    width: 22%;
+    max-width: 120px;
+    margin: 0 1rem 0.75rem 0;
+    border-radius: 2px;
+}
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+article.post {
+    overflow: auto;
+}
+
+@media (max-width: 600px) {
+    img.post-doodle {
+        width: 30%;
+        max-width: 96px;
+    }
+}
+
 .blog-media--video iframe {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -194,13 +236,21 @@ aside {
     overflow-y: auto; 
 }
 
+.sidebar-wordmark {
+    display: block;
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    margin: 0 0 0.85rem;
+}
+
 aside h1 {
     font-family: var(--font-head);
     font-size: 1.15rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    margin-bottom: 0.5rem;
+    margin: 0 0 0.5rem;
     color: #fff;
 }
 
