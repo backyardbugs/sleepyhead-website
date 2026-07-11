@@ -296,6 +296,18 @@ aside {
     overflow-y: auto; 
 }
 
+.sidebar-wordmark-link {
+    display: block;
+    text-decoration: none;
+    border-bottom: none;
+    color: inherit;
+}
+
+.sidebar-wordmark-link:hover {
+    border-bottom: none;
+    color: inherit;
+}
+
 .sidebar-wordmark {
     display: block;
     width: 100%;
@@ -1450,21 +1462,43 @@ html.muji-grid.theme-light {
     }
 }
 
-/* Single blog post: hide sidebar for reading; cig reveals it */
-html.post-focus aside,
-html.post-focus #sidebar-container {
+/* Single blog post: keep wordmark only; cig reveals full nav */
+html.post-focus .container {
+    flex-direction: column;
+}
+
+html.post-focus aside {
+    display: block;
+    width: auto;
+    height: auto;
+    position: relative;
+    top: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 16px 20px 8px;
+    text-align: center;
+    overflow: visible;
+}
+
+html.post-focus #sidebar-container > :not(.sidebar-wordmark-link) {
     display: none !important;
 }
 
-html.post-focus .container {
-    display: block;
+html.post-focus .sidebar-wordmark-link {
+    display: inline-block;
+    margin: 0 auto;
+}
+
+html.post-focus .sidebar-wordmark {
+    max-width: 180px;
+    margin: 0 auto;
 }
 
 html.post-focus main {
     width: 100%;
     max-width: 720px;
     margin: 0 auto;
-    padding-top: 28px;
+    padding-top: 20px;
 }
 
 html.post-focus .back-to-top,

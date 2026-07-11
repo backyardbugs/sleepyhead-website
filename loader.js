@@ -19,7 +19,7 @@ function toLocalISODate(date) {
 }
 
 var SIDEBAR_BIO = 'Fiction MFA. Musician. Dweeb. Based in FL.';
-var SIDEBAR_VERSION = 'theme-default-light-2026-07';
+var SIDEBAR_VERSION = 'wordmark-home-link-2026-07';
 
 fetch('sidebar.html?v=' + SIDEBAR_VERSION)
 .then(response => response.text())
