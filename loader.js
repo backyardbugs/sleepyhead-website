@@ -23,6 +23,7 @@ fetch('sidebar.html?v=' + SIDEBAR_VERSION)
     if (typeof window.applyPageAccent === 'function') window.applyPageAccent();
     if (typeof window.paintSidebarNav === 'function') window.paintSidebarNav();
     wireThemeToggle();
+    wireBackToTop();
     loadStatus(); 
     loadNowPlaying(); // New function for the Status Box
 });
@@ -35,6 +36,34 @@ function wireThemeToggle() {
         if (typeof window.toggleTheme === 'function') window.toggleTheme();
         highlightCurrentPage();
     });
+}
+
+function wireBackToTop() {
+    if (document.getElementById('back-to-top')) return;
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'back-to-top';
+    btn.className = 'back-to-top';
+    btn.setAttribute('aria-label', 'Back to top / navigation');
+    btn.innerHTML = '<img src="img/doodles/cigs.png" alt="" width="52" height="52">';
+    document.body.appendChild(btn);
+
+    btn.addEventListener('click', function () {
+        var target = document.getElementById('sidebar-container') || document.querySelector('aside') || document.body;
+        if (target && typeof target.scrollIntoView === 'function') {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+
+    var SHOW_AFTER = 280;
+    function syncVisibility() {
+        btn.classList.toggle('is-visible', window.scrollY > SHOW_AFTER);
+    }
+    window.addEventListener('scroll', syncVisibility, { passive: true });
+    syncVisibility();
 }
 
 function highlightCurrentPage() {
