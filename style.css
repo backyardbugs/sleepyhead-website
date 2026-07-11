@@ -1448,9 +1448,14 @@ html.muji-grid.theme-light {
     }
 
     .back-to-top.is-visible {
-        opacity: 1;
+        opacity: 0.55;
         pointer-events: auto;
         transform: translateY(0);
+    }
+
+    .back-to-top.is-visible:hover,
+    .back-to-top.is-visible:focus-visible {
+        opacity: 0.9;
     }
 
     .back-to-top img {
@@ -1516,9 +1521,16 @@ html.post-nav-open .back-to-top {
     background: transparent;
     cursor: pointer;
     line-height: 0;
-    opacity: 1;
+    opacity: 0.55;
     pointer-events: auto;
     transform: none;
+}
+
+html.post-focus .back-to-top:hover,
+html.post-focus .back-to-top:focus-visible,
+html.post-nav-open .back-to-top:hover,
+html.post-nav-open .back-to-top:focus-visible {
+    opacity: 0.9;
 }
 
 html.post-focus .back-to-top img,
