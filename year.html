@@ -19,28 +19,34 @@
         
         .hud-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 28px 20px;
             margin-bottom: 40px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 40px;
+            align-items: start;
         }
 
-        .hud-box {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border-color);
-            padding: 20px;
+        @media (max-width: 600px) {
+            .hud-container {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+        }
+
+        .hud-stamp {
             text-align: center;
+            background: none;
+            border: none;
+            padding: 0;
         }
 
-        .hud-label {
-            font-family: var(--font-head);
-            font-size: 0.8rem;
-            color: var(--text-soft);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .hud-stamp-icon {
             display: block;
-            margin-bottom: 5px;
+            width: 88px;
+            height: 88px;
+            object-fit: contain;
+            margin: 0 auto 8px;
         }
 
         .hud-value {
@@ -48,6 +54,50 @@
             font-size: 1.8rem;
             color: var(--accent-color);
             font-weight: bold;
+            display: block;
+            line-height: 1.1;
+            margin-bottom: 4px;
+        }
+
+        .hud-label {
+            font-family: var(--font-head);
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 0;
+        }
+
+        .advanced-stats {
+            grid-column: 1 / -1;
+            margin-top: 8px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .advanced-stats .hud-value {
+            font-size: 1.25rem;
+        }
+
+        .ledger-heading {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .ledger-heading-icon {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .ledger-heading .post-title {
+            margin: 0;
+            border-bottom: none;
+            padding-bottom: 0;
         }
 
         .calendar-wrapper {
@@ -258,17 +308,20 @@
             </div>
 
             <div class="hud-container">
-                <div class="hud-box">
-                    <span class="hud-label">Total Words</span>
+                <div class="hud-stamp">
+                    <img class="hud-stamp-icon" src="img/doodles/pieceofpaper.png" alt="" width="88" height="88">
                     <span class="hud-value" id="total-words">0</span>
+                    <span class="hud-label">Total Words</span>
                 </div>
-                <div class="hud-box">
-                    <span class="hud-label">Workouts</span>
+                <div class="hud-stamp">
+                    <img class="hud-stamp-icon" src="img/doodles/shredded.png" alt="" width="88" height="88">
                     <span class="hud-value" id="total-workouts">0</span>
+                    <span class="hud-label">Workouts</span>
                 </div>
-                <div class="hud-box">
-                    <span class="hud-label">Books Read</span>
+                <div class="hud-stamp">
+                    <img class="hud-stamp-icon" src="img/doodles/snorlaxbook.png" alt="" width="88" height="88">
                     <span class="hud-value" id="total-books">0</span>
+                    <span class="hud-label">Books Read</span>
                 </div>
             </div>
 
@@ -318,12 +371,18 @@
             <div class="ledger-grid">
                 
                 <div>
-                    <h2 class="post-title">Library</h2>
+                    <div class="ledger-heading">
+                        <img class="ledger-heading-icon" src="img/doodles/sleepybook.png" alt="" width="64" height="64">
+                        <h2 class="post-title">Library</h2>
+                    </div>
                     <div id="book-list"></div>
                 </div>
 
                 <div>
-                    <h2 class="post-title">Bands Seen</h2>
+                    <div class="ledger-heading">
+                        <img class="ledger-heading-icon" src="img/doodles/58microphone.png" alt="" width="64" height="64">
+                        <h2 class="post-title">Bands Seen</h2>
+                    </div>
                     <div id="band-list"></div>
                 </div>
 
@@ -531,8 +590,8 @@
             // Inject into DOM 
             
             let advancedStatsHTML = `
-                <div id="advanced-stats-box" class="hud-box" style="grid-column: span 2;">
-                   <div style="display:flex; justify-content:space-around; text-align:center;">
+                <div id="advanced-stats-box" class="advanced-stats">
+                   <div style="display:flex; justify-content:space-around; text-align:center; flex-wrap:wrap; gap:16px;">
                         <div>
                             <span class="hud-label">Longest Write Streak</span>
                             <span class="hud-value">${longestWritingStreak}</span>
