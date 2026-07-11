@@ -1449,3 +1449,49 @@ html.muji-grid.theme-light {
         filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
     }
 }
+
+/* Single blog post: hide sidebar for reading; cig reveals it */
+html.post-focus aside,
+html.post-focus #sidebar-container {
+    display: none !important;
+}
+
+html.post-focus .container {
+    display: block;
+}
+
+html.post-focus main {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding-top: 28px;
+}
+
+html.post-focus .back-to-top,
+html.post-nav-open .back-to-top {
+    display: block;
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 9000;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    line-height: 0;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+}
+
+html.post-focus .back-to-top img,
+html.post-nav-open .back-to-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}

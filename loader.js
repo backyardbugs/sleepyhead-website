@@ -1,5 +1,13 @@
 /* LOADER.JS - Injects the shared sidebar & Micro-blog */
 
+(function () {
+    try {
+        if (new URLSearchParams(window.location.search).get('post')) {
+            document.documentElement.classList.add('post-focus');
+        }
+    } catch (e) {}
+})();
+
 function toLocalISODate(date) {
     var d = date || new Date();
     var y = d.getFullYear();
@@ -45,22 +53,60 @@ function wireBackToTop() {
     btn.type = 'button';
     btn.id = 'back-to-top';
     btn.className = 'back-to-top';
-    btn.setAttribute('aria-label', 'Back to top / navigation');
+    btn.setAttribute('aria-label', 'Show navigation / back to top');
     btn.innerHTML = '<img src="img/doodles/cigs.png" alt="" width="52" height="52">';
     document.body.appendChild(btn);
 
-    btn.addEventListener('click', function () {
+    function isPostFocus() {
+        return document.documentElement.classList.contains('post-focus');
+    }
+
+    function scrollToSidebar() {
         var target = document.getElementById('sidebar-container') || document.querySelector('aside') || document.body;
         if (target && typeof target.scrollIntoView === 'function') {
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+    }
+
+    btn.addEventListener('click', function () {
+        if (isPostFocus()) {
+            // Reveal nav, then scroll to it
+            document.documentElement.classList.remove('post-focus');
+            document.documentElement.classList.add('post-nav-open');
+            requestAnimationFrame(function () {
+                scrollToSidebar();
+                syncVisibility();
+            });
+            return;
+        }
+
+        if (document.documentElement.classList.contains('post-nav-open')) {
+            // From a post with nav open: hide again for reading
+            document.documentElement.classList.add('post-focus');
+            document.documentElement.classList.remove('post-nav-open');
+            var feed = document.getElementById('blog-feed');
+            if (feed) feed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            syncVisibility();
+            return;
+        }
+
+        scrollToSidebar();
     });
 
     var SHOW_AFTER = 280;
     function syncVisibility() {
+        if (isPostFocus() || document.documentElement.classList.contains('post-nav-open')) {
+            btn.classList.add('is-visible');
+            btn.setAttribute(
+                'aria-label',
+                isPostFocus() ? 'Show navigation' : 'Hide navigation / back to post'
+            );
+            return;
+        }
         btn.classList.toggle('is-visible', window.scrollY > SHOW_AFTER);
+        btn.setAttribute('aria-label', 'Back to top / navigation');
     }
     window.addEventListener('scroll', syncVisibility, { passive: true });
     syncVisibility();

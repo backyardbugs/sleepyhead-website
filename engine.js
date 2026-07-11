@@ -4,6 +4,15 @@ var postFolder = "./posts/";
 var COMMENTS_API_URL = window.COMMENTS_API_URL || "https://script.google.com/macros/s/AKfycbxDwBHAPGdZa6yYapHIqOu_uJSM4EYHZ6Qp4Cf4kD3diM08sUCa1r4XspRfM8KiYfH8Mg/exec";
 var COMMENTS_FALLBACK_INJECTED = false;
 
+/* Single-post reading mode: hide sidebar until cig is clicked */
+(function () {
+    try {
+        if (new URLSearchParams(window.location.search).get('post')) {
+            document.documentElement.classList.add('post-focus');
+        }
+    } catch (e) {}
+})();
+
 /* Lead doodles: journal (default), update, making, music, reading */
 var POST_DOODLES = {
     journal: { src: "img/doodles/sleepyhead.png", alt: "Sleepyhead" },
