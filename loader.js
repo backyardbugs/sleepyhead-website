@@ -79,6 +79,7 @@ function wireBackToTop() {
                 scrollToSidebar();
                 syncVisibility();
             });
+            btn.blur();
             return;
         }
 
@@ -89,10 +90,12 @@ function wireBackToTop() {
             var feed = document.getElementById('blog-feed');
             if (feed) feed.scrollIntoView({ behavior: 'smooth', block: 'start' });
             syncVisibility();
+            btn.blur();
             return;
         }
 
         scrollToSidebar();
+        btn.blur();
     });
 
     var SHOW_AFTER = 280;
