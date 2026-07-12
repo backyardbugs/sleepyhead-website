@@ -7,6 +7,7 @@ var posts = [
     //   making   → cigfrogwizard.png
     //   music    → cigs.png
     //   reading  → zonkedfullTyler.png
+    ["mix-breakdown-ricky-ricardo", "Mix Breakdown: Ricky Ricardo", "2026-07-12", ["journal", "music", "engineering"], "music"],
     ["website-design-audit", "Website Design Audit", "2026-07-09", ["journal", "dev", "design"], "making"],
     ["the-death-of-good-taste", "The Death of Good Taste", "2026-06-17", ["journal", "culture", "writing"], "journal"],
     ["2026-summer-would-be-cool", "2026 Summer \"Would Be Cool If These Happened\"s", "2026-06-01", ["journal", "music", "reading", "games"], "journal"],

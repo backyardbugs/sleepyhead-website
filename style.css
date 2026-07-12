@@ -115,6 +115,16 @@ img {
     max-width: 640px;
 }
 
+.blog-media.blog-audio {
+    max-width: 520px;
+}
+
+.blog-media.blog-audio audio {
+    width: 100%;
+    height: 36px;
+    display: block;
+}
+
 /* Float doodles / inline images (worm-blossom style) */
 img.float-l {
     float: left;
