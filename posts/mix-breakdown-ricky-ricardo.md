@@ -1,7 +1,7 @@
 My band released a song yesterday. It's called Ricky Ricardo. Here's exactly how I mixed it.
 
 <figure class="blog-media blog-audio">
-  <audio controls preload="none" src="audio/RickyRicardo_New1.mp3"></audio>
+  <audio controls preload="none" src="https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/RickyRicardo_New1.mp3"></audio>
 </figure>
 
 <!--more-->
@@ -25,7 +25,7 @@ These busses act more like folders that I could add processing to if I want. The
 Okay, let's start with drums. That's where I always start.
 
 <figure class="blog-media blog-audio">
-  <audio controls preload="none" src="audio/RickyRicardo_drumchorus.mp3"></audio>
+  <audio controls preload="none" src="https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/RickyRicardo_drumchorus.mp3"></audio>
 </figure>
 
 <figure class="blog-media">
@@ -57,7 +57,7 @@ Okay there's obviously a lot of micro processing I'm skipping over here like (ho
 Okay, on to bass!
 
 <figure class="blog-media blog-audio">
-  <audio controls preload="none" src="audio/RickyRicardo_bass.mp3"></audio>
+  <audio controls preload="none" src="https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/RickyRicardo_bass.mp3"></audio>
 </figure>
 
 <figure class="blog-media">
@@ -75,7 +75,7 @@ I'm using Parallax. It's the pop bass preset with a lot of the low end cut out a
 ### Guitars
 
 <figure class="blog-media blog-audio">
-  <audio controls preload="none" src="audio/RickyRicardo_guitar.mp3"></audio>
+  <audio controls preload="none" src="https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/RickyRicardo_guitar.mp3"></audio>
 </figure>
 
 <figure class="blog-media">
@@ -93,7 +93,7 @@ Nothing too special. Double tracked, hard panned. Cory Wong Archetype amp sim. I
 Now the candy and texture stuff.
 
 <figure class="blog-media blog-audio">
-  <audio controls preload="none" src="audio/RickyRicardo_candy.mp3"></audio>
+  <audio controls preload="none" src="https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/RickyRicardo_candy.mp3"></audio>
 </figure>
 
 This is arguably my favorite part of arranging a song. I love adding weird samples and pads and textures that transport the listener. Like, there's this Julia Wolf song with a sample of a dog barking in the background and it hijacks my monkey brain so fast. You cannot help but feel and see a dog when you hear it bark. And you can harness that to transport listeners to explicit places that the music does in a more ambiguous way.
@@ -109,7 +109,7 @@ It's also helpful to write from some of these sonic places. Like, we had the Zef
 Lindsey's voice is so cool and we love layering it in fun and weird ways. You can get several textures out of one voice. Lindsey tracks different depending on where we want it to sit in the vocal stack. The "Very high harmony" track is her in a falsetto breathy take and then we pitched it up another octave, kind of hyperpop vibe. And out of context it sounds hilarious. But within context, it really adds something.
 
 <figure class="blog-media blog-audio">
-  <audio controls preload="none" src="audio/RickyRicardo_vox.mp3"></audio>
+  <audio controls preload="none" src="https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/RickyRicardo_vox.mp3"></audio>
 </figure>
 
 <figure class="blog-media">
@@ -137,7 +137,7 @@ I think an important part of this is the knowledge that the performance and arra
 Alright and lastly, before I get to the hilariously minimal mastering chain. Here's what's inside my trash folder. I keep a trash folder because I'm writing in this project and while not every idea makes it, I always feel like "oh maybe I'll need that". The truth is I don't ever need what's in the trash folder. Subtracting is always the answer. Even in Lindsey and I's maximalist approach to arrangement, we have never gone back into the trash folder. But I wanted to just unmute and press play and show you what's in there, because it's fascinating to me and maybe it is to you.
 
 <figure class="blog-media blog-audio">
-  <audio controls preload="none" src="audio/RickyRicardo_junk.mp3"></audio>
+  <audio controls preload="none" src="https://raw.githubusercontent.com/backyardbugs/sleepyhead-website/main/audio/RickyRicardo_junk.mp3"></audio>
 </figure>
 
 <figure class="blog-media">
