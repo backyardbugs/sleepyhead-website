@@ -300,10 +300,13 @@ aside {
     padding: 40px 20px;
     border-right: 1px solid var(--border-color);
     flex-shrink: 0;
+    align-self: flex-start;
     position: sticky;
     top: 0;
-    height: 100vh;
-    overflow-y: auto; 
+    max-height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
 }
 
 .sidebar-wordmark-link {
