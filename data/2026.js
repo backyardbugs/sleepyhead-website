@@ -105,6 +105,13 @@ var history2026 = [
     ["2026-06-30", 0, true, "Gym"],
     /* --- JULY --- */
     ["2026-07-01", 0, true, "Gym"],
+    ["2026-07-05", 0, true, "Gym"],
+    ["2026-07-07", 0, true, "Gym"],
+    ["2026-07-08", 706, false, ""],
+    ["2026-07-09", 191, true, ""],
+    ["2026-07-11", 0, true, "Gym"],
+    ["2026-07-14", 0, true, "Gym"],
+    ["2026-07-15", 1296, false, ""],
 ];
 
 const books2026 = [
@@ -115,7 +122,8 @@ const books2026 = [
     { title: "Words of Radiance", author: "Brandon Sanderson", rating: 5, review: "" },
     { title: "Harry Potter and the Sorcerer's Stone", author: "J.K. Rowling", rating: 5, review: "" },
     { title: "Harry Potter and the Chamber of Secrets", author: "J.K. Rowling", rating: 5, review: "" },
-    { title: "Harry Potter and the Prisoner of Azkaban", author: "J.K. Rowling", rating: 5, review: "" }
+    { title: "Harry Potter and the Prisoner of Azkaban", author: "J.K. Rowling", rating: 5, review: "" },
+    { title: "Golden Son", author: "Pierce Brown", rating: 5, review: "" }
 ];
 
 const shows2026 = [

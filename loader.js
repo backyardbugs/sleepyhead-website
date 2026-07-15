@@ -18,7 +18,7 @@ function toLocalISODate(date) {
     return y + '-' + m + '-' + day;
 }
 
-var SIDEBAR_BIO = 'Fiction MFA. Musician. Dweeb. Based in FL.';
+var SIDEBAR_BIO = 'Writer. Musician. Comic Artists. Dweeb.';
 var SIDEBAR_VERSION = 'wordmark-home-link-2026-07';
 
 fetch('sidebar.html?v=' + SIDEBAR_VERSION)
