@@ -497,11 +497,15 @@ h2.post-title {
     aside {
         width: auto;
         height: auto;
+        max-height: none;
+        align-self: stretch;
         position: relative;
+        top: auto;
         border-right: none;
         border-bottom: 1px solid var(--border-color);
         padding: 20px;
         text-align: center;
+        overflow: visible;
     }
     main {
         padding: 20px;
@@ -1492,6 +1496,8 @@ html.post-focus aside {
     display: block;
     width: auto;
     height: auto;
+    max-height: none;
+    align-self: stretch;
     position: relative;
     top: auto;
     border-right: none;
