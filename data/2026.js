@@ -112,6 +112,16 @@ var history2026 = [
     ["2026-07-11", 0, true, "Gym"],
     ["2026-07-14", 0, true, "Gym"],
     ["2026-07-15", 1296, false, ""],
+    ["2026-07-16", 916, true, ""],
+    ["2026-07-19", 0, true, "Gym"],
+    ["2026-07-20", 355, false, ""],
+    ["2026-07-21", 0, true, "Gym"],
+    ["2026-07-23", 0, true, "Gym"],
+    ["2026-07-24", 0, true, "Gym"],
+    ["2026-07-25", 0, true, "Gym"],
+    ["2026-07-27", 1100, true, ""],
+    ["2026-07-28", 643, true, ""],
+    ["2026-07-29", 649, true, ""],
 ];
 
 const books2026 = [
@@ -123,7 +133,10 @@ const books2026 = [
     { title: "Harry Potter and the Sorcerer's Stone", author: "J.K. Rowling", rating: 5, review: "" },
     { title: "Harry Potter and the Chamber of Secrets", author: "J.K. Rowling", rating: 5, review: "" },
     { title: "Harry Potter and the Prisoner of Azkaban", author: "J.K. Rowling", rating: 5, review: "" },
-    { title: "Golden Son", author: "Pierce Brown", rating: 5, review: "" }
+    { title: "Golden Son", author: "Pierce Brown", rating: 5, review: "" },
+    { title: "The Captain", author: "Will Wight", rating: 5, review: "" },
+    { title: "The Engineer", author: "Will Wight", rating: 5, review: "" },
+    { title: "Harry Potter and the Goblet of Fire", author: "J.K. Rowling", rating: 5, review: "" }
 ];
 
 const shows2026 = [
