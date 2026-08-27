@@ -166,7 +166,8 @@ const books2026 = [
 const shows2026 = [
     "Knuckle Puck — House of Blues, Orlando",
     "The Wonder Years — House of Blues, Orlando",
-    "Medium Build and Mumford & Sons — Benchmark Arena"
+    "Medium Build — Benchmark Arena",
+    "Mumford & Sons — Benchmark Arena"
 ];
 const albums2026 = [];
 const stats2026 = [];
