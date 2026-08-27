@@ -176,6 +176,20 @@ article.post {
     border-radius: 4px;
 }
 
+.goal-done {
+    color: var(--rainbow-green);
+}
+
+.goal-missed {
+    color: var(--rainbow-red);
+}
+
+article.post .instagram-media {
+    margin: 1.5em auto !important;
+    max-width: 400px !important;
+    background: var(--bg-elevated) !important;
+}
+
 /* 2. THE BASICS (The Palette) */
 :root {
     /* Surfaces */

@@ -208,6 +208,34 @@ function fetchPostContent(filename, isFeedView) {
 function enhanceBlogMedia(container) {
     if (!container) return;
     container.querySelectorAll("[data-blog-carousel]").forEach(initBlogCarousel);
+    loadInstagramEmbeds(container);
+}
+
+function loadInstagramEmbeds(container) {
+    if (!container || !container.querySelector(".instagram-media")) return;
+
+    function process() {
+        if (window.instgrm && window.instgrm.Embeds) {
+            window.instgrm.Embeds.process();
+        }
+    }
+
+    if (window.instgrm) {
+        process();
+        return;
+    }
+
+    var existing = document.querySelector('script[src*="instagram.com/embed.js"]');
+    if (existing) {
+        existing.addEventListener("load", process);
+        return;
+    }
+
+    var script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.instagram.com/embed.js";
+    script.onload = process;
+    document.body.appendChild(script);
 }
 
 function initBlogCarousel(root) {
