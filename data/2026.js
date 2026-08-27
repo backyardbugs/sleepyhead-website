@@ -127,6 +127,22 @@ var history2026 = [
     ["2026-08-01", 300, true, ""],
     ["2026-08-02", 824, false, ""],
     ["2026-08-03", 1434, true, ""],
+    ["2026-08-05", 0, true, "Gym"],
+    ["2026-08-09", 0, true, "Gym"],
+    ["2026-08-10", 0, true, "Gym"],
+    ["2026-08-11", 0, true, "Gym"],
+    ["2026-08-12", 0, true, "Gym"],
+    ["2026-08-13", 0, true, "Gym"],
+    ["2026-08-13", 0, true, "Gym (2nd)"],
+    ["2026-08-14", 0, true, "Gym"],
+    ["2026-08-16", 0, true, "Gym"],
+    ["2026-08-17", 0, true, "Gym"],
+    ["2026-08-18", 400, false, ""],
+    ["2026-08-19", 0, true, "Gym"],
+    ["2026-08-20", 0, true, "Gym"],
+    ["2026-08-21", 0, true, "Gym"],
+    ["2026-08-24", 0, true, "Gym"],
+    ["2026-08-25", 557, true, ""],
 ];
 
 const books2026 = [
@@ -141,7 +157,10 @@ const books2026 = [
     { title: "Golden Son", author: "Pierce Brown", rating: 5, review: "" },
     { title: "The Captain", author: "Will Wight", rating: 5, review: "" },
     { title: "The Engineer", author: "Will Wight", rating: 5, review: "" },
-    { title: "Harry Potter and the Goblet of Fire", author: "J.K. Rowling", rating: 5, review: "" }
+    { title: "Harry Potter and the Goblet of Fire", author: "J.K. Rowling", rating: 5, review: "" },
+    { title: "Harry Potter and the Order of the Phoenix", author: "J.K. Rowling", rating: 5, review: "" },
+    { title: "Dungeon Crawler Carl", author: "Matt Dinniman", rating: 5, review: "" },
+    { title: "Carl's Doomsday Report", author: "Matt Dinniman", rating: 5, review: "Dungeon Crawler Carl #2" }
 ];
 
 const shows2026 = [
