@@ -177,7 +177,7 @@ article.post {
 }
 
 .goal-done {
-    color: var(--rainbow-green);
+    color: var(--rainbow-blue);
 }
 
 .goal-missed {
@@ -816,6 +816,17 @@ a.read-more-btn:hover {
     background-color: var(--accent-color);
     color: var(--on-accent); /* Black text on Gold background */
     border-bottom: 1px solid var(--accent-color);
+}
+
+.feed-pagination {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 40px 0 60px;
+}
+
+.feed-pagination .feed-older {
+    margin-left: auto;
 }
 
 /* The Preformatted Poem Fix */

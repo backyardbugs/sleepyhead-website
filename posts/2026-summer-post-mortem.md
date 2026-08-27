@@ -4,7 +4,9 @@ So, here's my
 
 ### 2026 Summer "Would Be Cool If These Happened"s
 
-If they are red, I didn't finish them. If they are green, I did.
+If they are red, I didn't finish them. If they are blue, I did.
+
+<!--more-->
 
 - <span class="goal-done">[Julep](julep.html) releases our new single Ricky Ricardo.</span>
 - <span class="goal-missed">[High Press](highpress.html) releases our new single Forget Being Happy.</span>
@@ -23,8 +25,6 @@ If they are red, I didn't finish them. If they are green, I did.
 - <span class="goal-missed">I get paid to mix and master someone's song.</span>
 
 So, a bit of a mixed bag. But there are some big wins in there. The two biggest being getting hired at USF as a visiting assistant professor of instruction and hitting 100 workouts.
-
-<!--more-->
 
 ### Visiting Assistant Professor of Instruction
 
@@ -75,3 +75,5 @@ My favorite local bakery Olga's closed down. I made their breadstick donuts from
 <figure class="blog-media blog-media--portrait">
   <img src="img/2026-summer-post-mortem/breadstick-donuts.jpeg" alt="Homemade breadstick donuts">
 </figure>
+
+Anyways, thanks for reading -T

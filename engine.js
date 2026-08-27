@@ -50,6 +50,8 @@ function doodleHTML(postData) {
     return `<img class="post-doodle" src="${doodle.src}" alt="${doodle.alt}" loading="lazy" width="120" height="120">`;
 }
 
+var POSTS_PER_PAGE = 10;
+
 function loadBlogFeed() {
     var container = document.getElementById("blog-feed");
     var html = "";
@@ -88,16 +90,46 @@ function loadBlogFeed() {
 
     } else {
         // --- HOME FEED MODE ---
-        // Loop through the first 10 posts
-        for (var i = 0; i < Math.min(posts.length, 10); i++) {
-            html += buildPostHTML(posts[i], false); // false = feed view
+        var page = parseInt(urlParams.get("page"), 10);
+        if (!page || page < 1) page = 1;
+
+        var totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
+        if (page > totalPages) page = totalPages;
+
+        var start = (page - 1) * POSTS_PER_PAGE;
+        var pagePosts = posts.slice(start, start + POSTS_PER_PAGE);
+
+        for (var i = 0; i < pagePosts.length; i++) {
+            html += buildPostHTML(pagePosts[i], false);
         }
         container.innerHTML = html;
-        
-        // Fetch content for all 10
-        for (var i = 0; i < Math.min(posts.length, 10); i++) {
-            // TRUE means "Yes, please cut off the text if there is a break"
-            fetchPostContent(posts[i][0], true); 
+
+        for (var j = 0; j < pagePosts.length; j++) {
+            fetchPostContent(pagePosts[j][0], true);
+        }
+
+        if (totalPages > 1) {
+            var nav = document.createElement("nav");
+            nav.className = "feed-pagination";
+            nav.setAttribute("aria-label", "Blog pages");
+
+            if (page > 1) {
+                var newer = document.createElement("a");
+                newer.className = "read-more-btn feed-newer";
+                newer.href = page === 2 ? "home.html" : "home.html?page=" + (page - 1);
+                newer.textContent = "← Newer posts";
+                nav.appendChild(newer);
+            }
+
+            if (page < totalPages) {
+                var older = document.createElement("a");
+                older.className = "read-more-btn feed-older";
+                older.href = "home.html?page=" + (page + 1);
+                older.textContent = "Older posts →";
+                nav.appendChild(older);
+            }
+
+            container.appendChild(nav);
         }
     }
 }
