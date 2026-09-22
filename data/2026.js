@@ -143,7 +143,25 @@ var history2026 = [
     ["2026-08-21", 0, true, "Gym"],
     ["2026-08-24", 0, true, "Gym"],
     ["2026-08-25", 557, true, ""],
+    ["2026-08-27", 0, true, "Gym"],
     ["2026-08-28", 699, false, ""],
+    ["2026-08-29", 0, true, "Gym"],
+    /* --- SEPTEMBER --- */
+    ["2026-09-01", 0, true, "Gym"],
+    ["2026-09-02", 0, true, "Gym"],
+    ["2026-09-03", 0, true, "Gym"],
+    ["2026-09-04", 0, true, "Gym"],
+    ["2026-09-05", 0, true, "Gym"],
+    ["2026-09-06", 1022, false, ""],
+    ["2026-09-09", 0, true, "Gym"],
+    ["2026-09-11", 766, true, ""],
+    ["2026-09-14", 500, false, ""],
+    ["2026-09-15", 1500, true, ""],
+    ["2026-09-16", 0, true, "Gym"],
+    ["2026-09-18", 2614, false, ""],
+    ["2026-09-19", 1084, false, "Saw Turnstile and Hatebreed at England Brothers Park in St. Petersburg."],
+    ["2026-09-21", 983, true, ""],
+    ["2026-09-22", 0, true, "Gym"],
 ];
 
 const books2026 = [
@@ -161,14 +179,17 @@ const books2026 = [
     { title: "Harry Potter and the Goblet of Fire", author: "J.K. Rowling", rating: 5, review: "" },
     { title: "Harry Potter and the Order of the Phoenix", author: "J.K. Rowling", rating: 5, review: "" },
     { title: "Dungeon Crawler Carl", author: "Matt Dinniman", rating: 5, review: "" },
-    { title: "Carl's Doomsday Report", author: "Matt Dinniman", rating: 5, review: "Dungeon Crawler Carl #2" }
+    { title: "Carl's Doomsday Report", author: "Matt Dinniman", rating: 5, review: "Dungeon Crawler Carl #2" },
+    { title: "Harry Potter and the Half-Blood Prince", author: "J.K. Rowling", rating: 5, review: "" }
 ];
 
 const shows2026 = [
     "Knuckle Puck — House of Blues, Orlando",
     "The Wonder Years — House of Blues, Orlando",
     "Medium Build — Benchmark Arena, Tampa",
-    "Mumford & Sons — Benchmark Arena, Tampa"
+    "Mumford & Sons — Benchmark Arena, Tampa",
+    "Turnstile — England Brothers Park, St. Petersburg",
+    "Hatebreed — England Brothers Park, St. Petersburg"
 ];
 const albums2026 = [];
 const stats2026 = [];
