@@ -167,6 +167,7 @@ var history2026 = [
     /* --- OCTOBER --- */
     ["2026-10-01", 0, true, "Gym"],
     ["2026-10-05", 0, true, "Gym"],
+    ["2026-10-15", 0, true, "Gym"],
 ];
 
 const books2026 = [
