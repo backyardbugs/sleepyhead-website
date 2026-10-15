@@ -162,6 +162,11 @@ var history2026 = [
     ["2026-09-19", 1084, false, "Saw Turnstile and Hatebreed at England Brothers Park in St. Petersburg."],
     ["2026-09-21", 983, true, ""],
     ["2026-09-22", 0, true, "Gym"],
+    ["2026-09-26", 0, true, "Saw All Shall Perish at The Orpheum in Tampa."],
+    ["2026-09-29", 0, true, "Gym"],
+    /* --- OCTOBER --- */
+    ["2026-10-01", 0, true, "Gym"],
+    ["2026-10-05", 0, true, "Gym"],
 ];
 
 const books2026 = [
@@ -180,7 +185,9 @@ const books2026 = [
     { title: "Harry Potter and the Order of the Phoenix", author: "J.K. Rowling", rating: 5, review: "" },
     { title: "Dungeon Crawler Carl", author: "Matt Dinniman", rating: 5, review: "" },
     { title: "Carl's Doomsday Report", author: "Matt Dinniman", rating: 5, review: "Dungeon Crawler Carl #2" },
-    { title: "Harry Potter and the Half-Blood Prince", author: "J.K. Rowling", rating: 5, review: "" }
+    { title: "Harry Potter and the Half-Blood Prince", author: "J.K. Rowling", rating: 5, review: "" },
+    { title: "Harry Potter and the Deathly Hallows", author: "J.K. Rowling", rating: 5, review: "" },
+    { title: "All These Worlds", author: "Dennis E. Taylor", rating: 5, review: "Bobiverse #3" }
 ];
 
 const shows2026 = [
@@ -189,7 +196,8 @@ const shows2026 = [
     "Medium Build — Benchmark Arena, Tampa",
     "Mumford & Sons — Benchmark Arena, Tampa",
     "Turnstile — England Brothers Park, St. Petersburg",
-    "Hatebreed — England Brothers Park, St. Petersburg"
+    "Hatebreed — England Brothers Park, St. Petersburg",
+    "All Shall Perish — The Orpheum, Tampa"
 ];
 const albums2026 = [];
 const stats2026 = [];
